@@ -1,0 +1,19 @@
+___table_71:
+		db    0
+		db    0
+		db  90h
+		db    1
+		db  2Ch
+		db    1
+		db  84h
+		db    3
+		db  60h
+		db    4
+		db 0DCh
+		db    0
+		db 0F4h
+		db    1
+		db  58h
+		db    2
+		db  84h
+		db    3

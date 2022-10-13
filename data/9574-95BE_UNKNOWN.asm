@@ -1,0 +1,82 @@
+		debug "___table_37: "
+___table_37:
+		db    1
+		db    0
+		db    0
+		db 0FCh
+		db    8
+		db    1
+		db    0
+		db    0
+		db 0FCh
+		db    5
+		db    1
+		db    0
+		db    1
+		db    1
+		db 0FCh
+		db    4
+		db    0
+		db 0FCh
+		db    6
+		db    1
+		db    0
+		db    0
+		db 0FCh
+		db    4
+		db    1
+		db    0
+		db    0
+		db    1
+		db    1
+		db    0
+		db    0
+		db 0FCh
+		db    4
+		db    1
+		db    0
+		db    0
+		db    1
+		db    1
+		db    0
+		db    0
+		db    1
+		db    1
+		db    1
+		db    0
+		db    0
+		db    1
+		db    0
+		db    1
+		db    0
+		db    0
+		db    1
+		db    1
+		db    1
+		db    0
+		db    0
+		db    1
+		db    1
+
+		debug "___table_38: "
+___table_38:
+		db    0
+		db    0
+		db  0Dh
+		db  40h
+		db  6Dh
+		db  40h
+		db  2Dh
+		db  48h
+		db  8Dh
+		db  48h
+		db 0CDh
+		db  40h
+		db 0CDh
+		db  40h
+		db 0CDh
+		db  40h
+		db 0CDh
+		db  40h
+
+		debug "   tables end: "
