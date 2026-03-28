@@ -1,11 +1,11 @@
 fight_or_run:
-		ld	(iy+VAR_51), 0
+		ld	(iy+VAR_FLEE_SUCCESS), 0
 
-		GET_GAME_VARIABLE	VAR_5A			; ???
+		GET_GAME_VARIABLE	VAR_AMBUSH_FLAG			; ???
 
 		jr	nz, party_fight
 
-		RST_10_2F
+		FIND_ALIVE_HERO
 
 		jr	c, party_fight
 
@@ -26,7 +26,7 @@ party_run:
 		jr	nz, loc_687D
 
 loc_6879:
-		inc	(iy+VAR_51)
+		inc	(iy+VAR_FLEE_SUCCESS)
 
 		ret
 ; -------------------------------------

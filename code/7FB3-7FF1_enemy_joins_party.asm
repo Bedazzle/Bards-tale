@@ -6,7 +6,7 @@ loc_7FB3:
 		pop	hl
 
 loc_7FBA:
-		RST_10_51
+		PICK_RANDOM_HERO
 
 		or	a
 		jr	z, loc_7FBA
@@ -36,7 +36,7 @@ loc_7FC6:
 		pop	ix
 
 loc_7FDB:
-		ld	b, (iy+VAR_4E)
+		ld	b, (iy+VAR_ACTIVE_ENEMY)
 		xor	a
 
 		GET_B_FROM_LIST	36h
@@ -49,7 +49,7 @@ loc_7FDB:
 
 		PRINT_STATS_TABLE
 
-		RST_10_29
+		CHANGE_COMBAT_SPEED
 
 		and	a
 

@@ -52,7 +52,7 @@ match_filename:
 
 loc_633D:
 		ei
-		ld	a, (GAME_VARIABLES + VAR_07)
+		ld	a, (GAME_VARIABLES + VAR_DUNGEON_LEVEL)
 
 		cp	0FFh
 		jr	nz, rewind_or_forward
@@ -103,7 +103,7 @@ rewind_tape:
 ; -------------------------------------
 
 tape_error:
-		ld	a, (GAME_VARIABLES + VAR_07)
+		ld	a, (GAME_VARIABLES + VAR_DUNGEON_LEVEL)
 
 		cp	0FFh
 		jr	z, loop_heroes
@@ -200,7 +200,7 @@ press_play_hitkey:
 
 		xor	a
 		call	prep_black_color
-		inc	(iy+VAR_06)
+		inc	(iy+VAR_DISPLAY_STATE)
 
 		CLEAR_TXT_BUFFER
 
@@ -215,7 +215,7 @@ press_play_hitkey:
 
 loc_63F9:
 		inc	a
-		ld	(iy+VAR_07), a
+		ld	(iy+VAR_DUNGEON_LEVEL), a
 		ld	a, c
 		add	a, a
 		ld	(loc_6437+1), a
@@ -256,8 +256,8 @@ loc_6425:
 		ld	a, (GAME_VARIABLES + VAR_DAY_PART)
 		ld	(GAME_VARIABLES + VAR_COPY_DAYPART), a
 		xor	a
-		ld	(GAME_VARIABLES + VAR_3E), a
-		ld	(GAME_VARIABLES + VAR_3D), a
+		ld	(GAME_VARIABLES + VAR_SAVE_STATE_HI), a
+		ld	(GAME_VARIABLES + VAR_SAVE_STATE_LO), a
 
 loc_6437:
 		ld	de, 0					; !!! SMC

@@ -1,9 +1,9 @@
 print_stats_table:
-		GET_GAME_VARIABLE	VAR_12		; ???
+		GET_GAME_VARIABLE	VAR_TURN_PROCESSING		; ???
 
 		jr	z, loc_8AF3
 
-		inc	(iy+VAR_13)
+		inc	(iy+VAR_REDRAW_STATS)
 
 		ret
 

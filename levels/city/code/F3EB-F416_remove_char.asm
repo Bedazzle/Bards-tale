@@ -19,7 +19,7 @@ abort_remove_char:
 		jp	proc_guild
 
 loc_F404:
-		dec	(iy+VAR_00)
+		dec	(iy+VAR_PARTY_SIZE)
 
 loc_F407:
 		ld	(ix+CHAR_STATUS), 3

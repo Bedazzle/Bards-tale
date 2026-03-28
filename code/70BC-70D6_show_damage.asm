@@ -13,7 +13,7 @@ show_damage:
 
 loc_70C6:
 		dec	a
-		ld	(GAME_VARIABLES + VAR_4F), a
+		ld	(GAME_VARIABLES + VAR_DISPLAY_COUNT), a
 
 		PRINT_NUM_FROM_DE
 
@@ -21,6 +21,6 @@ loc_70C6:
 		db  60h, 61h, 0FFh			; "point"
 									; "of damage"
 
-		ld	a, (GAME_VARIABLES + VAR_53)
+		ld	a, (GAME_VARIABLES + VAR_TARGET_ID)
 
 		jp	loc_7C4E

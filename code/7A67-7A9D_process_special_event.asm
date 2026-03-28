@@ -1,19 +1,19 @@
 sub_7A67:
-		GET_GAME_VARIABLE	VAR_10			; ???
+		GET_GAME_VARIABLE	VAR_SPELL_ACTIVE			; ???
 
 		ret	z
 
-		inc	(iy+VAR_0F)
+		inc	(iy+VAR_EVENT_DEPTH)
 		call	loc_7A75
-		dec	(iy+VAR_0F)
+		dec	(iy+VAR_EVENT_DEPTH)
 
 		ret
 
 loc_7A75:
 		call	sub_82D2
 		xor	a
-		ld	(GAME_VARIABLES + VAR_0E), a
-		ld	a, (GAME_VARIABLES + VAR_11)
+		ld	(GAME_VARIABLES + VAR_COMBAT_MODE), a
+		ld	a, (GAME_VARIABLES + VAR_SPELL_ID)
 
 		cp	4
 		jr	z, loc_7A90
@@ -29,7 +29,7 @@ loc_7A75:
 		ret
 
 loc_7A90:
-		GET_GAME_VARIABLE	VAR_12			; ???
+		GET_GAME_VARIABLE	VAR_TURN_PROCESSING			; ???
 
 		jr	z, loc_7A99
 

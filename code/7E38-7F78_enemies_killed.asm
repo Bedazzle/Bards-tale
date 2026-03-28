@@ -1,13 +1,13 @@
 enemies_killed:
-		RST_10_29
+		CHANGE_COMBAT_SPEED
 
 		xor	a
-		ld	(GAME_VARIABLES + VAR_36), a
+		ld	(GAME_VARIABLES + VAR_TREASURE_FLAG), a
 
 		cp	(iy+VAR_UNDERGROUND)
 		jr	z, collect_loot
 
-		cp	(iy+VAR_3F)
+		cp	(iy+VAR_AREA_MODE)
 		jr	z, collect_loot
 
 		ld	a, 9
@@ -22,10 +22,10 @@ collect_loot:
 		call	nullify_FDDD
 		ld	l, a
 		ld	h, a
-		ld	(GAME_VARIABLES + VAR_76), hl
-		ld	(GAME_VARIABLES + VAR_43), hl
+		ld	(GAME_VARIABLES + VAR_XP_TOTAL_HI), hl
+		ld	(GAME_VARIABLES + VAR_TREASURE_HI), hl
 		ld	(GAME_VARIABLES + VAR_INFO_ROW_POS),	a
-		ld	(GAME_VARIABLES + VAR_45), a
+		ld	(GAME_VARIABLES + VAR_TREASURE_LO), a
 		ld	b, 0Fh
 
 loc_7E66:
@@ -46,7 +46,7 @@ loc_7E7A:
 
 		and	(iy+VAR_RND_HI)
 		ld	l, a
-		ld	(GAME_VARIABLES + VAR_74), hl
+		ld	(GAME_VARIABLES + VAR_GOLD_FOUND_HI), hl
 
 		GET_B_FROM_TABLE	2Bh
 
@@ -77,7 +77,7 @@ loc_7E9B:
 		jr	z, loc_7ECC
 
 		ld	c, a
-		ld	hl, (GAME_VARIABLES + VAR_43)
+		ld	hl, (GAME_VARIABLES + VAR_TREASURE_HI)
 
 loc_7EA4:
 		push	de
@@ -92,18 +92,18 @@ loc_7EAD:
 		add	hl, de
 		jr	nc, loc_7EB3
 
-		inc	(iy+VAR_45)
+		inc	(iy+VAR_TREASURE_LO)
 
 loc_7EB3:
-		GET_GAME_VARIABLE	VAR_36		; ???
+		GET_GAME_VARIABLE	VAR_TREASURE_FLAG		; ???
 
 		jr	nz, loc_7EC5
 
 		push	hl
-		ld	hl, (GAME_VARIABLES + VAR_74)
-		ld	de, (GAME_VARIABLES + VAR_76)
+		ld	hl, (GAME_VARIABLES + VAR_GOLD_FOUND_HI)
+		ld	de, (GAME_VARIABLES + VAR_XP_TOTAL_HI)
 		add	hl, de
-		ld	(GAME_VARIABLES + VAR_76), hl
+		ld	(GAME_VARIABLES + VAR_XP_TOTAL_HI), hl
 		pop	hl
 
 loc_7EC5:
@@ -111,7 +111,7 @@ loc_7EC5:
 		dec	c
 		jr	nz, loc_7EA4
 
-		ld	(GAME_VARIABLES + VAR_43), hl
+		ld	(GAME_VARIABLES + VAR_TREASURE_HI), hl
 
 loc_7ECC:
 		dec	b
@@ -130,7 +130,7 @@ loc_7ECC:
 
 		PRINT_MESSAGE	69h			; "and"
 
-		ld	hl, (GAME_VARIABLES + VAR_76)
+		ld	hl, (GAME_VARIABLES + VAR_XP_TOTAL_HI)
 		ld	a, l
 
 		cp	0Eh
@@ -145,7 +145,7 @@ loc_7EED:
 
 		PRINT_MESSAGE	79h			; "pieces of gold."
 
-		GET_GAME_VARIABLE	VAR_36		; ???
+		GET_GAME_VARIABLE	VAR_TREASURE_FLAG		; ???
 
 		jr	nz, no_more_loot
 
@@ -205,7 +205,7 @@ loc_7F2D:
 		ld	d, 0F0h
 
 loc_7F39:
-		RST_10_51
+		PICK_RANDOM_HERO
 
 		or	a
 		jr	z, loc_7F39

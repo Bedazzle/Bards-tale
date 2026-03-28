@@ -7,7 +7,7 @@ show_icon_A:
 
 		push	af
 		xor	a
-		ld	(GAME_VARIABLES + VAR_55), a
+		ld	(GAME_VARIABLES + VAR_ICON_CODE), a
 		ld	(GAME_PARAM_COPY+10h), a
 		call	dyn_proc_07
 		pop	af

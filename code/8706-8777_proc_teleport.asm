@@ -4,7 +4,7 @@ proc_teleport:
 
 		jr	z, loc_8760
 
-		GET_GAME_VARIABLE	VAR_67		; ???
+		GET_GAME_VARIABLE	VAR_ROUND_NUMBER		; ???
 
 		jr	nz, loc_8760
 
@@ -28,17 +28,17 @@ wait_teleport:
 		ld	(iy+VAR_CURSOR_ROW), 7
 		ld	a, (GAME_VARIABLES + VAR_COORD_SO_NO)
 
-		RST_10_45
+		ADJUST_VALUE
 
 		ld	c, a
 		ld	a, (GAME_VARIABLES + VAR_COORD_WE_EA)
 
-		RST_10_45
+		ADJUST_VALUE
 
 		ld	b, a
-		ld	a, (GAME_VARIABLES + VAR_3B)
+		ld	a, (GAME_VARIABLES + VAR_TELEPORT_MODE)
 
-		RST_10_45
+		ADJUST_VALUE
 
 		ld	d, a
 
@@ -64,7 +64,7 @@ wait_teleport:
 
 		ld	(GAME_VARIABLES + VAR_COORD_SO_NO), bc
 		ld	a, d
-		ld	hl, GAME_VARIABLES + VAR_3B
+		ld	hl, GAME_VARIABLES + VAR_TELEPORT_MODE
 
 		cp	(hl)
 		jr	z, loc_8763
@@ -81,7 +81,7 @@ loc_8760:
 loc_8763:
 		call	sub_C192
 		xor	a
-		ld	(GAME_VARIABLES + VAR_3E), a
+		ld	(GAME_VARIABLES + VAR_SAVE_STATE_HI), a
 
 loc_876A:
 		and	a

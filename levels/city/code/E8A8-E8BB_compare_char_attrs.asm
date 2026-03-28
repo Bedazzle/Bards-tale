@@ -4,7 +4,7 @@ sub_E8A8:
 		ld	b, 4
 		ld	de, ___table_3+3	;7DB7h
 
-		FIND_ATTR_AND_ADDRESS	CHAR_13
+		FIND_ATTR_AND_ADDRESS	CHAR_SAVED_STATS
 
 loc_E8B2:
 		ld	a, (de)

@@ -1,4 +1,4 @@
-dyn_proc_74:						; RST_10_42
+dyn_proc_74:						; CHECK_SPELL_COST
 		GET_ATTR_BY_PARAM	CHAR_SPPT_HI
 
 		jr	nz, loc_759F

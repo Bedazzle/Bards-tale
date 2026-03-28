@@ -424,7 +424,7 @@
 		; ---------------------------
 
 
-		MACRO RST_10_00 param
+		MACRO GET_ATTR_SAVE_IX param
 			rst	10h
 			db 0
 			db param
@@ -436,87 +436,87 @@
 			db param
 		ENDM
 
-		MACRO RST_10_29
+		MACRO CHANGE_COMBAT_SPEED
 			rst	10h
 			db 29h
 		ENDM
 
-		MACRO RST_10_2A
+		MACRO CHECK_FLEE_RESULT
 			rst	10h
 			db 2Ah
 		ENDM
 
-		MACRO RST_10_2E
+		MACRO CHECK_ALL_HEROES
 			rst	10h
 			db 2Eh
 		ENDM
 
-		MACRO RST_10_2F
+		MACRO FIND_ALIVE_HERO
 			rst	10h
 			db 2Fh
 		ENDM
 
-		MACRO RST_10_30
+		MACRO SELECT_TARGET
 			rst	10h
 			db 30h
 		ENDM
 
-		MACRO RST_10_42
+		MACRO CHECK_SPELL_COST
 			rst	10h
 			db 42h
 		ENDM
 
-		MACRO RST_10_45
+		MACRO ADJUST_VALUE
 			rst	10h
 			db 45h
 		ENDM
 
-		MACRO RST_10_48
+		MACRO ROLL_DAMAGE
 			rst	10h
 			db 48h
 		ENDM
 
-		MACRO RST_10_49
+		MACRO RESET_DAMAGE
 			rst	10h
 			db 49h
 		ENDM
 
-		MACRO RST_10_4A
+		MACRO RECALC_ALL_AC
 			rst	10h
 			db 4Ah
 		ENDM
 
-		MACRO RST_10_4B
+		MACRO DISPATCH_MOVEMENT
 			rst	10h
 			db 4Bh
 		ENDM
 
-		MACRO RST_10_51
+		MACRO PICK_RANDOM_HERO
 			rst	10h
 			db 51h
 		ENDM
 
-		MACRO RST_10_53
+		MACRO PRINT_ACTOR_NAME
 			rst	10h
 			db 53h
 		ENDM
 
-		MACRO RST_10_57
+		MACRO CALC_SPELL_FX
 			rst	10h
 			db 57h
 		ENDM
 
-		MACRO RST_10_5C
+		MACRO CALC_MONSTER_HP
 			rst	10h
 			db 5Ch
 		ENDM
 
-		MACRO RST_10_5D
+		MACRO CHECK_THREE_HEROES
 			rst	10h
 			db 5Dh
 		ENDM
 
-		MACRO RST_10_61 param1, param2
+		MACRO CHECK_ITEM_MASK param1, param2
 			rst	10h
 			db 61h
 			db param1

@@ -8,7 +8,7 @@ print_memb_num:
 		call	count_heroes
 		push	af
 		add	a, '1'
-		ld	(GAME_VARIABLES + VAR_6E), a
+		ld	(GAME_VARIABLES + VAR_MEMBER_NUM), a
 		pop	af
 
 		PRINT_DIGIT
@@ -22,7 +22,7 @@ print_s_bracket:
 		call	count_heroes
 		jr	nc, print_r_bracket
 
-		ld	(iy+VAR_6F), 'S'
+		ld	(iy+VAR_PLURAL_FLAG), 'S'
 
 		PRINT_MESSAGE	38h			; "S]"
 

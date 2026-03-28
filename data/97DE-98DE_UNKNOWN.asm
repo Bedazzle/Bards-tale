@@ -108,8 +108,8 @@ ___table_44:
 		db    3
 		db    4
 
-		; display "___table_45: ", $
-___table_45:
+		; display "KEY_CODES_TABLE: ", $
+KEY_CODES_TABLE:
 		db    7
 		db    8
 		db  23h, 24h, 25h, 26h

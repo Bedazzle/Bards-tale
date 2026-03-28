@@ -1,5 +1,5 @@
 clear_txt_buffer:
-		ld	(GAME_VARIABLES + VAR_41), ix
+		ld	(GAME_VARIABLES + VAR_TEXT_BUF_PTR), ix
 		ld	hl, TEXT_BUFFER + 11h		;0FB73h
 		ld	b, 11h
 

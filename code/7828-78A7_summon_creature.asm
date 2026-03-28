@@ -1,5 +1,5 @@
 loc_7828:
-		RST_10_2A
+		CHECK_FLEE_RESULT
 
 		jr	c, loc_7832
 
@@ -11,7 +11,7 @@ loc_782C:
 loc_7832:
 		CLEAN_ALLY_MEMORY
 
-		ld	a, (GAME_VARIABLES + VAR_53)
+		ld	a, (GAME_VARIABLES + VAR_TARGET_ID)
 		and	7Fh
 		ld	c, a
 
@@ -62,7 +62,7 @@ loc_7864:
 		FIND_HERO_BY_B
 
 		xor	a
-		ld	(GAME_VARIABLES + VAR_4F), a
+		ld	(GAME_VARIABLES + VAR_DISPLAY_COUNT), a
 		ld	a, l
 
 		PRINT_EMPTY
@@ -71,7 +71,7 @@ loc_7864:
 		add	hl, hl
 		ld	b, h
 		ld	c, l
-		ld	hl, ENEMY + ENEMY_11
+		ld	hl, ENEMY + ENEMY_COMBAT_DATA
 		ld	e, 4
 
 loc_787B:

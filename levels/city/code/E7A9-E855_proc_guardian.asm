@@ -5,7 +5,7 @@ proc_guardian:
 
 		GET_E_FROM_TABLE	INX_GUARDIANS
 
-		ld      (___table_84), a
+		ld      (ACTIVE_GUARDIAN), a
 
 		GET_E_FROM_TABLE	10h
 
@@ -31,20 +31,20 @@ loop_guardian:
 
 attack_guardian:
 		xor	a
-		ld	(GAME_VARIABLES + VAR_4D), a
-		ld	(GAME_VARIABLES + VAR_5A), a
+		ld	(GAME_VARIABLES + VAR_ENEMY_COUNT), a
+		ld	(GAME_VARIABLES + VAR_AMBUSH_FLAG), a
 		inc	a
-		ld	(___table_85), a
-		inc	(iy+VAR_5B)
+		ld	(COMBAT_ACTIVE_FLAG), a
+		inc	(iy+VAR_ENCOUNTER_CTR)
 		call	combat_foes
 
-		GET_GAME_VARIABLE	VAR_51		; ???
+		GET_GAME_VARIABLE	VAR_FLEE_SUCCESS		; ???
 
 		jr	nz, proc_guardian
 
 loc_E7E3:
 		ld	hl, (GAME_VARIABLES + VAR_COORD_SO_NO)
-		ld	(GAME_VARIABLES + VAR_38), hl
+		ld	(GAME_VARIABLES + VAR_VIEW_Y_OFFSET), hl
 		call	sub_F112
 		and	7
 		exx
@@ -104,7 +104,7 @@ loc_E81E:
 									; "a gate, which is guarded by"
 
 		xor	a
-		ld	(GAME_VARIABLES + VAR_4F), a
+		ld	(GAME_VARIABLES + VAR_DISPLAY_COUNT), a
 
 		GET_E_FROM_TABLE	INX_GUARDIANS
 

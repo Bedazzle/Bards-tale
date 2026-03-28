@@ -16,7 +16,7 @@ sub_C12D:
 
 		ex	af, af'
 		push	bc
-		ld	bc, (GAME_VARIABLES + VAR_72)
+		ld	bc, (GAME_VARIABLES + VAR_PRINT_POS)
 
 loc_C13A:
 		ld	a, (hl)
@@ -26,7 +26,7 @@ loc_C13A:
 		dec	d
 		jr	nz, loc_C13A
 
-		ld	(GAME_VARIABLES + VAR_72), bc
+		ld	(GAME_VARIABLES + VAR_PRINT_POS), bc
 		pop	bc
 
 loc_C146:

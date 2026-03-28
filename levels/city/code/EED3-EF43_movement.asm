@@ -22,11 +22,11 @@ move_forward:
 		and	7
 		jr	z, loc_EF3F
 
-		GET_GAME_VARIABLE	VAR_10		; ???
+		GET_GAME_VARIABLE	VAR_SPELL_ACTIVE		; ???
 
 		ret	nz
 
-		GET_GAME_VARIABLE	VAR_2E		; ???
+		GET_GAME_VARIABLE	VAR_ANIM_SPEED_FLAG		; ???
 
 		ret	nz
 

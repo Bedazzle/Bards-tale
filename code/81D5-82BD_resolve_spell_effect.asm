@@ -6,12 +6,12 @@ loc_81D5:
 		ld	d, (ix+CHAR_LEVEL_HI)
 		ld	e, (ix+CHAR_LEVEL_LO)
 
-		RST_10_49
+		RESET_DAMAGE
 
 loc_81E4:
 		push	bc
 
-		RST_10_48
+		ROLL_DAMAGE
 
 		pop	bc
 		dec	de
@@ -23,33 +23,33 @@ loc_81E4:
 
 ; -------------------------------------
 loc_81EF:
-		ld (iy+VAR_0B), 1
+		ld (iy+VAR_SPELL_STATE), 1
 		jr	loc_81FF
 
 loc_81F5:
-		ld (iy+VAR_0B), 4
+		ld (iy+VAR_SPELL_STATE), 4
 		jr	loc_81FF
 
 loc_81FB:
-		ld (iy+VAR_0B), 0
+		ld (iy+VAR_SPELL_STATE), 0
 
 loc_81FF:
-		ld (GAME_VARIABLES + VAR_50), a
+		ld (GAME_VARIABLES + VAR_DAMAGE_TYPE), a
 		ld hl, 0
 		jr	loc_820B
 
 ; -------------------------------------
 
 loc_8207:
-		RST_10_49
+		RESET_DAMAGE
 
-		RST_10_48
+		ROLL_DAMAGE
 
 loc_820B:
-		ld	a, (GAME_VARIABLES + VAR_50)
+		ld	a, (GAME_VARIABLES + VAR_DAMAGE_TYPE)
 		push	af
 
-		GET_GAME_VARIABLE	VAR_53		; ???
+		GET_GAME_VARIABLE	VAR_TARGET_ID		; ???
 
 		jr	nz, loc_821E
 
@@ -58,10 +58,10 @@ loc_820B:
 		jr	c, loc_821E
 
 		ld	a, 1
-		ld	(ENEMY+ENEMY_10), a
+		ld	(ENEMY+ENEMY_ACTIVE_FLAG), a
 
 loc_821E:
-		GET_GAME_VARIABLE	VAR_53		; ???
+		GET_GAME_VARIABLE	VAR_TARGET_ID		; ???
 
 		jr	c, loc_8237
 
@@ -105,9 +105,9 @@ loc_823E:
 loc_824A:
 		PRINT_MESSAGE	65h			; "at"
 
-		RST_10_53
+		PRINT_ACTOR_NAME
 
-		RST_10_2A
+		CHECK_FLEE_RESULT
 
 		jr	c, loc_826E
 
@@ -162,7 +162,7 @@ loc_826E:
 
 loc_8286:
 		dec	a
-		ld	(GAME_VARIABLES + VAR_4F), a
+		ld	(GAME_VARIABLES + VAR_DISPLAY_COUNT), a
 		ex	de, hl
 
 		PRINT_NUM_FROM_DE
@@ -174,11 +174,11 @@ loc_8286:
 									; "of damage"
 
 loc_8293:
-		ld	a, (GAME_VARIABLES + VAR_53)
+		ld	a, (GAME_VARIABLES + VAR_TARGET_ID)
 		call	loc_7C4E
 		jr	c, loc_82B8
 
-		GET_GAME_VARIABLE	VAR_0B		; ???
+		GET_GAME_VARIABLE	VAR_SPELL_STATE		; ???
 
 		jr	z, loc_82B4
 
@@ -191,7 +191,7 @@ loc_8293:
 		jr	c, loc_82B4
 
 		ld	a, b
-		ld	(iy+VAR_0B), 0
+		ld	(iy+VAR_SPELL_STATE), 0
 		call	loc_70AF
 
 		PRINT_MESSAGE	62h			; "him!"

@@ -29,7 +29,7 @@ loc_731F:
 		or	a
 		ret	z
 
-		RST_10_61	6Bh, 0Fh
+		CHECK_ITEM_MASK	6Bh, 0Fh
 
 		ret	z
 
@@ -58,7 +58,7 @@ equip_for_use:
 loc_733F:
 		ld	a, (hl)
 
-		RST_10_61	6Bh, 0Fh
+		CHECK_ITEM_MASK	6Bh, 0Fh
 
 		cp	c
 		jr	nz, loc_734C
@@ -79,7 +79,7 @@ loc_7353:
 		call	sub_75BF
 		ld	a, b
 
-		cp	(iy+VAR_4C)
+		cp	(iy+VAR_CURRENT_ACTOR)
 		ret	nz
 
 		jp	sub_7A67

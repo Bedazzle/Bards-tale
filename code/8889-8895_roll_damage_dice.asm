@@ -1,4 +1,4 @@
-dyn_proc_79:				; RST_10_48
+dyn_proc_79:				; ROLL_DAMAGE
 		push	de
 
 loc_888A:

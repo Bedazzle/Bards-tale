@@ -19,15 +19,15 @@ loc_7DFE:
 		jr	loc_7E31
 
 loc_7E11:
-		GET_GAME_VARIABLE	VAR_10			; ???
+		GET_GAME_VARIABLE	VAR_SPELL_ACTIVE			; ???
 
 		jr	z, loc_7E23
 		ld	a, c
 
-		cp	(iy+VAR_4C)
+		cp	(iy+VAR_CURRENT_ACTOR)
 		jr	nz, loc_7E23
 
-		ld	a, (GAME_VARIABLES + VAR_11)
+		ld	a, (GAME_VARIABLES + VAR_SPELL_ID)
 
 		cp	3
 		jr	z, loc_7E2A

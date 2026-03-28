@@ -56,7 +56,7 @@ ___table_94:
 		db 0AAh
 		db 0DAh
 
-___table_95:
+ALLY_DATA:
 		db    0,   0,	0,0D8h,0AAh,0FAh,0A0h
 
 ___table_96:

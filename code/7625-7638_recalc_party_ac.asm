@@ -1,4 +1,4 @@
-dyn_proc_07:				; RST_10_4A
+dyn_proc_07:				; RECALC_ALL_AC
 		PUSH_REGS
 
 		ld	b, 6

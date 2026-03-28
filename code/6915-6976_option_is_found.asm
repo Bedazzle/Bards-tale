@@ -36,7 +36,7 @@ loc_691D:
 
 		GET_B_FROM_LIST	51h
 
-		ld	(GAME_VARIABLES + VAR_4B), a
+		ld	(GAME_VARIABLES + VAR_CURRENT_SPELL), a
 		call	loc_6A03
 		jr	nc, loc_6963
 
@@ -69,7 +69,7 @@ loc_6963:
 ; -------------------------------------
 
 loc_6966:
-		ld	a, (GAME_VARIABLES + VAR_4B)
+		ld	a, (GAME_VARIABLES + VAR_CURRENT_SPELL)
 
 		GET_B_FROM_LIST	3Ch
 

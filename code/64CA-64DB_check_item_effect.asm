@@ -1,4 +1,4 @@
-dyn_proc_08:			; RST_10_61
+dyn_proc_08:			; CHECK_ITEM_MASK
 		push	de
 		ld	d, a
 		call	get_param_to_A

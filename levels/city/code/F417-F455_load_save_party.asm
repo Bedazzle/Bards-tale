@@ -11,8 +11,8 @@ load_party:
 
 		CLEAR_INFO_PANEL
 
-		ld	b, (iy+VAR_14)
-		ld	(iy+VAR_07),	0FFh
+		ld	b, (iy+VAR_HERO_SLOT)
+		ld	(iy+VAR_DUNGEON_LEVEL),	0FFh
 		ld	hl, PARTY_FILE
 		ld	(partyfile_addr), hl
 		ld	hl, 344h
@@ -27,7 +27,7 @@ save_party:
 
 		jp	c, proc_guild
 
-		ld	b, (iy+VAR_14)
+		ld	b, (iy+VAR_HERO_SLOT)
 
 		PRINT_CRLF_AND_MESSAGE	3Ah	; "Insert party tape."
 

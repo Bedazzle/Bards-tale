@@ -39,7 +39,7 @@ loc_62D1:
 loc_62DB:
 		pop	hl
 		ld	(GAME_VARIABLES + VAR_CURSOR_ROW), hl
-		ld	ix, (GAME_VARIABLES + VAR_41)
+		ld	ix, (GAME_VARIABLES + VAR_TEXT_BUF_PTR)
 		dec	(iy+VAR_PAUSE)		; pause OFF
 
 		ret

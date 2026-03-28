@@ -9,8 +9,8 @@ show_pic_by_A:
 		push	af
 		xor	a
 
-		cp	(iy+VAR_06)
-		ld	(GAME_VARIABLES + VAR_06), a
+		cp	(iy+VAR_DISPLAY_STATE)
+		ld	(GAME_VARIABLES + VAR_DISPLAY_STATE), a
 		call	nz, sub_64FB
 		pop	af
 		add	a, a

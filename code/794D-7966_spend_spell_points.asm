@@ -3,7 +3,7 @@ loc_794D:
 
 		FIND_HERO_BY_B
 
-		RST_10_42
+		CHECK_SPELL_COST
 
 		ret	c
 

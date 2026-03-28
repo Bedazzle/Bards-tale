@@ -1,12 +1,12 @@
 loc_7BF4:
 		xor	a
-		ld	(GAME_VARIABLES + VAR_50), a
-		ld	a, (GAME_VARIABLES + VAR_53)
+		ld	(GAME_VARIABLES + VAR_DAMAGE_TYPE), a
+		ld	a, (GAME_VARIABLES + VAR_TARGET_ID)
 
 		FIND_HERO_BY_A
 
 		ld	c, (ix+CHAR_NATURAL_AC)
-		ld	e, (iy+VAR_4E)
+		ld	e, (iy+VAR_ACTIVE_ENEMY)
 
 		GET_E_FROM_TABLE	2Dh
 
@@ -55,7 +55,7 @@ loc_7C0D:
 		rlca
 		rlca
 		and	7
-		ld	(GAME_VARIABLES + VAR_50), a
+		ld	(GAME_VARIABLES + VAR_DAMAGE_TYPE), a
 		ld	hl, 0
 
 loc_7C3B:

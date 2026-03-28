@@ -1,7 +1,7 @@
 jmp_to_movement:
 		jp	movement
 
-dyn_proc_81:					; RST_10_4B
+dyn_proc_81:					; DISPATCH_MOVEMENT
 		jp	proc_sinistr_strt
 
 sub_C192:

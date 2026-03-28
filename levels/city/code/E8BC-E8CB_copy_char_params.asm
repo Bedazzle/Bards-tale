@@ -5,7 +5,7 @@ sub_E8BC:
 
 		ex	de, hl
 
-		FIND_ATTR_AND_ADDRESS	CHAR_60
+		FIND_ATTR_AND_ADDRESS	CHAR_BACKUP_PARAMS
 
 loc_E8C5:
 		ld	a, (hl)

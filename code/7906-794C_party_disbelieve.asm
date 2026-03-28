@@ -11,7 +11,7 @@ loc_790A:
 
 		jr	z, loc_7932
 
-		GET_GAME_VARIABLE	VAR_68			; ???
+		GET_GAME_VARIABLE	VAR_ANTIMAGIC			; ???
 
 		jr	nz, loc_7920
 
@@ -25,33 +25,33 @@ loc_7920:
 
 		GET_C_FROM_LIST	36h
 
-		ld	(iy+VAR_50), 6
+		ld	(iy+VAR_DAMAGE_TYPE), 6
 		ld	a, e
 		call	loc_7C4E
 
 		PRINT_MESSAGE	29h			; "The party disbelieves..."
 
-		RST_10_29
+		CHANGE_COMBAT_SPEED
 
 loc_7932:
 		dec	e
 		dec	c
 		jp	m, loc_790A
 
-		GET_GAME_VARIABLE	VAR_68			; ???
+		GET_GAME_VARIABLE	VAR_ANTIMAGIC			; ???
 
 		ret	c
 
 		xor	a
-		ld	(GAME_VARIABLES + VAR_68), a
+		ld	(GAME_VARIABLES + VAR_ANTIMAGIC), a
 
 		ret
 
 loc_7940:
 		ld	(iy+VAR_ACTIVE_HERO), 80h
-		ld	(iy+VAR_53), 1
+		ld	(iy+VAR_TARGET_ID), 1
 
-		RST_10_2A
+		CHECK_FLEE_RESULT
 
 		ret	c
 		or	a

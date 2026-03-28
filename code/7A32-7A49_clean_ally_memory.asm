@@ -8,7 +8,7 @@ clean_ally_memory:
 		xor	a
 		ld	(___table_93), a
 		ld	(___table_94), a
-		ld	(___table_95), a
-		ld	(GAME_VARIABLES + VAR_66), a
+		ld	(ALLY_DATA), a
+		ld	(GAME_VARIABLES + VAR_ALLY_COUNTER), a
 
 		ret

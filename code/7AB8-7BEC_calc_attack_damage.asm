@@ -1,9 +1,9 @@
 loc_7AB8:
 		push	ix
 		xor	a
-		ld	(GAME_VARIABLES + VAR_50), a
+		ld	(GAME_VARIABLES + VAR_DAMAGE_TYPE), a
 
-		GET_GAME_VARIABLE	VAR_53			; ???
+		GET_GAME_VARIABLE	VAR_TARGET_ID			; ???
 
 		jr	c, loc_7ACA
 
@@ -36,7 +36,7 @@ loc_7ADB:
 
 		GET_ATTR_BY_PARAM_SAVE_HL	CHAR_POS_IN_PARTY
 
-		ld	(GAME_VARIABLES + VAR_6D), a
+		ld	(GAME_VARIABLES + VAR_ATTACK_MODIFIER), a
 		jr	nz, loc_7AE9
 
 		ld	c, a
@@ -55,12 +55,12 @@ loc_7AE9:
 loc_7AF4:
 		ld	c, a
 		xor	a
-		ld	(GAME_VARIABLES + VAR_34), a
+		ld	(GAME_VARIABLES + VAR_WEAPON_BONUS), a
 		ld	e, 1
 		call	loc_7A9E
 		jr	c, loc_7B1B
 
-		inc	(iy+VAR_34)
+		inc	(iy+VAR_WEAPON_BONUS)
 
 		GET_D_FROM_TABLE	INX_WEAPON_BONUS
 
@@ -72,7 +72,7 @@ loc_7AF4:
 		GET_D_FROM_TABLE	INX_ITEM_SPECATT
 
 		call	divide_A_by_16
-		ld	(GAME_VARIABLES + VAR_50), a
+		ld	(GAME_VARIABLES + VAR_DAMAGE_TYPE), a
 		ex	af, af'
 		sub	e
 		jr	nc, loc_7B1A
@@ -92,14 +92,14 @@ loc_7B1B:
 		sub	e
 		jr	c, loc_7B2B
 
-		sub	(iy+VAR_64)
+		sub	(iy+VAR_DAMAGE_PENALTY)
 		jr	nc, loc_7B2C
 
 loc_7B2B:
 		xor	a
 
 loc_7B2C:
-		add	a, (iy+VAR_62)
+		add	a, (iy+VAR_AC_MOD_ENEMY)
 
 		cp	15h
 		jr	c, loc_7B35
@@ -126,16 +126,16 @@ loc_7B35:
 		cp	e
 		ret	c
 
-		GET_GAME_VARIABLE	VAR_6D			; ???
+		GET_GAME_VARIABLE	VAR_ATTACK_MODIFIER			; ???
 
 		jr	nz, loc_7B60
-		ld	a, (ix+CHAR_15)
+		ld	a, (ix+CHAR_ATTACK_SPEC)
 		ld	b, a
 		rlca
 		rlca
 		rlca
 		and	7
-		ld	(GAME_VARIABLES + VAR_50), a
+		ld	(GAME_VARIABLES + VAR_DAMAGE_TYPE), a
 		ld	a, b
 		and	1Fh
 		or	20h ; ' '
@@ -218,7 +218,7 @@ loc_7BA2:
 		ex	af, af'
 		ld	e, a
 		add	hl, de
-		ld	e, (iy+VAR_5F)
+		ld	e, (iy+VAR_BASE_DAMAGE)
 		add	hl, de
 
 		GET_IY_A_FROM_TABLE	6Dh, 30h
@@ -241,7 +241,7 @@ loc_7BC1:
 		djnz	loc_7BC1
 
 loc_7BC9:
-		ld	e, (iy+VAR_62)
+		ld	e, (iy+VAR_AC_MOD_ENEMY)
 		and	a
 		sbc	hl, de
 		jr	nc, loc_7BD4
@@ -262,7 +262,7 @@ loc_7BD4:
 		cp	(ix+CHAR_HUNTER_CHANCE)
 		jr	nc, loc_7BEB
 
-		ld	(iy+VAR_50), 7
+		ld	(iy+VAR_DAMAGE_TYPE), 7
 
 loc_7BEB:
 		and	a

@@ -10,7 +10,7 @@ loc_5C17:
 		ld	hl, addr_9815
 
 loc_5C27:
-		ld	(iy+VAR_6C), 0
+		ld	(iy+VAR_XP_THRESHOLD), 0
 		push	bc
 
 loc_5C2C:
@@ -26,7 +26,7 @@ loc_5C2C:
 		pop	bc
 		jr	c, loc_5C3E
 
-		inc	(iy+VAR_6C)
+		inc	(iy+VAR_XP_THRESHOLD)
 
 		jr	loc_5C2C
 
@@ -35,7 +35,7 @@ loc_5C3E:
 		ld	e, c
 		dec	hl
 		dec	hl
-		ld	a, (iy+VAR_6C)
+		ld	a, (iy+VAR_XP_THRESHOLD)
 		ld	(ix+CHAR_NAME),	a
 
 loc_5C48:

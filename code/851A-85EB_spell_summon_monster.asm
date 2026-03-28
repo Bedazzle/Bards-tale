@@ -32,7 +32,7 @@ loc_852B:
 
 		push	af
 
-		RST_10_5C
+		CALC_MONSTER_HP
 
 		ld	(ENEMY+ENEMY_HITS), a
 		ld	(ENEMY+ENEMY_COND), a
@@ -108,7 +108,7 @@ loc_858C:
 		ld	a, 1
 
 loc_8592:
-		ld	(ENEMY+ENEMY_17), a
+		ld	(ENEMY+ENEMY_SPECIAL_FLAG), a
 		ld	b, 6
 
 loc_8597:
@@ -135,7 +135,7 @@ loc_85A8:
 loc_85AB:
 		ld	e, b
 
-		RST_10_5D
+		CHECK_THREE_HEROES
 
 		jr	c, loc_85A8
 
@@ -161,7 +161,7 @@ loc_85C7:
 		PRINT_MESSAGE	69h			; "and"
 
 		xor	a
-		ld	(GAME_VARIABLES + VAR_4F), a
+		ld	(GAME_VARIABLES + VAR_DISPLAY_COUNT), a
 
 		GET_B_FROM_TABLE	41h
 
@@ -183,11 +183,11 @@ loc_85D9:
 
 		CALC_IN_FB7D
 
-		RST_10_5C
+		CALC_MONSTER_HP
 
 		ld	(hl), a
 
-		RST_10_57
+		CALC_SPELL_FX
 
 		ld	(hl), 0
 		ret

@@ -1,7 +1,7 @@
 proc_sinistr_strt:
 		call	sub_EFC1
 		ld	hl, (GAME_VARIABLES + VAR_COORD_SO_NO)
-		ld	(GAME_VARIABLES + VAR_38), hl
+		ld	(GAME_VARIABLES + VAR_VIEW_Y_OFFSET), hl
 		call	sub_F112
 		jr	nz, loc_EFA3
 
@@ -67,11 +67,11 @@ loc_EFB5:
 
 
 sub_EFC1:
-		GET_GAME_VARIABLE	VAR_10		; ???
+		GET_GAME_VARIABLE	VAR_SPELL_ACTIVE		; ???
 
 		ret	nz
 
-		GET_GAME_VARIABLE	VAR_2E		; ???
+		GET_GAME_VARIABLE	VAR_ANIM_SPEED_FLAG		; ???
 
 		ret	nz
 

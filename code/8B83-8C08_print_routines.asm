@@ -80,7 +80,7 @@ print_crlf:
 		inc	(hl)
 		ld	a, (hl)
 
-		cp	(iy+VAR_48)
+		cp	(iy+VAR_PORTRAIT_CTR)
 		ret	z
 		ret	c
 

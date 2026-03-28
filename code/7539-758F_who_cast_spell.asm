@@ -66,7 +66,7 @@ spell_result:
 ; -------------------------------------
 
 no_spell_points:
-		RST_10_42
+		CHECK_SPELL_COST
 
 		ret	nc
 

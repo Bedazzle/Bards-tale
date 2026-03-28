@@ -1,12 +1,12 @@
 loc_6746:
-		GET_GAME_VARIABLE	VAR_61			; ???
+		GET_GAME_VARIABLE	VAR_INITIATIVE_FLAG			; ???
 
 		jr	z, loc_6758
 
 		ld	hl, addr_FDD6
 		ld	b, 7
 		call	nullify_buffer
-		ld	(GAME_VARIABLES + VAR_61), a
+		ld	(GAME_VARIABLES + VAR_INITIATIVE_FLAG), a
 
 		jr	loc_67C6
 
@@ -122,7 +122,7 @@ loc_67C6:
 		or	a
 		jr	z, loc_67DF
 
-		ld	a, (ENEMY+ENEMY_15)
+		ld	a, (ENEMY+ENEMY_SPEED)
 		and	1Fh
 		add	a, a
 		add	a, a
@@ -136,7 +136,7 @@ loc_67C6:
 		ld	a, 0FFh
 
 loc_67DC:
-		ld	(___table_95+51h), a
+		ld	(ALLY_DATA+51h), a
 
 loc_67DF:
 		ld	b, 0
@@ -146,13 +146,13 @@ loc_67E1:
 
 		jr	z, loc_6802
 
-		RST_10_61	70h, 1Fh
+		CHECK_ITEM_MASK	70h, 1Fh
 
 		add	a, a
 		add	a, a
 		ld	c, a
 
-		RST_10_57
+		CALC_SPELL_FX
 
 		GET_B_FROM_TABLE	36h
 
@@ -180,7 +180,7 @@ loc_6802:
 		cp	4
 		ret	nc
 
-		cp	(iy+VAR_4D)
+		cp	(iy+VAR_ENEMY_COUNT)
 		ret	nc
 
 		inc	b

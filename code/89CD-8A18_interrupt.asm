@@ -26,7 +26,7 @@ interrupt:
 
 		call	get_pressed_key
 
-		GET_GAME_VARIABLE	VAR_0F		; ???
+		GET_GAME_VARIABLE	VAR_EVENT_DEPTH		; ???
 
 		call	z, sub_82BE
 

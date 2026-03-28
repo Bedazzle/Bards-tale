@@ -16,7 +16,7 @@ loc_F13F:
 
 loc_F152:
 		inc	(iy+VAR_PAUSE)		; pause ON
-		ld	(iy+VAR_06),	1
+		ld	(iy+VAR_DISPLAY_STATE),	1
 		call	set_city_colors
 		ld	hl, byte_FBD7
 		ld	c, 0

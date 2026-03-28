@@ -3,7 +3,7 @@ loc_75A5:
 
 		GET_ATTR_BY_A
 
-		RST_10_61	67h, 7Fh
+		CHECK_ITEM_MASK	67h, 7Fh
 
 		dec	hl
 

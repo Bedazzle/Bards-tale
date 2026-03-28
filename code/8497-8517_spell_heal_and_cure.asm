@@ -1,7 +1,7 @@
 loc_8497:
 		PUSH_REGS
 
-		RST_10_49
+		RESET_DAMAGE
 
 		GET_IY_A_FROM_TABLE	4Bh, 4Ah
 
@@ -18,7 +18,7 @@ loc_84A4:
 		djnz	loc_84A4
 
 loc_84AC:
-		ld	b, (iy+VAR_53)
+		ld	b, (iy+VAR_TARGET_ID)
 
 		FIND_HERO_BY_B
 

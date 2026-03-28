@@ -1,7 +1,7 @@
 loc_819B:
-		GET_GAME_VARIABLE	VAR_53			; ???
+		GET_GAME_VARIABLE	VAR_TARGET_ID			; ???
 
-		ld	a, (ENEMY+ENEMY_16)
+		ld	a, (ENEMY+ENEMY_ATTACK_SPEC)
 		jr	c, loc_81A7
 
 		jr	z, loc_81AC
@@ -38,7 +38,7 @@ loc_81B8:
 		ret
 
 loc_81C6:
-		ld	a, (GAME_VARIABLES + VAR_4B)
+		ld	a, (GAME_VARIABLES + VAR_CURRENT_SPELL)
 
 		cp	43h ; 'C'
 		jp	z, loc_8328

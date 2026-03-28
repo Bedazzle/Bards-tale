@@ -163,13 +163,60 @@ All 75 code UNKNOWN routines identified and renamed.
 
 - [x] Verify final binary still matches original
 
-#### Future work (not blocking 1.0.0)
-- [ ] Name all `VAR_xx` game variables
-- [ ] Name all `CHAR_xx` and `ENEMY_xx` struct offsets
-- [ ] Name all `___table_xx` data tables
-- [ ] Document RST 10h dispatch system architecture
-- [ ] Create cross-reference map (caller/callee graph)
-- [ ] Write architecture overview document
+---
+
+## Milestone 2: Documentation & Naming Cleanup (v1.1.x)
+
+Completing the remaining symbolic naming so the source reads like real code,
+not hex offsets. Each patch version is independently verifiable.
+
+### v1.1.0 — Name Game Variables (70 unnamed) (DONE)
+
+- [x] Traced and named all 70 `VAR_xx` game variables in `constants.asm`
+- [x] Updated all references across 100+ assembly files
+- [x] Verified binary matches after all renames
+
+### v1.2.0 — Name Character & Enemy Struct Offsets (12 unnamed) (DONE)
+
+- [x] Named 7 CHAR offsets: SPEED, SAVED_STATS, ATTACK_SPEC, DEFENSE_SPEC, SPECIAL_FLAG, BACKUP_PARAMS, SWAP_STATS
+- [x] Named 5 ENEMY offsets: ACTIVE_FLAG, COMBAT_DATA, SPEED, ATTACK_SPEC, SPECIAL_FLAG
+- [x] Verified binary matches
+
+### v1.3.0 — Name Data Tables & Macros (31 unnamed) (DONE)
+
+- [x] Named 13 `___table_xx` → spell state trackers, combat flags, key codes
+- [x] Named 18 `RST_10_xx` macros → meaningful dispatch names (CHECK_FLEE_RESULT, SELECT_TARGET, etc.)
+- [x] Verified binary matches
+
+### v1.4.0 — Architecture Documentation (DONE)
+
+- [x] ARCHITECTURE.md: RST 10h dispatch system
+- [x] ARCHITECTURE.md: Memory map ($0000-$FFFF)
+- [x] ARCHITECTURE.md: Character struct (100 bytes, all fields)
+- [x] ARCHITECTURE.md: Enemy struct
+- [x] ARCHITECTURE.md: Combat flow diagram
+- [x] ARCHITECTURE.md: Spell system + effect dispatch
+- [x] ARCHITECTURE.md: 3D rendering pipeline
+
+### v1.5.0 — Cross-Reference Map (DONE)
+
+- [x] CROSS_REFERENCE.md: All 80+ spells mapped to effect handlers
+- [x] CROSS_REFERENCE.md: City location dispatch table
+- [x] CROSS_REFERENCE.md: Main game loop call graph
+- [x] CROSS_REFERENCE.md: Full combat call graph
+
+### v1.6.0 — Source-Derived Game Guide & Easter Eggs
+
+Game knowledge extracted directly from the assembly — real numbers, hidden
+mechanics, and secrets that aren't in any manual.
+
+- [x] `guide/EASTER_EGGS.md` — hidden mechanics, secrets, oddities found in the code
+- [x] `guide/COMBAT.md` — damage formulas, initiative, class advantages, flee mechanics
+- [x] `guide/CLASSES.md` — per-class breakdown with actual stat scaling from source
+- [x] `guide/MAGIC.md` — spell system deep dive, costs, durations, which spells stack
+- [x] `guide/EXPLORATION.md` — city layout, dungeon tips, encounter rates, day/night
+- [x] `guide/ITEMS.md` — equipment system, special weapon types, breakage chances
+- [x] `guide/LEVELING.md` — XP formulas per class, level thresholds, stat growth
 
 ---
 

@@ -1,4 +1,4 @@
-dyn_proc_76:				; RST_10_45
+dyn_proc_76:				; ADJUST_VALUE
 		push	bc
 		ld	e, a
 		ld	c, 0

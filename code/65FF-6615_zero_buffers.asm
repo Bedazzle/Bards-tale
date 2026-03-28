@@ -7,8 +7,8 @@ more_nullify:
 		dec	c
 		jr	nz, more_nullify
 
-		ld	(GAME_VARIABLES + VAR_56), a
-		ld	hl, GAME_VARIABLES + VAR_68
+		ld	(GAME_VARIABLES + VAR_SONG_MODIFIER), a
+		ld	hl, GAME_VARIABLES + VAR_ANTIMAGIC
 		ld	b, 9
 
 		jp	nullify_buffer

@@ -1,7 +1,7 @@
 loc_662A:
 		CLEAR_INFO_PANEL
 
-		RST_10_5D
+		CHECK_THREE_HEROES
 
 		ld	hl, 150Eh
 		ld	(GAME_VARIABLES + VAR_CURSOR_ROW), hl
@@ -43,7 +43,7 @@ loc_6651:
 		PRINT_NUM_FROM_E
 
 		dec	e
-		ld	(iy+VAR_4F), e
+		ld	(iy+VAR_DISPLAY_COUNT), e
 
 		GET_C_FROM_TABLE	41h
 

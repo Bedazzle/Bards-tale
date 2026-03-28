@@ -1,4 +1,4 @@
-dyn_proc_87:				; RST_10_51
+dyn_proc_87:				; PICK_RANDOM_HERO
 		PUSH_REGS
 
 		ld	c, 7
@@ -29,15 +29,15 @@ loc_6821:
 		or	a
 		jr	nz, loc_683A
 
-		ld	a, (ENEMY+ENEMY_10)
+		ld	a, (ENEMY+ENEMY_ACTIVE_FLAG)
 		or	a
 		jr	nz, loc_6843
 
-		ld	a, (ENEMY+ENEMY_17)
+		ld	a, (ENEMY+ENEMY_SPECIAL_FLAG)
 		or	a
 		jr	z, loc_683A
 
-		GET_GAME_VARIABLE	VAR_66			; ???
+		GET_GAME_VARIABLE	VAR_ALLY_COUNTER			; ???
 
 		jr	nz, loc_6843
 

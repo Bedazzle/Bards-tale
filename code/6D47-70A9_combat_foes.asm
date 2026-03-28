@@ -1,5 +1,5 @@
 combat_party:
-		ld	(iy+VAR_5A), 1
+		ld	(iy+VAR_AMBUSH_FLAG), 1
 
 ; -------------------------------------
 
@@ -13,8 +13,8 @@ combat_foes:
 ; -------------------------------------
 
 loc_6D55:
-		ld	a, (GAME_VARIABLES + VAR_10)
-		ld	(GAME_VARIABLES + VAR_0E), a
+		ld	a, (GAME_VARIABLES + VAR_SPELL_ACTIVE)
+		ld	(GAME_VARIABLES + VAR_COMBAT_MODE), a
 		call	sub_82D2
 		call	loc_656A
 		call	loc_662A
@@ -29,14 +29,14 @@ you_still_face:
 		call	loc_6644
 		call	loc_669A
 
-		GET_GAME_VARIABLE	VAR_61		; ???
+		GET_GAME_VARIABLE	VAR_INITIATIVE_FLAG		; ???
 
 		jr	nz, loc_6D80
 
 loc_6D77:
 		call	fight_or_run
 
-		GET_GAME_VARIABLE	VAR_51		; ???
+		GET_GAME_VARIABLE	VAR_FLEE_SUCCESS		; ???
 
 		jp	nz, loc_6F93
 
@@ -44,7 +44,7 @@ loc_6D80:
 		PRINT_NEWLINE
 
 		call	loc_6746
-		ld	(iy+VAR_6B), 0FFh
+		ld	(iy+VAR_ENEMY_SLOT), 0FFh
 
 loc_6D89:
 		ld	b, 0
@@ -52,7 +52,7 @@ loc_6D89:
 loc_6D8B:
 		GET_B_FROM_TABLE	38h
 
-		cp	(iy+VAR_6B)
+		cp	(iy+VAR_ENEMY_SLOT)
 		jp	nz, loc_6E0C
 
 		exx
@@ -71,11 +71,11 @@ loc_6D8B:
 		or	a
 		jr	nz, loc_6DD5
 
-		GET_ATTR_BY_PARAM_SAVE_HL	CHAR_17		; ???
+		GET_ATTR_BY_PARAM_SAVE_HL	CHAR_SPECIAL_FLAG		; ???
 
 		jr	z, loc_6DAE
 
-		GET_GAME_VARIABLE	VAR_66			; ???
+		GET_GAME_VARIABLE	VAR_ALLY_COUNTER			; ???
 
 		jr	nz, loc_6E0C
 
@@ -97,7 +97,7 @@ loc_6DAE:
 		GET_A_FROM_TABLE	35h
 
 loc_6DC3:
-		ld	(GAME_VARIABLES + VAR_4B), a
+		ld	(GAME_VARIABLES + VAR_CURRENT_SPELL), a
 		xor	a
 		ld	(GAME_VARIABLES + VAR_ACTIVE_HERO), a
 		call	loc_708A
@@ -129,7 +129,7 @@ loc_6DD5:
 
 		GET_B_FROM_TABLE	3Ch
 
-		ld	(GAME_VARIABLES + VAR_4B), a
+		ld	(GAME_VARIABLES + VAR_CURRENT_SPELL), a
 
 		GET_B_FROM_TABLE	51h
 
@@ -140,7 +140,7 @@ loc_6DF8:
 
 		PRINT_IX_HERO_NAME
 
-		ld	a, (GAME_VARIABLES + VAR_4B)
+		ld	a, (GAME_VARIABLES + VAR_CURRENT_SPELL)
 
 		cp	4Fh ; 'O'
 		jr	c, loc_6E0F
@@ -165,7 +165,7 @@ loc_6E0F:
 loc_6E14:
 		GET_B_FROM_TABLE	51h
 
-		ld	(GAME_VARIABLES + VAR_4B), a
+		ld	(GAME_VARIABLES + VAR_CURRENT_SPELL), a
 
 		GET_B_FROM_TABLE	3Bh
 
@@ -185,7 +185,7 @@ loc_6E2D:
 
 		PRINT_NEWLINE
 
-		RST_10_29
+		CHANGE_COMBAT_SPEED
 
 loc_6E36:
 		jp	loc_6D89
@@ -209,7 +209,7 @@ loc_6E48:
 		or	a
 		jr	z, loc_6E4F
 
-		RST_10_51
+		PICK_RANDOM_HERO
 
 		jr	loc_6E5A
 ; -------------------------------------
@@ -227,17 +227,17 @@ loc_6E57:
 		GET_B_FROM_TABLE	51h
 
 loc_6E5A:
-		ld	(GAME_VARIABLES + VAR_53), a
+		ld	(GAME_VARIABLES + VAR_TARGET_ID), a
 		or	a
 		jr	nz, loc_6E6B
-		ld	a, (ENEMY+ENEMY_17)
+		ld	a, (ENEMY+ENEMY_SPECIAL_FLAG)
 		or	a
 		jr	nz, loc_6E6B
 		ld	a, 1
-		ld	(ENEMY+ENEMY_10), a
+		ld	(ENEMY+ENEMY_ACTIVE_FLAG), a
 
 loc_6E6B:
-		GET_GAME_VARIABLE	VAR_53			; ???
+		GET_GAME_VARIABLE	VAR_TARGET_ID			; ???
 
 		jp	c, loc_6E86
 		push	ix
@@ -276,7 +276,7 @@ loc_6E8E:
 		or	a
 		jr	nz, test_chop
 
-		ld	a, (ENEMY+ENEMY_16)
+		ld	a, (ENEMY+ENEMY_ATTACK_SPEC)
 		call	loc_7068
 
 		jr	test_is_missed
@@ -300,7 +300,7 @@ test_swing:
 		PRINT_MESSAGE	65h			; "at"
 
 test_is_missed:
-		RST_10_53
+		PRINT_ACTOR_NAME
 
 		call	loc_7AB8
 		jr	nc, loc_6EBF
@@ -339,7 +339,7 @@ loc_6ED7:
 
 		jr	c, loc_6EE5
 
-		GET_GAME_VARIABLE	VAR_50		; ???
+		GET_GAME_VARIABLE	VAR_DAMAGE_TYPE		; ???
 
 		jr	nz, loc_6EE5
 
@@ -362,11 +362,11 @@ loc_6EEA:
 
 		pop	de
 
-		RST_10_2E
+		CHECK_ALL_HEROES
 
 		jp	c, oh_dear_game_over
 
-		RST_10_29
+		CHANGE_COMBAT_SPEED
 
 		jp	loc_6D89
 ; -------------------------------------
@@ -379,7 +379,7 @@ loc_6EFA:
 		ld	b, 0
 
 loc_6F03:
-		ld	(iy+VAR_4E), b
+		ld	(iy+VAR_ACTIVE_ENEMY), b
 
 		GET_B_FROM_TABLE	36h
 
@@ -391,13 +391,13 @@ loc_6F03:
 
 		jr	nz, loc_6F22
 
-		RST_10_57
+		CALC_SPELL_FX
 
 		ld	e, 0
 
 loc_6F15:
 		ld	a, (hl)
-		cp	(iy+VAR_6B)
+		cp	(iy+VAR_ENEMY_SLOT)
 		jp	z, loc_6FB7
 		inc	hl
 		inc	e
@@ -410,7 +410,7 @@ loc_6F22:
 		ld	a, b
 		cp	4
 		jr	c, loc_6F03
-		dec	(iy+VAR_6B)
+		dec	(iy+VAR_ENEMY_SLOT)
 		jp	nz, loc_6D89
 		ld	b, 3
 
@@ -431,25 +431,25 @@ loc_6F30:
 		or	a
 		jr	z, loc_6F66
 
-		ld	a, (ENEMY+ENEMY_17)
+		ld	a, (ENEMY+ENEMY_SPECIAL_FLAG)
 		or	a
 		jr	z, loc_6F66
 
-		GET_GAME_VARIABLE	VAR_66
+		GET_GAME_VARIABLE	VAR_ALLY_COUNTER
 
 		jr	nz, loc_6F66
 		ld	(iy+VAR_ACTIVE_HERO), 1
-		ld	(iy+VAR_53), 80h
+		ld	(iy+VAR_TARGET_ID), 80h
 
-		RST_10_2A
+		CHECK_FLEE_RESULT
 
 		jr	c, loc_6F66
 
-		inc	(iy+VAR_66)
+		inc	(iy+VAR_ALLY_COUNTER)
 
 		PRINT_MESSAGE	0Eh			; "Your foes see through your illusion!"
 
-		RST_10_29
+		CHANGE_COMBAT_SPEED
 
 loc_6F66:
 		call	process_poison
@@ -462,15 +462,15 @@ loc_6F66:
 		pop	af
 		jp	c, oh_dear_game_over
 
-		RST_10_5D
+		CHECK_THREE_HEROES
 
 		jr	nc, loc_6FB4
 
-		RST_10_2F
+		FIND_ALIVE_HERO
 
 		jr	c, loc_6FB4
 
-		GET_GAME_VARIABLE	VAR_5A		; ???
+		GET_GAME_VARIABLE	VAR_AMBUSH_FLAG		; ???
 
 		jr	z, loc_6F90
 
@@ -496,19 +496,19 @@ loc_6F93:
 		CLEAR_INFO_PANEL
 
 		xor	a
-		ld	(GAME_VARIABLES + VAR_5A), a
-		ld	(GAME_VARIABLES + VAR_5B), a
-		ld	a, (ENEMY+ENEMY_16)
+		ld	(GAME_VARIABLES + VAR_AMBUSH_FLAG), a
+		ld	(GAME_VARIABLES + VAR_ENCOUNTER_CTR), a
+		ld	a, (ENEMY+ENEMY_ATTACK_SPEC)
 		or	a
 		jr	nz, loc_6FA6
 
 		CLEAN_ALLY_MEMORY
 
 loc_6FA6:
-		GET_GAME_VARIABLE	VAR_0E			; ???
+		GET_GAME_VARIABLE	VAR_COMBAT_MODE			; ???
 
 		jr	z, loc_6FB1
-		ld	a, (GAME_VARIABLES + VAR_11)
+		ld	a, (GAME_VARIABLES + VAR_SPELL_ID)
 		call	loc_82D7
 
 loc_6FB1:
@@ -528,7 +528,7 @@ loc_6FB7:
 		ld	c, a
 		ld	d, 4
 		call	loc_6813
-		ld	(GAME_VARIABLES + VAR_53), a
+		ld	(GAME_VARIABLES + VAR_TARGET_ID), a
 		push	bc
 		push	ix
 
@@ -563,7 +563,7 @@ loc_6FD2:
 		GET_A_FROM_TABLE	35h
 
 loc_6FED:
-		ld	(GAME_VARIABLES + VAR_4B), a
+		ld	(GAME_VARIABLES + VAR_CURRENT_SPELL), a
 		push	af
 		ld	a, b
 		or	80h
@@ -631,9 +631,9 @@ loc_7033:
 		GET_B_FROM_TABLE	41h
 
 		call	loc_7068
-		ld	a, (GAME_VARIABLES + VAR_53)
+		ld	a, (GAME_VARIABLES + VAR_TARGET_ID)
 
-		RST_10_53
+		PRINT_ACTOR_NAME
 
 		call	loc_7BF4
 		jr	nc, loc_7048
@@ -663,11 +663,11 @@ loc_7058:
 loc_705B:
 		PRINT_STATS_TABLE
 
-		RST_10_2E
+		CHECK_ALL_HEROES
 
 		jp	c, oh_dear_game_over
 
-		RST_10_29
+		CHANGE_COMBAT_SPEED
 
 loc_7064:
 		pop	bc
@@ -711,21 +711,21 @@ loc_7068:
 ; -------------------------------------
 
 loc_708A:
-		ld	(iy+VAR_53), 80h
-		ld	a, (ENEMY+ENEMY_10)
+		ld	(iy+VAR_TARGET_ID), 80h
+		ld	a, (ENEMY+ENEMY_ACTIVE_FLAG)
 		or	a
 		ret	z
 
-		RST_10_51
+		PICK_RANDOM_HERO
 
-		ld	(GAME_VARIABLES + VAR_53), a
+		ld	(GAME_VARIABLES + VAR_TARGET_ID), a
 
 		ret
 
 ; -------------------------------------
 
 sub_7099:
-		ld	(GAME_VARIABLES + VAR_53), a
+		ld	(GAME_VARIABLES + VAR_TARGET_ID), a
 		ld	(iy+VAR_ACTIVE_HERO), b
 
 		ret
@@ -734,7 +734,7 @@ sub_7099:
 
 loc_70A0:
 		xor	a
-		ld	(GAME_VARIABLES + VAR_4F), a
+		ld	(GAME_VARIABLES + VAR_DISPLAY_COUNT), a
 
 		GET_B_FROM_TABLE	41h
 

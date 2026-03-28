@@ -4,7 +4,7 @@ loc_8626:
 		bit	7, (iy+VAR_ACTIVE_HERO)
 		jr	z, loc_8636
 
-		ld	hl, GAME_VARIABLES + VAR_62
+		ld	hl, GAME_VARIABLES + VAR_AC_MOD_ENEMY
 		add	a, (hl)
 		ld	(hl), a
 
@@ -12,7 +12,7 @@ loc_8626:
 
 loc_8636:
 		ld	c, a
-		ld	a, (GAME_VARIABLES + VAR_53)
+		ld	a, (GAME_VARIABLES + VAR_TARGET_ID)
 		and	7Fh
 		ld	b, a
 

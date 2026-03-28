@@ -2,7 +2,7 @@ loc_8649:
 		ld      a, (GAME_VARIABLES + VAR_FACE_DIRECTION)
 		add     a, 0BAh ; '¦'
 		ld      e, a
-		ld      hl, GAME_VARIABLES + VAR_4F
+		ld      hl, GAME_VARIABLES + VAR_DISPLAY_COUNT
 
 		CLEAR_INFO_PANEL
 
@@ -13,7 +13,7 @@ loc_8649:
 
 		PRINT_MESSAGE	6Dh			; "and are"
 
-		ld	a, (GAME_VARIABLES + VAR_3B)
+		ld	a, (GAME_VARIABLES + VAR_TELEPORT_MODE)
 		ld	(hl), a
 		dec	(hl)
 

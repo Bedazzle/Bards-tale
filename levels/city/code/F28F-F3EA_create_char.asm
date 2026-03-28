@@ -261,7 +261,7 @@ copy_hero_name:
 		ld	hl, TEXT_BUFFER
 		ldir
 
-		inc	(iy+VAR_00)
+		inc	(iy+VAR_PARTY_SIZE)
 
 		PRINT_STATS_TABLE
 

@@ -10,7 +10,7 @@ loc_669C:
 
 		ld	d, a
 
-		RST_10_61	70h, 1Fh
+		CHECK_ITEM_MASK	70h, 1Fh
 
 		ld	c, a
 		dec	b
@@ -19,7 +19,7 @@ loc_669C:
 
 		inc	b
 
-		RST_10_61	70h, 1Fh
+		CHECK_ITEM_MASK	70h, 1Fh
 
 		cp	c
 		jr	nc, loc_66E3
@@ -49,7 +49,7 @@ loc_66C9:
 		jr	nz, loc_66C9
 
 		dec	a
-		ld	(GAME_VARIABLES + VAR_4F), a
+		ld	(GAME_VARIABLES + VAR_DISPLAY_COUNT), a
 
 		PRINT_CRLF_AND_MESSAGE	0Ch			; "The"
 

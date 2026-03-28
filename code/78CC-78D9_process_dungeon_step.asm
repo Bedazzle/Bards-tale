@@ -3,7 +3,7 @@ loc_78CC:
 
 		jr	z, loc_78D7
 
-		inc	(iy+VAR_35)
+		inc	(iy+VAR_DUNGEON_STEPS)
 		call	sub_C19B
 
 loc_78D7:

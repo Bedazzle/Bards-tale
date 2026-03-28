@@ -15,8 +15,8 @@ show_some_pictext:
 
 loc_6721:
 		dec	a
-		ld	(GAME_VARIABLES + VAR_4F), a
-		ld	a, (___table_84)
+		ld	(GAME_VARIABLES + VAR_DISPLAY_COUNT), a
+		ld	a, (ACTIVE_GUARDIAN)
 		push	af
 
 		PRINT_EMPTY

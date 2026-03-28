@@ -19,7 +19,7 @@ oh_dear_game_over:
 		jp	z, game_cycle
 
 		xor	a
-		ld	(GAME_VARIABLES + VAR_3B), a
+		ld	(GAME_VARIABLES + VAR_TELEPORT_MODE), a
 		ld	c, 1
 		ld	b, c
 

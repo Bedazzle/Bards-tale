@@ -46,6 +46,6 @@ wait_city_walk:
 		ld	a, (GAME_VARIABLES + VAR_KEEP_PRESSED)
 		ld	(GAME_VARIABLES + VAR_PRESSED_KEY), a
 
-		RST_10_4B
+		DISPATCH_MOVEMENT
 
 		jr	loop_city_walk

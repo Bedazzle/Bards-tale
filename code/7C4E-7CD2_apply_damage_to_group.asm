@@ -20,7 +20,7 @@ loc_7C5A:
 
 		ex	de, hl
 
-		RST_10_57
+		CALC_SPELL_FX
 
 		GET_B_FROM_TABLE	36h
 
@@ -40,7 +40,7 @@ loc_7C6C:
 
 		ex	de, hl
 
-		RST_10_57
+		CALC_SPELL_FX
 
 		ld	b, a
 
@@ -48,13 +48,13 @@ loc_7C7B:
 		res	0, (hl)
 		ex	(sp), hl
 		ex	de, hl
-		ld	a, (GAME_VARIABLES + VAR_50)
+		ld	a, (GAME_VARIABLES + VAR_DAMAGE_TYPE)
 
 		cp	6
 		jr	nc, loc_7C97
 
 		xor	a
-		ld	(GAME_VARIABLES + VAR_50), a
+		ld	(GAME_VARIABLES + VAR_DAMAGE_TYPE), a
 
 		cp	d
 		jr	nz, loc_7C97

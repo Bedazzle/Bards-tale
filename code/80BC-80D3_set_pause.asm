@@ -10,7 +10,7 @@ pause_speed:
 
 		WAIT_KEY_DOWN
 
-		GET_GAME_VARIABLE	VAR_67		; ???
+		GET_GAME_VARIABLE	VAR_ROUND_NUMBER		; ???
 
 		jr	z, loc_80D0
 

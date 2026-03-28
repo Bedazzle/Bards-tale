@@ -25,7 +25,7 @@ check_attack:
 		ld	a, 1
 
 loc_6997:
-		RST_10_30
+		SELECT_TARGET
 
 		jr	c, loc_6963
 		jr	loc_6971

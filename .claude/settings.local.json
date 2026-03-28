@@ -9,7 +9,12 @@
       "Bash(mv \"656A-65FE___UNKNOWN.asm\" \"656A-65FE_generate_encounter.asm\")",
       "Bash(mv \"669A-6705___UNKNOWN.asm\" \"669A-6705_enemy_group_advance.asm\")",
       "Bash(mv \"5C17-5C50___UNKNOWN.asm\" \"5C17-5C50_calc_xp_thresholds.asm\")",
-      "Bash(mv \"64CA-64DB___UNKNOWN.asm\" \"64CA-64DB_check_item_effect.asm\")"
+      "Bash(mv \"64CA-64DB___UNKNOWN.asm\" \"64CA-64DB_check_item_effect.asm\")",
+      "Bash(sed -i '' 's/VAR_00/VAR_PARTY_SIZE/g' code/*.asm levels/city/code/*.asm BT_game.asm data/*.asm)",
+      "Bash(sed -i '' 's/VAR_04\\\\b/VAR_DAY_OUTER_CTR/g' code/*.asm levels/city/code/*.asm BT_game.asm)",
+      "Bash(sed -i '' 's/VAR_06\\\\b/VAR_DISPLAY_STATE/g' code/*.asm levels/city/code/*.asm BT_game.asm)",
+      "Bash(sed -i '' 's/VAR_07\\\\b/VAR_DUNGEON_LEVEL/g' code/*.asm levels/city/code/*.asm BT_game.asm)",
+      "Bash(sed -i '' 's/VAR_08\\\\b/VAR_DAY_MID_CTR/g' code/*.asm levels/city/code/*.asm BT_game.asm)"
     ]
   }
 }

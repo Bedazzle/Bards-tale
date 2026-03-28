@@ -3,7 +3,7 @@ proc_emptybuild:
 
 		jr	nz, no_ambush
 
-		ld	(GAME_VARIABLES + VAR_5A), a
+		ld	(GAME_VARIABLES + VAR_AMBUSH_FLAG), a
 		call	combat_foes
 
 no_ambush:

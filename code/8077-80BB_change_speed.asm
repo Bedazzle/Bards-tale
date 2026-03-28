@@ -7,7 +7,7 @@ change_speed:
 loop_speed:
 		ld	c, 0A0h
 		call	dummy_pause
-		ld	hl, GAME_VARIABLES + VAR_58
+		ld	hl, GAME_VARIABLES + VAR_COMBAT_SPEED
 		push	af
 		call	get_pressed_key
 		jr	c, set_speed

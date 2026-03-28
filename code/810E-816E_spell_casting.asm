@@ -3,7 +3,7 @@ spell_casting:
 
 		PRINT_IX_HERO_NAME
 
-		ld	a, (GAME_VARIABLES + VAR_4B)
+		ld	a, (GAME_VARIABLES + VAR_CURRENT_SPELL)
 
 		cp	4Fh 			; 'O'
 		jr	c, loc_8125
@@ -48,7 +48,7 @@ casts_a_spell:
 		jr	c, print_fizzled
 
 loc_813F:
-		ld	a, (GAME_VARIABLES + VAR_4B)
+		ld	a, (GAME_VARIABLES + VAR_CURRENT_SPELL)
 		ld	c, a
 
 		cp	4Fh ; 'O'

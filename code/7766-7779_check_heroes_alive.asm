@@ -1,4 +1,4 @@
-dyn_proc_59:								; RST_10_2E
+dyn_proc_59:								; CHECK_ALL_HEROES
 		EXEC_FOR_HEROES	loc_776B
 
 		ret

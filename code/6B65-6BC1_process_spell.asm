@@ -1,7 +1,7 @@
 process_spell:
 		PUSH_REGS
 
-		ld	hl, GAME_VARIABLES + VAR_4B
+		ld	hl, GAME_VARIABLES + VAR_CURRENT_SPELL
 		ld	b, 3
 		call	nullify_buffer
 		ld	de, SPELL_NAMES
@@ -32,7 +32,7 @@ loop_spell_letters:
 		ld	(GAME_VARIABLES + VAR_SPELL_CLASS), a
 
 loc_6B91:
-		ld	(iy+VAR_4B), b
+		ld	(iy+VAR_CURRENT_SPELL), b
 		inc	(iy+VAR_SPELL_LEVEL)
 
 		ret

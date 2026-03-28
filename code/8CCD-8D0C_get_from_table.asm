@@ -45,7 +45,7 @@ get_IY_A_from_table:
 		ld	(load_from_IY+2), a
 
 load_from_IY:
-		ld	c, (iy+VAR_00)		; !!! SMC
+		ld	c, (iy+VAR_PARTY_SIZE)		; !!! SMC
 
 call_load_BC:
 		call	sub_8CF7

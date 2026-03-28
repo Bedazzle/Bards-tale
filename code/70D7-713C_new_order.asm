@@ -1,7 +1,7 @@
 new_order:
 		inc	(iy+VAR_PAUSE)		; pause ON
 
-		GET_GAME_VARIABLE	VAR_00		; ???
+		GET_GAME_VARIABLE	VAR_PARTY_SIZE		; ???
 
 		jr	c, loc_7139
 		jr	z, loc_7139

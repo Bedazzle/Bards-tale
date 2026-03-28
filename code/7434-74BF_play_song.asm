@@ -80,12 +80,12 @@ loc_7481:
 		call	sub_7A67
 		pop	af
 		push	af
-		ld	(GAME_VARIABLES + VAR_11), a
+		ld	(GAME_VARIABLES + VAR_SPELL_ID), a
 
 		GET_A_FROM_TABLE	0
 
-		ld	(GAME_VARIABLES + VAR_1D), a
-		ld	(iy+VAR_4C), e
+		ld	(GAME_VARIABLES + VAR_BARD_SONG_LVL), a
+		ld	(iy+VAR_CURRENT_ACTOR), e
 		pop	af
 		call	loc_82D7
 
@@ -100,7 +100,7 @@ loc_7481:
 		GET_IY_A_FROM_TABLE	54h, 43h
 
 		ld	b, a
-		ld	a, (GAME_VARIABLES + VAR_11)
+		ld	a, (GAME_VARIABLES + VAR_SPELL_ID)
 
 		cp	4
 		jr	z, loc_74BA
@@ -119,6 +119,6 @@ loc_7481:
 ; -------------------------------------
 
 loc_74BA:
-		ld	(iy+VAR_57), b
+		ld	(iy+VAR_SONG_EFFECT), b
 
 		jp	dyn_proc_07

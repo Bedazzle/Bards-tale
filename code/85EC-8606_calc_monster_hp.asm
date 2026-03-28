@@ -1,4 +1,4 @@
-dyn_proc_94:				; RST_10_5C
+dyn_proc_94:				; CALC_MONSTER_HP
 		push	de
 		ld	d, a
 

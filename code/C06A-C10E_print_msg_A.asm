@@ -10,7 +10,7 @@ print_msg_no_cp:
 		ld	b, a
 		dec	b
 		pop	af
-		ld	(GAME_VARIABLES + VAR_72), ix
+		ld	(GAME_VARIABLES + VAR_PRINT_POS), ix
 		ld	de, 101h
 		exx
 		and	a

@@ -3,6 +3,77 @@
 All notable changes to this project will be documented in this file.
 Format follows [Keep a Changelog](https://keepachangelog.com/).
 
+## [1.6.0] - 2026-03-28
+
+### Added
+- `guide/` directory with 7 source-derived game guides:
+  - **EASTER_EGGS.md** — hidden mechanics no manual covers: enemy joining party, Hunter crits, Monk unarmed scaling, item breakage, Paladin hidden AC, day/night encounter math, cheat defines, guardian/inn exact coordinates
+  - **COMBAT.md** — full damage formulas from assembly, initiative multipliers per class, AC calculation, flee mechanics with speed comparison, damage type effects (poison/drain/stoning/instant kill)
+  - **CLASSES.md** — all 10 classes with exact scaling from source code, Monk being the strongest class proven by math, multi-class strategy
+  - **MAGIC.md** — every spell cost, all light/reveal durations, summoned creature table, spell duration system, anti-magic warning
+  - **EXPLORATION.md** — city grid layout, day/night cycle internals, encounter rate math, all 7 tavern locations, Sinister Street secret, 3D rendering explanation
+  - **ITEMS.md** — equip eligibility, breakage probability (1/64 for cheap items), special attack types, bard instrument requirement, SP-halving equipment
+  - **LEVELING.md** — XP distribution formula, per-class XP curves, Review Board mechanics, stat growth, HP/SP regen, optimal leveling strategy
+
+## [1.5.0] - 2026-03-28
+
+### Added
+- `CROSS_REFERENCE.md` — complete cross-reference map:
+  - All 80+ spells (4-letter codes) mapped to their effect handler routines
+  - City location dispatch table (12 building types → handler routines)
+  - Main game loop call graph (from INIT_GAME through movement/combat)
+  - Full combat call graph (encounter → initiative → actions → damage → XP)
+
+### Milestone 2 Complete
+All documentation and naming cleanup finished. Every symbol in the codebase
+now has a meaningful name.
+
+## [1.4.0] - 2026-03-28
+
+### Added
+- `ARCHITECTURE.md` — comprehensive technical documentation covering:
+  - Full memory map ($0000-$FFFF with all regions described)
+  - RST 10h dispatch system (how macros map to routines via jump table)
+  - Character struct layout (all 100 bytes, every field)
+  - Enemy struct layout
+  - Combat flow (from encounter generation through XP awards)
+  - Spell system (4-letter codes → type dispatch → effect handlers)
+  - 3D rendering pipeline (view calculation → wall layers → sprite decode)
+
+## [1.3.0] - 2026-03-28
+
+### Named (31 tables + macros)
+- 13 data tables: `___table_82`→`GUARDIAN_TYPE`, tables 86-92 are spell state trackers (LIGHT, REVEAL, SECRET, COMPASS, CARPET, SHIELD, EYE), `___table_85`→`COMBAT_ACTIVE_FLAG`, `___table_45`→`KEY_CODES_TABLE`
+- 18 RST_10 macros: `RST_10_2A`→`CHECK_FLEE_RESULT`, `RST_10_30`→`SELECT_TARGET`, `RST_10_48`→`ROLL_DAMAGE`, `RST_10_4A`→`RECALC_ALL_AC`, `RST_10_61`→`CHECK_ITEM_MASK`, etc.
+
+### Verified
+- Binary still matches original
+
+## [1.2.0] - 2026-03-28
+
+### Named (12 struct offsets)
+- 7 character offsets: `CHAR_12`→`CHAR_SPEED` (used in defense/initiative), `CHAR_13`→`CHAR_SAVED_STATS` (possession swap), `CHAR_15`→`CHAR_ATTACK_SPEC` (damage dice), `CHAR_16`→`CHAR_DEFENSE_SPEC`, `CHAR_17`→`CHAR_SPECIAL_FLAG`, `CHAR_60`→`CHAR_BACKUP_PARAMS` (class change), `CHAR_63`→`CHAR_SWAP_STATS`
+- 5 enemy offsets: `ENEMY_10`→`ENEMY_ACTIVE_FLAG`, `ENEMY_11`→`ENEMY_COMBAT_DATA`, `ENEMY_15`→`ENEMY_SPEED`, `ENEMY_16`→`ENEMY_ATTACK_SPEC`, `ENEMY_17`→`ENEMY_SPECIAL_FLAG`
+
+### Verified
+- Binary still matches original
+
+## [1.1.0] - 2026-03-28
+
+### Named (70 game variables)
+All `VAR_xx` hex offsets in `constants.asm` replaced with meaningful names.
+References updated across 100+ assembly files.
+
+Examples: `VAR_00` → `VAR_PARTY_SIZE`, `VAR_53` → `VAR_TARGET_ID`,
+`VAR_4D` → `VAR_ENEMY_COUNT`, `VAR_10` → `VAR_SPELL_ACTIVE`,
+`VAR_38`/`VAR_39` → `VAR_VIEW_Y_OFFSET`/`VAR_VIEW_X_OFFSET` (3D rendering)
+
+Variable groups identified: day/night cycle (5 vars), spell system (6),
+combat state (6), damage pipeline (6), 3D view (2), treasure/loot (5)
+
+### Verified
+- Binary still matches original after all renames
+
 ## [1.0.0] - 2026-03-28
 
 ### Milestone

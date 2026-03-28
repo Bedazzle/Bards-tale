@@ -18,13 +18,13 @@ loc_7FF2:
 loc_8003:
 		PRINT_MESSAGE	75h			; "plays a tune..."
 
-		inc	(iy+VAR_0F)
+		inc	(iy+VAR_EVENT_DEPTH)
 		ld	a, c
 		call	loc_82E2
-		dec	(iy+VAR_0F)
+		dec	(iy+VAR_EVENT_DEPTH)
 
 loc_8010:
-		GET_GAME_VARIABLE	VAR_10		; ???
+		GET_GAME_VARIABLE	VAR_SPELL_ACTIVE		; ???
 
 		jr	nz, loc_8010
 
@@ -43,17 +43,17 @@ loc_8010:
 		dec	c
 		jr	z, loc_802F
 
-		ld	hl, GAME_VARIABLES + VAR_60
+		ld	hl, GAME_VARIABLES + VAR_DEFENSE_BONUS
 		ld	a, 2
 
 		jr	sub_805D
 ; -------------------------------------
 
 loc_802F:
-		ld	hl, GAME_VARIABLES + VAR_56
+		ld	hl, GAME_VARIABLES + VAR_SONG_MODIFIER
 		call	sub_805D
 
-		RST_10_4A
+		RECALC_ALL_AC
 
 		and	a
 
@@ -94,11 +94,11 @@ loc_8048:
 ; -------------------------------------
 
 loc_8055:
-		ld	hl, GAME_VARIABLES + VAR_64
+		ld	hl, GAME_VARIABLES + VAR_DAMAGE_PENALTY
 		jr	sub_805D
 
 loc_805A:
-		ld	hl, GAME_VARIABLES + VAR_5F
+		ld	hl, GAME_VARIABLES + VAR_BASE_DAMAGE
 
 sub_805D:
 		add	a, (hl)

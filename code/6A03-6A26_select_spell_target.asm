@@ -1,5 +1,5 @@
 loc_6A03:
-		RST_10_61	69h, 7
+		CHECK_ITEM_MASK	69h, 7
 
 		cp	4
 		ccf
@@ -14,7 +14,7 @@ loc_6A03:
 
 		ld	a, c
 
-		RST_10_30
+		SELECT_TARGET
 
 		ccf
 

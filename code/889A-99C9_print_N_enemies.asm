@@ -27,7 +27,7 @@ loop_enemy_block:
 		ld	a, (hl)
 		ld	e, a
 		dec	a
-		ld	(GAME_VARIABLES + VAR_4F), a
+		ld	(GAME_VARIABLES + VAR_DISPLAY_COUNT), a
 
 		PRINT_NUM_FROM_E
 

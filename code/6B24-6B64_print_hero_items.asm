@@ -47,7 +47,7 @@ get_item_status:
 		jr	z, print_list_item
 
 print_unknown_type:
-		RST_10_61	6Bh, 0Fh
+		CHECK_ITEM_MASK	6Bh, 0Fh
 
 		or	80h
 

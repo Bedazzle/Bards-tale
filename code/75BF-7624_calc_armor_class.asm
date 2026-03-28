@@ -52,7 +52,7 @@ loc_75F3:
 
 		ld	a, (hl)
 
-		RST_10_61	73h, 0Fh
+		CHECK_ITEM_MASK	73h, 0Fh
 
 		add	a, e
 		ld	e, a
@@ -62,14 +62,14 @@ loc_7600:
 		djnz	loc_75F3
 
 loc_7603:
-		RST_10_00	55h
+		GET_ATTR_SAVE_IX	55h
 
 		inc	hl
 		add	a, (hl)
 		inc	hl
 		add	a, (hl)
 		add	a, e
-		sub	(iy+VAR_63)
+		sub	(iy+VAR_STAT_MODIFIER)
 		jr	nc, loc_7611
 
 		xor	a
@@ -88,9 +88,9 @@ loc_7617:
 ; -------------------------------------
 
 loc_761B:
-		ld	a, (ix+CHAR_16)
+		ld	a, (ix+CHAR_DEFENSE_SPEC)
 
-		RST_10_61	44h, 1Fh
+		CHECK_ITEM_MASK	44h, 1Fh
 
 		ld	e, a
 

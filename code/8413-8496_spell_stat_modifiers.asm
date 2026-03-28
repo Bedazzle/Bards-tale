@@ -5,14 +5,14 @@ loc_8413:
 		bit	7, (iy+VAR_ACTIVE_HERO)
 		jr	z, loc_8426
 
-		inc	(iy+VAR_61)
+		inc	(iy+VAR_INITIATIVE_FLAG)
 
 		PRINT_MESSAGE	6Bh			; "and the party misses an attack"
 
 		jr	loc_8453
 
 loc_8426:
-		ld	a, (GAME_VARIABLES + VAR_53)
+		ld	a, (GAME_VARIABLES + VAR_TARGET_ID)
 		and	7Fh
 
 		GET_A_FROM_TABLE	1
@@ -39,7 +39,7 @@ loc_8437:
 
 		jr	c, loc_844B
 
-		ld	a, (GAME_VARIABLES + VAR_53)
+		ld	a, (GAME_VARIABLES + VAR_TARGET_ID)
 		and	7Fh
 
 		GET_A_FROM_TABLE	2Eh
@@ -47,12 +47,12 @@ loc_8437:
 		jp	loc_86C0
 
 loc_844B:
-		ld	hl, GAME_VARIABLES + VAR_63
+		ld	hl, GAME_VARIABLES + VAR_STAT_MODIFIER
 		ld	a, c
 		add	a, (hl)
 		ld	(hl), a
 
-		RST_10_4A
+		RECALC_ALL_AC
 
 loc_8453:
 		jp	print_ellipsis
@@ -81,11 +81,11 @@ loc_8464:
 
 		jr	c, loc_8477
 		ld	a, c
-		ld	hl, GAME_VARIABLES + VAR_56
+		ld	hl, GAME_VARIABLES + VAR_SONG_MODIFIER
 		add	a, (hl)
 		ld	(hl), a
 
-		RST_10_4A
+		RECALC_ALL_AC
 
 		jr	loc_8453
 ; -------------------------------------
@@ -115,7 +115,7 @@ loc_8489:
 		ld	b, 6
 
 loc_848B:
-		ld	(iy+VAR_53), b
+		ld	(iy+VAR_TARGET_ID), b
 		call	loc_8497
 		dec	b
 		jp	p, loc_848B

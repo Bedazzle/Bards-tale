@@ -19,7 +19,7 @@ proc_city_sewers:
 go_city_sewers:
 		ld	hl, 1110h				; TODO: must be loaded from city map data
 		ld	(GAME_VARIABLES + VAR_COORD_SO_NO), hl
-		ld	(iy+VAR_3B), 3
+		ld	(iy+VAR_TELEPORT_MODE), 3
 		ld	b, 0FFh
 		ld	c, 7
 

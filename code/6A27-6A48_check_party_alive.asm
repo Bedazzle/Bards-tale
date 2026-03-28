@@ -1,4 +1,4 @@
-dyn_proc_60:								; RST_10_2F
+dyn_proc_60:								; FIND_ALIVE_HERO
 		ld	b, 0
 
 		FIND_HERO_BY_B

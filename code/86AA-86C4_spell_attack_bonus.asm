@@ -5,7 +5,7 @@ loc_86AA:
 
 		GET_GAME_VARIABLE	VAR_ACTIVE_HERO
 
-		ld	a, (GAME_VARIABLES + VAR_53)
+		ld	a, (GAME_VARIABLES + VAR_TARGET_ID)
 		jr	nc, loc_86BD
 
 		and	7Fh

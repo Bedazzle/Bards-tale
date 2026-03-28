@@ -1,5 +1,5 @@
 attack_and_result:
-		GET_GAME_VARIABLE	VAR_50		; ???
+		GET_GAME_VARIABLE	VAR_DAMAGE_TYPE		; ???
 
 		jr	z, loc_70B4
 
@@ -15,6 +15,6 @@ loc_70B4:
 
 		PRINT_WORD
 
-		ld	a, (GAME_VARIABLES + VAR_53)
+		ld	a, (GAME_VARIABLES + VAR_TARGET_ID)
 
 		ret

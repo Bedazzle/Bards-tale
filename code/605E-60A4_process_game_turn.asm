@@ -1,8 +1,8 @@
 process_game_turn:
-		inc	(iy+VAR_12)				; ??? processing day/night cycle flag
+		inc	(iy+VAR_TURN_PROCESSING)				; ??? processing day/night cycle flag
 
 param_to_copy:
-		ld	hl, GAME_VARIABLES + VAR_45
+		ld	hl, GAME_VARIABLES + VAR_TREASURE_LO
 		ld	bc, 33h					; 51
 		ld	de, GAME_PARAM_COPY
 		ldir
@@ -16,18 +16,18 @@ param_to_copy:
 		ldir
 
 		call	process_daynight
-		dec	(iy+VAR_12)				; ??? processing day/night cycle flag
+		dec	(iy+VAR_TURN_PROCESSING)				; ??? processing day/night cycle flag
 
-		GET_GAME_VARIABLE	VAR_13		; ???
+		GET_GAME_VARIABLE	VAR_REDRAW_STATS		; ???
 
 		jr	z, copy_to_param
 
-		ld	(iy+VAR_13), 0
+		ld	(iy+VAR_REDRAW_STATS), 0
 
 		PRINT_STATS_TABLE
 
 copy_to_param:
-		ld	de, GAME_VARIABLES + VAR_45
+		ld	de, GAME_VARIABLES + VAR_TREASURE_LO
 		ld	hl, GAME_PARAM_COPY
 		ld	bc, 33h
 		ldir

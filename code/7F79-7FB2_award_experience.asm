@@ -1,7 +1,7 @@
 loc_7F79:
 		push	af
 
-		RST_10_2E
+		CHECK_ALL_HEROES
 
 		ld	c, b
 		ld	de, 0
@@ -12,7 +12,7 @@ loc_7F81:
 		sbc	hl, bc
 		jr	nc, loc_7F8C
 
-		dec	(iy+VAR_45)
+		dec	(iy+VAR_TREASURE_LO)
 		jp	m, loc_7F92
 
 loc_7F8C:

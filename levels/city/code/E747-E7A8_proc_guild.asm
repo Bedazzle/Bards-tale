@@ -16,7 +16,7 @@ next_guild:
 		xor	a
 		ld	(iy+VAR_REVEAL_SECRET), a
 		inc	a
-		ld	(GAME_VARIABLES + VAR_04), a
+		ld	(GAME_VARIABLES + VAR_DAY_OUTER_CTR), a
 
 		GET_GAME_VARIABLE	VAR_LIGHT
 
@@ -56,11 +56,11 @@ loop_menu:
 		jr	nz, loop_menu
 
 exit_guild:
-		GET_GAME_VARIABLE	VAR_00		; ???
+		GET_GAME_VARIABLE	VAR_PARTY_SIZE		; ???
 
 		jr	c, loop_menu
 
-		RST_10_2E
+		CHECK_ALL_HEROES
 
 		xor	a
 		or	b

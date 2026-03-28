@@ -9,22 +9,22 @@ DO_SOME_MOVEMENT:
 		dec	a
 		jp	z, loc_F01A
 
-		ld	hl, GAME_VARIABLES + VAR_39
+		ld	hl, GAME_VARIABLES + VAR_VIEW_X_OFFSET
 		ld	a, (GAME_VARIABLES + VAR_COORD_WE_EA)
 		sub	3
 		call	sub_F0C8
-		inc	(iy+VAR_39)
+		inc	(iy+VAR_VIEW_X_OFFSET)
 		dec	(hl)
 		call	sub_F112
 		ld	(byte_FBD7), a
 		call	sub_F0E2
 		ld	(byte_FBD8), a
-		inc	(iy+VAR_39)
+		inc	(iy+VAR_VIEW_X_OFFSET)
 		call	sub_F10E
 		ld	(byte_FBDA), a
 		call	sub_F0F6
 		ld	(byte_FBDB), a
-		inc	(iy+VAR_39)
+		inc	(iy+VAR_VIEW_X_OFFSET)
 		call	sub_F112
 		ld	(byte_FBDE), a
 		call	sub_F10E
@@ -34,22 +34,22 @@ DO_SOME_MOVEMENT:
 ; -------------------------------------
 
 loc_F01A:
-		ld	hl, GAME_VARIABLES + VAR_38
+		ld	hl, GAME_VARIABLES + VAR_VIEW_Y_OFFSET
 		ld	a, (GAME_VARIABLES + VAR_COORD_SO_NO)
 		sub	3
 		call	sub_F0D5
-		inc	(iy+VAR_38)
+		inc	(iy+VAR_VIEW_Y_OFFSET)
 		dec	(hl)
 		call	sub_F112
 		ld	(byte_FBD8), a
 		call	sub_F0E2
 		ld	(byte_FBD7), a
-		inc	(iy+VAR_38)
+		inc	(iy+VAR_VIEW_Y_OFFSET)
 		call	sub_F10E
 		ld	(byte_FBDB), a
 		call	sub_F0F6
 		ld	(byte_FBDA), a
-		inc	(iy+VAR_38)
+		inc	(iy+VAR_VIEW_Y_OFFSET)
 		call	sub_F112
 		ld	(byte_FBDD), a
 		call	sub_F10E
@@ -59,22 +59,22 @@ loc_F01A:
 ; -------------------------------------
 
 loc_F054:
-		ld	hl, GAME_VARIABLES + VAR_39
+		ld	hl, GAME_VARIABLES + VAR_VIEW_X_OFFSET
 		ld	a, (GAME_VARIABLES + VAR_COORD_WE_EA)
 		add	a, 3
 		call	sub_F0C8
-		dec	(iy+VAR_39)
+		dec	(iy+VAR_VIEW_X_OFFSET)
 		inc	(hl)
 		call	sub_F112
 		ld	(byte_FBD7), a
 		call	sub_F0EC
 		ld	(byte_FBD8), a
-		dec	(iy+VAR_39)
+		dec	(iy+VAR_VIEW_X_OFFSET)
 		call	sub_F10A
 		ld	(byte_FBDA), a
 		call	sub_F100
 		ld	(byte_FBDB), a
-		dec	(iy+VAR_39)
+		dec	(iy+VAR_VIEW_X_OFFSET)
 		call	sub_F112
 		ld	(byte_FBDE), a
 		call	sub_F10A
@@ -84,22 +84,22 @@ loc_F054:
 ; -------------------------------------
 
 loc_F08E:
-		ld	hl, GAME_VARIABLES + VAR_38
+		ld	hl, GAME_VARIABLES + VAR_VIEW_Y_OFFSET
 		ld	a, (GAME_VARIABLES + VAR_COORD_SO_NO)
 		add	a, 3
 		call	sub_F0D5
-		dec	(iy+VAR_38)
+		dec	(iy+VAR_VIEW_Y_OFFSET)
 		inc	(hl)
 		call	sub_F112
 		ld	(byte_FBD8), a
 		call	sub_F0EC
 		ld	(byte_FBD7), a
-		dec	(iy+VAR_38)
+		dec	(iy+VAR_VIEW_Y_OFFSET)
 		call	sub_F10A
 		ld	(byte_FBDB), a
 		call	sub_F100
 		ld	(byte_FBDA), a
-		dec	(iy+VAR_38)
+		dec	(iy+VAR_VIEW_Y_OFFSET)
 		call	sub_F112
 		ld	(byte_FBDD), a
 		call	sub_F10A
@@ -192,13 +192,13 @@ sub_F10E:
 
 sub_F112:
 		push	hl
-		ld	a, (GAME_VARIABLES + VAR_38)
+		ld	a, (GAME_VARIABLES + VAR_VIEW_Y_OFFSET)
 		ld	b, a
 
 		cp	1Eh
 		jr	nc, loc_F13C
 
-		ld	a, (GAME_VARIABLES + VAR_39)
+		ld	a, (GAME_VARIABLES + VAR_VIEW_X_OFFSET)
 		ld	c, a
 
 		cp	1Eh

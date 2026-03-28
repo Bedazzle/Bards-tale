@@ -43,7 +43,7 @@ loc_E62A:
 
 loc_E62F:
 		xor	a
-		ld	(GAME_VARIABLES + VAR_37), a
+		ld	(GAME_VARIABLES + VAR_TEMPLE_TIMER), a
 
 		GET_ATTR_BY_PARAM	CHAR_HITS_LO
 
@@ -84,7 +84,7 @@ loc_E651:
 		jr	c, loc_E664
 
 loc_E65A:
-		inc	(iy+VAR_37)
+		inc	(iy+VAR_TEMPLE_TIMER)
 
 		PRINT_MESSAGE2	62h		; "has been drained of life force."
 
@@ -242,7 +242,7 @@ loc_E701:
 ; -------------------------------------
 
 loc_E705:
-		RST_10_00	37h
+		GET_ATTR_SAVE_IX	37h
 
 		jr	z, loc_E72D
 
@@ -290,7 +290,7 @@ loc_E738:
 
 		PRINT_MESSAGE2	60h			; "...and he is healed!"
 
-		RST_10_4A
+		RECALC_ALL_AC
 
 		CHANGE_SPEED_TO_8
 

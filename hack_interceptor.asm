@@ -101,11 +101,11 @@
 ;		ld	b, 6Fh
 ;		call	nullify_buffer
 ;		xor	a
-;		ld	(iy+VAR_58), 5
+;		ld	(iy+VAR_COMBAT_SPEED), 5
 ;
 ;		ld	sp, 0FFFFh
 ;		ld	iy, 5FABh		; game variables
-;		ld	(iy+VAR_48), 18h
+;		ld	(iy+VAR_PORTRAIT_CTR), 18h
 ;		ld	(iy+VAR_PAUSE), 0
 ;		ld	(iy+VAR_INFO_COL_POS), 15h
 ;

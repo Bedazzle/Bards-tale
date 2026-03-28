@@ -11,7 +11,7 @@ loc_7CD3:
 		cp	STATUS_DEAD
 		jr	nz, loc_7CEB
 
-		ld	a, (GAME_VARIABLES + VAR_50)	; ???
+		ld	a, (GAME_VARIABLES + VAR_DAMAGE_TYPE)	; ???
 
 		cp	5
 		jr	z, loc_7CFF
@@ -39,7 +39,7 @@ loc_7CEB:
 		jr	z, loc_7D28
 
 loc_7CFF:
-		GET_GAME_VARIABLE	VAR_50			; ???
+		GET_GAME_VARIABLE	VAR_DAMAGE_TYPE			; ???
 
 		jr	z, loc_7D23
 
@@ -73,14 +73,14 @@ loc_7D19:
 ; -------------------------------------
 
 loc_7D23:
-		ld	(GAME_VARIABLES + VAR_50), a
+		ld	(GAME_VARIABLES + VAR_DAMAGE_TYPE), a
 		and	a
 
 		ret
 ; -------------------------------------
 
 loc_7D28:
-		ld	(GAME_VARIABLES + VAR_50), a
+		ld	(GAME_VARIABLES + VAR_DAMAGE_TYPE), a
 
 loc_7D2B:
 		xor	a
@@ -91,11 +91,11 @@ loc_7D2B:
 
 loc_7D37:
 		ld	(ix+CHAR_STATUS), a
-		ld	a, (GAME_VARIABLES + VAR_53)
-		cp	(iy+VAR_4C)
+		ld	a, (GAME_VARIABLES + VAR_TARGET_ID)
+		cp	(iy+VAR_CURRENT_ACTOR)
 		call	z, sub_7A67
 
-		RST_10_2E
+		CHECK_ALL_HEROES
 
 		jp	c, oh_dear_game_over
 
@@ -158,7 +158,7 @@ loc_7D77:
 ; -------------------------------------
 
 loc_7D79:
-		GET_GAME_VARIABLE	VAR_53		; ???
+		GET_GAME_VARIABLE	VAR_TARGET_ID		; ???
 
 		jr	z, loc_7D23
 		ld	a, (ix+CHAR_STATUS)
@@ -166,11 +166,11 @@ loc_7D79:
 		cp	2
 		jr	z, loc_7D48
 
-		FIND_ATTR_AND_ADDRESS	CHAR_13
+		FIND_ATTR_AND_ADDRESS	CHAR_SAVED_STATS
 
 		ex	de, hl
 
-		FIND_ATTR_AND_ADDRESS	CHAR_63
+		FIND_ATTR_AND_ADDRESS	CHAR_SWAP_STATS
 
 		ld	b, 3
 

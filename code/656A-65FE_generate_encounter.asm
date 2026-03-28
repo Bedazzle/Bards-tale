@@ -1,18 +1,18 @@
 loc_656A:
 		ZERO_BUFFERS
 
-		inc	(iy+VAR_67)
+		inc	(iy+VAR_ROUND_NUMBER)
 
-		GET_GAME_VARIABLE	VAR_0E			; ???
+		GET_GAME_VARIABLE	VAR_COMBAT_MODE			; ???
 
 		jr	z, loc_6588
 
 		GET_IY_A_FROM_TABLE	54h, 43h
 
 		ld	e, a
-		ld	hl, GAME_VARIABLES + VAR_5F
+		ld	hl, GAME_VARIABLES + VAR_BASE_DAMAGE
 
-		GET_GAME_VARIABLE	VAR_11			; ???
+		GET_GAME_VARIABLE	VAR_SPELL_ID			; ???
 
 		jr	nz, loc_6582
 
@@ -28,11 +28,11 @@ loc_6582:
 loc_6588:
 		ld	b, 0FFh
 
-		GET_GAME_VARIABLE	VAR_5A			; ???
+		GET_GAME_VARIABLE	VAR_AMBUSH_FLAG			; ???
 
 		jr	nz, loc_65F1
 
-		GET_GAME_VARIABLE	VAR_5B			; ???
+		GET_GAME_VARIABLE	VAR_ENCOUNTER_CTR			; ???
 
 		ld	c, a
 		jr	nz, loc_65A3
@@ -48,7 +48,7 @@ loc_6588:
 		ld	e, 0
 
 loc_65A0:
-		ld	(iy+VAR_4D), e
+		ld	(iy+VAR_ENEMY_COUNT), e
 
 loc_65A3:
 		inc	b
@@ -83,7 +83,7 @@ loc_65AF:
 loc_65C0:
 		GET_B_FROM_LIST	41h
 
-		RST_10_61	71h, 7
+		CHECK_ITEM_MASK	71h, 7
 
 		jr	z, loc_65CC
 
@@ -113,7 +113,7 @@ loc_65DD:
 loc_65E1:
 		GET_B_FROM_TABLE	41h
 
-		RST_10_5C
+		CALC_MONSTER_HP
 
 		ld	(hl), a
 		inc	hl
@@ -122,7 +122,7 @@ loc_65E1:
 
 		ld	a, b
 
-		cp	(iy+VAR_4D)
+		cp	(iy+VAR_ENEMY_COUNT)
 		jr	c, loc_65A3
 
 loc_65F1:

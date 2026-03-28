@@ -23,8 +23,8 @@ loc_82EB:
 		ld	a, (hl)
 		exx
 		ld	h, a
-		ld	(GAME_VARIABLES + VAR_15), hl
-		ld	(iy+VAR_26), d
-		ld	(iy+VAR_10), 1
+		ld	(GAME_VARIABLES + VAR_SPELL_DURATION), hl
+		ld	(iy+VAR_CAST_HERO), d
+		ld	(iy+VAR_SPELL_ACTIVE), 1
 
 		ret
