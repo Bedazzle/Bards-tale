@@ -1,0 +1,15 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(mkdir -p recompile)",
+      "Bash(./sjasmplus --syntax=abF --msg=err BT_main.asm)",
+      "Bash(make clean:*)",
+      "Bash(make)",
+      "Bash(make:*)",
+      "Bash(mv \"656A-65FE___UNKNOWN.asm\" \"656A-65FE_generate_encounter.asm\")",
+      "Bash(mv \"669A-6705___UNKNOWN.asm\" \"669A-6705_enemy_group_advance.asm\")",
+      "Bash(mv \"5C17-5C50___UNKNOWN.asm\" \"5C17-5C50_calc_xp_thresholds.asm\")",
+      "Bash(mv \"64CA-64DB___UNKNOWN.asm\" \"64CA-64DB_check_item_effect.asm\")"
+    ]
+  }
+}

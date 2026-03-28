@@ -14,7 +14,7 @@ binary_start:
 		include "code/5B8B-5BA7_print_hero_attr.asm"
 		include "code/5BA8-5BE0_get_pressed_key.asm"
 		include "code/5BE1-5C16_print_number.asm"
-		include "code/5C17-5C50___UNKNOWN.asm"
+		include "code/5C17-5C50_calc_xp_thresholds.asm"
 
 ; -------------------------------------
 		dw off_5C53
@@ -60,33 +60,33 @@ PARTY_FILE:
 
 		include "code/649C-64BF_push_pop_regs.asm"
 		include "code/64C0-64C9_get_rnd_by_param.asm"
-		include "code/64CA-64DB___UNKNOWN.asm"
+		include "code/64CA-64DB_check_item_effect.asm"
 		include "code/64DC-64F2_exec_for_heroes.asm"
 		include "code/64F3-6569_city_colors.asm"
-		include "code/656A-65FE___UNKNOWN.asm"
+		include "code/656A-65FE_generate_encounter.asm"
 		include "code/65FF-6615_zero_buffers.asm"
 		include "code/6616-6629_calculate_addr.asm"
 		include "code/662A-6699_encounter.asm"
-		include "code/669A-6705___UNKNOWN.asm"
+		include "code/669A-6705_enemy_group_advance.asm"
 		include "code/6706-6712_swap_byte_buffer.asm"
 		include "code/6713-6733_show_some_pictext.asm"
 		include "code/6734-6745_clear_txt_buffer.asm"
-		include "code/6746-680C___UNKNOWN.asm"
-		include "code/680D-6857___UNKNOWN.asm"
+		include "code/6746-680C_calc_combat_initiative.asm"
+		include "code/680D-6857_select_random_hero.asm"
 		include "code/6858-68AC_fight_or_run.asm"
 		include "code/68AD-6914_battle_options.asm"
 		include "code/6915-6976_option_is_found.asm"
-		include "code/6977-69B7___UNKNOWN.asm"
+		include "code/6977-69B7_handle_battle_actions.asm"
 		include "code/69B8-6A02_battle_play_tune.asm"
-		include "code/6A03-6A26___UNKNOWN.asm"
-		include "code/6A27-6A48___UNKNOWN.asm"
+		include "code/6A03-6A26_select_spell_target.asm"
+		include "code/6A27-6A48_check_party_alive.asm"
 		include "code/6A49-6A65_get_rnd_numbers.asm"
-		include "code/6A66-6AC5___UNKNOWN.asm"
+		include "code/6A66-6AC5_combat_flee_check.asm"
 		include "code/6AC6-6ACB_divide_A_by_8.asm"
-		include "code/6ACC-6B23___UNKNOWN.asm"
+		include "code/6ACC-6B23_calc_defense_rating.asm"
 		include "code/6B24-6B64_print_hero_items.asm"
 		include "code/6B65-6BC1_process_spell.asm"
-		include "code/6BC2-6C82___UNKNOWN.asm"
+		include "code/6BC2-6C82_select_combat_target.asm"
 		include "code/6C83-6CAA_print_memb_num.asm"
 
 ; -------------------------------------
@@ -115,7 +115,7 @@ sub_6CB1:
 		include "code/6CBC-6CCE_count_heroes.asm"
 		include "code/6CCF-6CD6_print_group.asm"
 		include "code/6CD7-6D04_check_equipped.asm"
-		include "code/6D05-6D2B___UNKNOWN.asm"
+		include "code/6D05-6D2B_find_special_weapon.asm"
 
 ; -------------------------------------
 
@@ -166,8 +166,8 @@ sub_713D:
 		jp	loc_714B
 ; -------------------------------------
 
-		include "code/7144-719A___UNKNOWN.asm"
-		include "code/719B-71AF___UNKNOWN.asm"
+		include "code/7144-719A_lookup_addr_table.asm"
+		include "code/719B-71AF_print_combat_actor.asm"
 		include "code/71B0-7226_print_hero_stats.asm"
 		include "code/7227-722C_print_and_wait.asm"
 		include "code/722D-72DC_trade_gold.asm"
@@ -176,7 +176,7 @@ sub_713D:
 		include "code/7305-7362_equip_item.asm"
 		include "code/7363-737E_enter_number.asm"
 		include "code/737F-73A5_print_magic_attrs.asm"
-		include "code/73A6-73E7___UNKNOWN.asm"
+		include "code/73A6-73E7_process_action_key.asm"
 
 		include "tables/73E8-7405_procs_actions.asm"
 
@@ -206,19 +206,19 @@ if_FB98_is_zero:
 ; -------------------------------------
 
 		include "code/7539-758F_who_cast_spell.asm"
-		include "code/7590-75A4___UNKNOWN.asm"
-		include "code/75A5-75BE___UNKNOWN.asm"
-		include "code/75BF-7624___UNKNOWN.asm"
-		include "code/7625-7638___UNKNOWN.asm"
-		include "code/7639-7663___UNKNOWN.asm"
+		include "code/7590-75A4_check_spell_cost.asm"
+		include "code/75A5-75BE_use_and_break_item.asm"
+		include "code/75BF-7624_calc_armor_class.asm"
+		include "code/7625-7638_recalc_party_ac.asm"
+		include "code/7639-7663_add_item_to_hero.asm"
 		include "code/7664-768F_print_hero_attrib.asm"
 		include "code/7690-76B8_shoppe_pool_gold.asm"
-		include "code/76B9-76EC___UNKNOWN.asm"
+		include "code/76B9-76EC_calc_xp_for_level.asm"
 		include "code/76ED-771B_increas_12_digits.asm"
-		include "code/771C-773B___UNKNOWN.asm"
+		include "code/771C-773B_add_to_bcd_number.asm"
 		include "code/773C-7757_copy_hero_money.asm"
 		include "code/7758-7765_is_roster_full.asm"
-		include "code/7766-7779___UNKNOWN.asm"
+		include "code/7766-7779_check_heroes_alive.asm"
 
 ; -------------------------------------
 
@@ -243,36 +243,36 @@ sub_7785:
 ; -------------------------------------
 
 		include "code/778B-77AF_decreas_12_digits.asm"
-		include "code/77B0-77D7___UNKNOWN.asm"
+		include "code/77B0-77D7_store_bcd_and_compare.asm"
 		include "code/77B8-77FF_unpack_hero_attrs.asm"
 		include "code/7800-7827_pack_hero_attrs.asm"
-		include "code/7828-78A7___UNKNOWN.asm"
-		include "code/78A8-78CB___UNKNOWN.asm"
-		include "code/78CC-78D9___UNKNOWN.asm"
+		include "code/7828-78A7_summon_creature.asm"
+		include "code/78A8-78CB_apply_anti_magic.asm"
+		include "code/78CC-78D9_process_dungeon_step.asm"
 		include "code/78DA-7905_process_poison.asm"
-		include "code/7906-794C___UNKNOWN.asm"
-		include "code/794D-7966___UNKNOWN.asm"
-		include "code/7967-7A31___UNKNOWN.asm"
+		include "code/7906-794C_party_disbelieve.asm"
+		include "code/794D-7966_spend_spell_points.asm"
+		include "code/7967-7A31_post_combat_cleanup.asm"
 		include "code/7A32-7A49_clean_ally_memory.asm"
 		include "code/7A4A-7A66_clean_hero_memory.asm"
-		include "code/7A67-7A9D___UNKNOWN.asm"
-		include "code/7A9E-7AB7___UNKNOWN.asm"
-		include "code/7AB8-7BEC___UNKNOWN.asm"
+		include "code/7A67-7A9D_process_special_event.asm"
+		include "code/7A9E-7AB7_find_equipped_by_type.asm"
+		include "code/7AB8-7BEC_calc_attack_damage.asm"
 		include "code/7BED-7BF3_divide_A_by_16.asm"
-		include "code/7BF4-7C4D___UNKNOWN.asm"
-		include "code/7C4E-7CD2___UNKNOWN.asm"
-		include "code/7CD3-7DB3___UNKNOWN.asm"
+		include "code/7BF4-7C4D_calc_enemy_attack.asm"
+		include "code/7C4E-7CD2_apply_damage_to_group.asm"
+		include "code/7CD3-7DB3_apply_damage_to_hero.asm"
 
 		include "data/7DB4-7DB7_UNKNOWN_TABLE_3.asm"
 
 ; ======= S U B	R O U T	I N E =========
 
-		include "code/7DB8-7DF8___UNKNOWN.asm"
-		include "code/7DF9-7E37___UNKNOWN.asm"
+		include "code/7DB8-7DF8_regenerate_hp_sp.asm"
+		include "code/7DF9-7E37_regen_equipped_effects.asm"
 		include "code/7E38-7F78_enemies_killed.asm"
-		include "code/7F79-7FB2___UNKNOWN.asm"
-		include "code/7FB3-7FF1___UNKNOWN.asm"
-		include "code/7FF2-8064___UNKNOWN.asm"
+		include "code/7F79-7FB2_award_experience.asm"
+		include "code/7FB3-7FF1_enemy_joins_party.asm"
+		include "code/7FF2-8064_process_bard_song.asm"
 		include "code/8065-806C_dummy_pause.asm"
 
 ; -------------------------------------
@@ -293,9 +293,9 @@ dyn_proc_54:						; RST_10_29
 		include "code/80FB-810D_choose_hero.asm"
 		include "code/810E-816E_spell_casting.asm"
 		include "code/816E-819A_light_the_light.asm"
-		include "code/819B-81D4___UNKNOWN.asm"
-		include "code/81D5-82BD___UNKNOWN.asm"
-		include "code/82BE-82D1___UNKNOWN.asm"
+		include "code/819B-81D4_check_spell_valid.asm"
+		include "code/81D5-82BD_resolve_spell_effect.asm"
+		include "code/82BE-82D1_tick_spell_duration.asm"
 
 ; ======= S U B	R O U T	I N E =========
 
@@ -307,13 +307,13 @@ sub_82D2:
 
 ; -------------------------------------
 
-		include "code/82D7-82FB___UNKNOWN.asm"
+		include "code/82D7-82FB_start_spell_or_song.asm"
 
 		include "data/82FC-8313_UNKNOWN.asm"
 
-		include "code/8314-8412___UNKNOWN.asm"
-		include "code/8413-8496___UNKNOWN.asm"
-		include "code/8497-8517___UNKNOWN.asm"
+		include "code/8314-8412_spell_breath_attack.asm"
+		include "code/8413-8496_spell_stat_modifiers.asm"
+		include "code/8497-8517_spell_heal_and_cure.asm"
 
 ; -------------------------------------
 
@@ -323,13 +323,13 @@ loc_8518:
 
 ; -------------------------------------
 
-		include "code/851A-85EB___UNKNOWN.asm"
-		include "code/85EC-8606___UNKNOWN.asm"
-		include "code/8607-861A___UNKNOWN.asm"
-		include "code/861B-8625___UNKNOWN.asm"
-		include "code/8626-8648___UNKNOWN.asm"
-		include "code/8649-86A9___UNKNOWN.asm"
-		include "code/86AA-86C4___UNKNOWN.asm"
+		include "code/851A-85EB_spell_summon_monster.asm"
+		include "code/85EC-8606_calc_monster_hp.asm"
+		include "code/8607-861A_spell_reveal_secret.asm"
+		include "code/861B-8625_spell_flee_effect.asm"
+		include "code/8626-8648_spell_ac_modifier.asm"
+		include "code/8649-86A9_show_location_info.asm"
+		include "code/86AA-86C4_spell_attack_bonus.asm"
 
 ; -------------------------------------
 
@@ -397,7 +397,7 @@ shield_setup:
 ; -------------------------------------
 
 		include "code/8706-8777_proc_teleport.asm"
-		include "code/8778-87B4___UNKNOWN.asm"
+		include "code/8778-87B4_adjust_value_updown.asm"
 		include "code/87B5-87CF_print_plus_minus.asm"
 
 ; -------------------------------------
@@ -450,12 +450,12 @@ dyn_proc_80:				; RST_10_49
 		ret
 ; -------------------------------------
 
-		include "code/8889-8895___UNKNOWN.asm"
+		include "code/8889-8895_roll_damage_dice.asm"
 		include "code/8896-8899_print_ellipsis.asm"
 		include "code/889A-99C9_print_N_enemies.asm"
 		include "code/88CA-88E4_print_12_digits.asm"
-		include "code/88E5-890C___UNKNOWN.asm"
-		include "code/890D-891C___UNKNOWN.asm"
+		include "code/88E5-890C_print_large_number.asm"
+		include "code/890D-891C_toggle_speed_flag.asm"
 
 ; -------------------------------------
 		ret
@@ -525,7 +525,7 @@ OPTION_KEYS:
 		include "data/A5EC-BFE1_UNKNOWN.asm"
 
 		include "code/BFE2-C009_print_routines2.asm"
-		include "code/C00A-C038___UNKNOWN.asm"
+		include "code/C00A-C038_print_item_name_padded.asm"
 
 ; -------------------------------------
 
@@ -617,7 +617,7 @@ loc_C11D:
 ; ======= S U B	R O U T	I N E =========
 
 LEVEL_START:					; C18C (49548) load 39C5 (14789) bytes of level here
-		include "levels/city/code/C18C-C19D___UNKNOWN.asm"
+		include "levels/city/code/C18C-C19D_movement_dispatch.asm"
 
 		include "levels/city/tables/C19E-C2C1_addr_table.asm"
 
@@ -633,14 +633,14 @@ LEVEL_START:					; C18C (49548) load 39C5 (14789) bytes of level here
 		include "levels/city/code/E3CE-E3FB_shoppe_identify.asm"
 		include "levels/city/code/E3FC-E422_shoppe_sell.asm"
 		include "levels/city/code/E423-E4F3_shoppe_buy.asm"
-		include "levels/city/code/E4F4-E50C___UNKNOWN.asm"
-		include "levels/city/code/E50D-E54B___UNKNOWN.asm"
-		include "levels/city/code/E54C-E561___UNKNOWN.asm"
+		include "levels/city/code/E4F4-E50C_shift_price_buffer.asm"
+		include "levels/city/code/E50D-E54B_display_inventory_list.asm"
+		include "levels/city/code/E54C-E561_get_inventory_selection.asm"
 
 		include "levels/city/data/E562-E5E1_UNKNOWN.asm"
 
 		include "levels/city/code/E5E2-E5F2_print_item_price.asm"
-		include "levels/city/code/E5F3-E5FF___UNKNOWN.asm"
+		include "levels/city/code/E5F3-E5FF_format_item_price.asm"
 		include "levels/city/code/E600-E746_proc_temple.asm"
 		include "levels/city/code/E747-E7A8_proc_guild.asm"
 		include "levels/city/code/E7A9-E855_proc_guardian.asm"
@@ -648,8 +648,8 @@ LEVEL_START:					; C18C (49548) load 39C5 (14789) bytes of level here
 		include "levels/city/data/E856-E87D_guardians.asm"
 
 		include "levels/city/code/E87E-E8A7_proc_city_sewers.asm"
-		include "levels/city/code/E8A8-E8BB___UNKNOWN.asm"
-		include "levels/city/code/E8BC-E8CB___UNKNOWN.asm"
+		include "levels/city/code/E8A8-E8BB_compare_char_attrs.asm"
+		include "levels/city/code/E8BC-E8CB_copy_char_params.asm"
 
 		include "levels/city/data/E8CC-E8DD_UNKNOWN.asm"
 		include "levels/city/data/E8DE-E8F5_inns_data.asm"
@@ -659,8 +659,8 @@ LEVEL_START:					; C18C (49548) load 39C5 (14789) bytes of level here
 		include "levels/city/code/E950-EA54_do_advancement.asm"
 		include "levels/city/code/EA55-EACD_do_spell_acquire.asm"
 		include "levels/city/code/EACE-EBAA_do_class_change.asm"
-		include "levels/city/code/EBAB-EBB3___UNKNOWN.asm"
-		include "levels/city/code/EBB4-EBC2___UNKNOWN.asm"
+		include "levels/city/code/EBAB-EBB3_adjust_stat_floor.asm"
+		include "levels/city/code/EBB4-EBC2_add_16bit_carry.asm"
 
 		include "levels/city/data/EBC3-EBD7_UNKNOWN.asm"
 
@@ -682,14 +682,14 @@ LEVEL_START:					; C18C (49548) load 39C5 (14789) bytes of level here
 
 		include "levels/city/tables/EF44-EF6F_procs_buffer3.asm"
 
-		include "levels/city/code/EF70-EFD1___UNKNOWN.asm"
-		include "levels/city/code/EFD2-F13E___UNKNOWN.asm"
-		include "levels/city/code/F13F-F178___UNKNOWN.asm"
+		include "levels/city/code/EF70-EFD1_proc_sinister_street.asm"
+		include "levels/city/code/EFD2-F13E_render_3d_view.asm"
+		include "levels/city/code/F13F-F178_display_walls_creatures.asm"
 
 		include "levels/city/data/F179-F1A8_UNKNOWN.asm"
 
-		include "levels/city/code/F1A9-F258___UNKNOWN.asm"
-		include "levels/city/code/F259-F28E___UNKNOWN.asm"
+		include "levels/city/code/F1A9-F258_render_sprite_3d.asm"
+		include "levels/city/code/F259-F28E_decode_sprite_mask.asm"
 		include "levels/city/code/F28F-F3EA_create_char.asm"
 		include "levels/city/code/F3EB-F416_remove_char.asm"
 		include "levels/city/code/F417-F455_load_save_party.asm"
