@@ -1,3 +1,9 @@
+; ZX-M8XXX helpers
+; @main
+; @entry start_interceptor
+; @define INTERCEPT
+; @define DEBUG_MSG
+
   	DEVICE ZXSPECTRUM48
 
 ;TAPFILENAME = "bt.tap"
@@ -13,10 +19,11 @@ ROM_LOAD = $0556
 	;DEFINE MAXSPPOINTS
 	;DEFINE NOCITYMONSTERS
 
-	;DEFINE	INTERCEPT
-	;DEFINE DEBUG_MSG
-
 	include	 "tools/TapLib.asm"
+
+	; Define empty macro for sjasmplus.exe compatibility
+	MACRO MD5CHECK filename?, hash?
+	ENDM
 
 	org 25000
 loader:
@@ -76,6 +83,9 @@ screen_start:
 	incbin "original/game_4000-5AFF.mem"	;ok
 screen_end:
 	SAVETAP "recompile/bt.tap",HEADLESS,screen_start,screen_end-screen_start
+
+	MD5CHECK "recompile/bt.bin", "794fb3c0965f9355dd91b146696742f5"
+	MD5CHECK "recompile/bt.tap", "61f836ce2034b5fd4230c34b84bb23c7"
 
 	IFDEF INTERCEPT
 		org PARTIAL_FONT

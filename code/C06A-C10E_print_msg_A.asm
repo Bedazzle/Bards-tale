@@ -144,7 +144,7 @@ loc_C0F4:
 		ld	a, (hl)
 		pop	hl
 
-		cp	'\'
+		cp	'\\'
 		jr	z, loc_C10F
 
 		dec	d
