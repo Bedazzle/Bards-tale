@@ -13,8 +13,9 @@
 ; via GET_*_FROM_LIST / GET_*_FROM_TABLE during a fight. A memory-watch
 ; trace (tools/m8xxx/memwatch.html) caught buffers $2A,$2B,$2C,$2D,$2E and
 ; ALLY_DATA ($2F) all being written by nullify_buffer ($6162) - i.e. they
-; are ZEROED at combat setup and populated during the fight, then cleared
-; or rebuilt by post_combat_cleanup (.rebuild_lists walks $45,$30,$2F,...).
+; are ZEROED at combat setup, then read during the fight and cleared or
+; rebuilt by post_combat_cleanup (.rebuild_lists walks $45,$30,$2F,...).
+; (See the WRITE-TRACE REFINEMENT below: the populate side is unproven.)
 ; The static bytes below are therefore just power-on junk (they happen to
 ; read as gfx fill); the live content is runtime combat state. Roles from
 ; the consumers:
@@ -25,6 +26,22 @@
 ;   $2C/$2D/$2E -> per-enemy-group attack / AC / damage modifiers.
 ; Kept @wip (labels not renamed) because the exact per-buffer field layout
 ; still rests on consumer inference, but the BUFFER nature is confirmed.
+;
+; READ vs WRITE MECHANISM (2026-07-11, from code/8CCD get_from_table +
+; write-trace over 44 city encounters):
+;   * GET_*_FROM_TABLE idx  -> READS table[idx] into A (these FCE2 slots are
+;     read as SOURCES here);
+;   * GET_*_FROM_LIST  idx  -> COPIES table[idx] to (hl'), the *caller's*
+;     shadow-HL destination (get_from_list: `call lookup; exx; ld (hl),a`).
+; So in apply_damage_dispatch the `.mark_active` writes (`exx / ld (hl),a /
+; inc (hl)`) go to the CALLER's hl' - the enemy-group record being compacted
+; - NOT to these ADDR_TABLE slots. The slots themselves are only ZEROED (by
+; nullify_buffer at setup) and READ; across 44 city encounters no non-nullify
+; write hit $FD71-$FDDE, so in ordinary combat they read back ZERO = "no
+; modifier / empty list" (default). The per-buffer "roles" below are the
+; CONSUMER's interpretation of what a non-zero value WOULD mean; a populate
+; path (a routine doing GET_*_FROM_LIST with hl' aimed here, or an
+; encounter-setup writer for special monsters) was not observed in the trace.
 ; Note: static layout of this region not reverse-engineered (it is scratch).
 ;
 ; --- (unlabeled leading fragment @ $FCE2) --------------------
@@ -119,7 +136,8 @@ ALLY_DATA:
 ; 0-3. calc_enemy_attack reads it at VAR_ACTIVE_ENEMY and adds it into
 ; the to-hit/AC calc; spell_ac_modifier reads it at (target & $7F).
 ; CONFIRMED a runtime buffer: zeroed by nullify_buffer ($6162) at combat
-; setup (memory-watch trace), populated during the fight.
+; setup; in a 44-encounter trace it then read back ZERO (no non-nullify
+; write hit it), so in ordinary combat the reader gets 0 = no modifier.
 ; Referenced by: calc_enemy_attack, spell_ac_modifier (ADDR_TABLE index $2D)
 ___table_96:
 		DB $7A,0,$78,$AA
@@ -140,7 +158,8 @@ ___table_9K:
 ; spell_stat_modifiers entries (mod_stat_22 buff / mod_stat_5D debuff)
 ; read it at (target & $7F) to add/subtract an attack bonus.
 ; CONFIRMED a runtime buffer: zeroed by nullify_buffer ($6162) at combat
-; setup (memory-watch trace), populated during the fight.
+; setup; in a 44-encounter trace it then read back ZERO (no non-nullify
+; write hit it), so in ordinary combat the reader gets 0 = no modifier.
 ; Referenced by: calc_attack_damage, spell_stat_modifiers (ADDR_TABLE index $2E)
 ___table_97:
 		DB $A0,0,0,0
@@ -169,7 +188,8 @@ ___table_99:
 ; 0-3. calc_enemy_attack reads it at VAR_ACTIVE_ENEMY; spell_attack_bonus
 ; reads it at (target & $7F) and adds it via add_attack_bonus.
 ; CONFIRMED a runtime buffer: zeroed by nullify_buffer ($6162) at combat
-; setup (memory-watch trace), populated during the fight.
+; setup; in a 44-encounter trace it then read back ZERO (no non-nullify
+; write hit it), so in ordinary combat the reader gets 0 = no modifier.
 ; Referenced by: calc_enemy_attack, spell_attack_bonus (ADDR_TABLE index $2C)
 ___table_9A:
 		DB $F8,$AA,$AA,$AA
@@ -189,11 +209,13 @@ ___table_9B:
 ; (.scan_active) scans it for a 0 slot or one matching the current enemy
 ; group id; enemies_killed walks it (0 = end) to award XP/gold per hit
 ; group. So the ADDR_TABLE slot is a per-hit-group id list, with
-; ___table_9D ($2A) the parallel kill-count array.
-; CONFIRMED a runtime buffer: a memory-watch trace saw it zeroed by
-; nullify_buffer ($6162) at combat setup, so the static bytes below (which
-; read as gfx fill) are just power-on junk, overwritten during the fight.
-; Referenced by: apply_damage_to_group, enemies_killed (ADDR_TABLE index $2B)
+; ___table_9D ($2A) the parallel kill-count array (as the readers treat it).
+; CONFIRMED zeroed by nullify_buffer ($6162) at combat setup, so the static
+; bytes below (which read as gfx fill) are just power-on junk. In a 44-
+; encounter trace it then stayed ZERO (no non-nullify write hit it), so the
+; readers get an all-zero list in basic combat - the write path that would
+; populate it goes via hl' and was not seen here (see region banner).
+; Referenced by: apply_damage_to_group, enemies_killed (ADDR_TABLE index $2B, reads)
 ___table_9C:
 		DB $50,$50,$50,$50,$50
 		DB 0,$0A,0,$0A,$0A,$0A,$0A,$AA,$78,$A0
@@ -202,13 +224,14 @@ ___table_9C:
 ; --- ___table_9D ---------------------------------------------
 ; @wip
 ; Read via ADDR_TABLE index $2A as the kill-count array parallel to
-; ___table_9C ($2B): apply_damage_to_group increments the entry for a
-; hit group; enemies_killed reads it (0 = skip) to size the XP/gold
-; award for that group.
-; CONFIRMED a runtime buffer: the same memory-watch trace saw it zeroed by
-; nullify_buffer ($6162) at combat setup, so the static bytes below are
-; power-on junk, overwritten during the fight.
-; Referenced by: apply_damage_to_group, enemies_killed (ADDR_TABLE index $2A)
+; ___table_9C ($2B): apply_damage_to_group READS it (0 = skip) and
+; enemies_killed READS it (0 = skip) to size the XP/gold award per group.
+; CONFIRMED zeroed by nullify_buffer ($6162) at combat setup. NOTE the
+; "increment" apply_damage_to_group does (`inc (hl)`) writes through the
+; alternate hl', which the write-trace did NOT see land here - so whether
+; this slot is the array that gets incremented, or just the read side of
+; it, is unproven; over 44 encounters it stayed zero (see region banner).
+; Referenced by: apply_damage_to_group, enemies_killed (ADDR_TABLE index $2A, reads)
 ___table_9D:
 		DB $EA,$F8,$EA,$AA,$AA,0,$50,$50,$50
 		DB $50,$50,$50,$50,0,0,0
