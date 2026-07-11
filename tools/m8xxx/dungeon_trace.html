@@ -1,0 +1,72 @@
+<!doctype html><meta charset="utf-8">
+<div id="out">PENDING</div>
+<iframe id="fr" src="index.html" style="width:320px;height:256px;border:0"></iframe>
+<script>
+function emit(o){ document.getElementById('out').textContent='@@S@@'+JSON.stringify(o)+'@@E@@'; }
+async function waitFor(f,ms){ let t=0; while(!f()&&t<ms){ await new Promise(r=>setTimeout(r,50)); t+=50; } return f(); }
+const hx=a=>'0x'+a.toString(16);
+async function main(){
+  const fr=document.getElementById('fr'); const W=()=>fr.contentWindow;
+  if(!await waitFor(()=>W()&&W().spectrum&&W().zxDebug,30000)) return emit({err:'no spectrum'});
+  const s=W().spectrum, zx=W().zxDebug, F=W().fetch.bind(W()); const rd=a=>s.memory.read(a),wr=(a,v)=>s.memory.write(a,v),ula=s.ula;
+  const key=(code,down,up)=>{
+    s.memory.write(0x5C00,0xFF); s.memory.write(0x5C01,0xFF); s.memory.write(0x5C08,0);
+    ula.keyDown&&ula.keyDown(code);
+    for(let i=0;i<(down||14);i++) s.runFrame();
+    if(ula.keyUp)ula.keyUp(code); if(ula.keyboardState)ula.keyboardState.fill(0xff);
+    for(let i=0;i<(up||10);i++) s.runFrame();
+  };
+  try{
+    if(!s.romLoaded){ try{ await s.loadRom('roms/48.rom'); s.reset&&s.reset(); }catch(e){} }
+    await waitFor(()=>rd(0)===0xF3,8000);
+    s.setTapeFlashLoad&&s.setTapeFlashLoad(true);
+    await zx.loadFile(new Uint8Array(await F('_bard_t1s1.tzx').then(r=>r.arrayBuffer())),'game.tzx');
+    await zx.autoLoad({type:'tape', isTzx:true, maxFrames:16000, settleFrames:1500});
+    s.cpu.pc=0x5B00; for(let i=0;i<300;i++) s.runFrame();          // Guild
+    key('KeyE',18,120);                                            // -> Skara Brae 3D view
+    const lv=new Uint8Array(await F('_level_02.bin').then(r=>r.arrayBuffer()));
+    for(let i=0;i<lv.length;i++) wr(0xC18C+i, lv[i]);              // overlay Cellars
+    for(let i=0;i<30;i++) s.runFrame();
+    const G=0x5FAB, XY=0x5FAC, FACE=0x5FAE;
+    const boot={pc:hx(s.cpu.pc), loc:rd(G+0x0E), coord_ns:rd(XY), coord_we:rd(XY+1), facing:rd(FACE)};
+
+    // ---- hook the ADDR_TABLE dispatcher ($7150): log (idx, sub) ----
+    const CALC=0x7150; const acc={};
+    s.xrefTrackingEnabled=true;
+    s.onInstructionExecuted=(pc)=>{
+      if(pc===CALC){ const t=s.cpu.a, c=s.cpu.c;
+        if(!acc[t]) acc[t]={n:0,sub:{}}; acc[t].n++; acc[t].sub[c]=(acc[t].sub[c]||0)+1; }
+    };
+
+    // ---- dungeon walk: clear DARKNESS ($5FEB) so the wall renderer runs, flee combat ----
+    s.cpu.iy=0x5FAB;                                               // GAME_VARIABLES base
+    const DARK=0x5FEB, CAF=0xFB98;
+    wr(XY,5); wr(XY+1,5); wr(FACE,0); wr(DARK,0);                  // lit view
+    let steps=0, encounters=0;
+    const moves=['KeyI','KeyI','KeyL','KeyI','KeyI','KeyJ','KeyI','KeyK','KeyI','KeyI','KeyL','KeyI',
+                 'KeyJ','KeyI','KeyI','KeyL','KeyI','KeyK','KeyI','KeyI','KeyJ','KeyI','KeyL','KeyI'];
+    let shots=[];
+    for(let pass=0; pass<5; pass++){
+      wr(DARK,0);                                                  // keep it lit each pass
+      for(const m of moves){
+        key(m,9,7); steps++;
+        if(rd(CAF)){ encounters++;                                 // combat -> flee (R), don't get stuck
+          for(let t=0;t<5 && rd(CAF);t++){ key('KeyR',9,5); key('Space',7,4); }
+        }
+      }
+      if(pass===0 || pass===2) shots.push(s.canvas?s.canvas.toDataURL('image/png'):'');
+    }
+    const midshot = s.canvas? s.canvas.toDataURL('image/png') : '';
+
+    s.onInstructionExecuted=null;
+    const tables={};
+    for(const t in acc){ const a=acc[t]; const subs=Object.keys(a.sub).map(Number).sort((x,y)=>x-y);
+      tables['$'+(+t).toString(16).padStart(2,'0')]={reads:a.n, sub_min:subs[0], sub_max:subs[subs.length-1], distinct:subs.length, subs:subs.slice(0,20)};
+    }
+    s.renderToScreen&&s.renderToScreen();
+    emit({ boot, steps, encounters, final_loc:rd(G+0x0E), final_coord:[rd(XY),rd(XY+1)],
+           slots_read:Object.keys(acc).length, tables, png:midshot });
+  }catch(e){ emit({err:String(e), stack:String(e&&e.stack).slice(0,500)}); }
+}
+main();
+</script>

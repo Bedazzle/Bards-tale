@@ -1,0 +1,30 @@
+# Deterministic line endings so a byte-exact-verified disassembly stays reviewable.
+# The whole tree is LF; force LF in the repo AND the working tree regardless of
+# the user's core.autocrlf setting (this project is edited on Windows with
+# core.autocrlf=true, which would otherwise check these out as CRLF and make
+# git status flag every file). EOL never affects the rebuild (the assembler
+# ignores it), but a mixed tree makes diffs unreadable.
+* text=auto eol=lf
+
+# Source / text — explicit LF (belt and braces over the wildcard above)
+*.asm   text eol=lf
+*.md    text eol=lf
+*.py    text eol=lf
+*.txt   text eol=lf
+*.bat   text eol=lf
+*.sh    text eol=lf
+*.json  text eol=lf
+
+# Binary assets — never normalize EOL, never diff as text
+*.bin   binary
+*.mem   binary
+*.sna   binary
+*.szx   binary
+*.z80   binary
+*.tap   binary
+*.tzx   binary
+*.dsk   binary
+*.scr   binary
+*.rom   binary
+*.png   binary
+*.zip   binary

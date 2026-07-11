@@ -59,8 +59,8 @@ CHAR_MAP = _build_char_map()
 POOLS = {
     'messages': {
         'name': 'Main game messages',
-        'lengths_file': 'data/9B0D-9B94_messages_table.asm',
-        'bitstream_file': 'data/9CDE-A585_words_table.asm',
+        'lengths_file': 'data/9B0D-9B94__messages_table.asm',
+        'bitstream_file': 'data/9CDE-A585__words_table.asm',
         # bitstream file contains BOTH words_table and INDEX_ITEM_NAMES;
         # split at this label
         'bitstream_split_before': 'INDEX_ITEM_NAMES:',
@@ -68,22 +68,24 @@ POOLS = {
     },
     'items': {
         'name': 'Item names',
-        'lengths_file': 'data/9B95-9C14_items_lengths.asm',
-        'bitstream_file': 'data/9CDE-A585_words_table.asm',
+        'lengths_file': 'data/9B95-9C14__items_lengths.asm',
+        'bitstream_file': 'data/9CDE-A585__words_table.asm',
         'bitstream_split_before': 'INDEX_ITEM_NAMES:',
         'bitstream_part': 'after',  # take the part after the split
+        # the item-name bitstream spills past $A585 into this next block:
+        'bitstream_append_file': 'data/A586-A5EB__item_names_tail.asm',
     },
     'monsters': {
         'name': 'Monster + race + class + combat-verb names',
-        'lengths_file': 'data/9C20-9CDC_words.asm',
-        'bitstream_file': 'data/A5EC-BFE1_UNKNOWN.asm',
+        'lengths_file': 'data/9C20-9CDC__words.asm',
+        'bitstream_file': 'data/A5EC-BFE1__index_monster_names.asm',
         'bitstream_split_before': None,
         'bitstream_part': None,
     },
     'city': {
         'name': 'Skara Brae city text',
-        'lengths_file': 'levels/city/data/C2E0-C372_messages_table_2.asm',
-        'bitstream_file': 'levels/city/data/C373-CEF4_messages_texts_2.asm',
+        'lengths_file': 'levels/city/data/C2E0-C372__messages_table_2.asm',
+        'bitstream_file': 'levels/city/data/C373-CEF4__messages_texts_2.asm',
         'bitstream_split_before': None,
         'bitstream_part': None,
     },
@@ -110,6 +112,9 @@ def _parse_db_bytes_text(text: str) -> list[int]:
             m = re.match(r'^0[xX]([0-9A-Fa-f]+)$', tok)
             if m:
                 out.append(int(m.group(1), 16)); continue
+            m = re.match(r'^\$([0-9A-Fa-f]+)$', tok)   # SjASMPlus $-hex
+            if m:
+                out.append(int(m.group(1), 16)); continue
             m = re.match(r'^(\d+)$', tok)
             if m:
                 out.append(int(m.group(1))); continue
@@ -121,7 +126,7 @@ def _parse_db_bytes_text(text: str) -> list[int]:
 
 
 def parse_asm_bytes(path: str) -> list[int]:
-    with open(path) as f:
+    with open(path, encoding='latin-1') as f:
         return _parse_db_bytes_text(f.read())
 
 
@@ -133,13 +138,15 @@ def load_pool(repo_root: str, pool_id: str) -> tuple[list[int], list[int]]:
     lengths = parse_asm_bytes(os.path.join(repo_root, spec['lengths_file']))
     bs_path = os.path.join(repo_root, spec['bitstream_file'])
     if spec['bitstream_split_before']:
-        with open(bs_path) as f:
+        with open(bs_path, encoding='latin-1') as f:
             text = f.read()
         parts = text.split(spec['bitstream_split_before'], 1)
         chosen = parts[0] if spec['bitstream_part'] == 'before' else parts[1]
         bitstream = _parse_db_bytes_text(chosen)
     else:
         bitstream = parse_asm_bytes(bs_path)
+    if spec.get('bitstream_append_file'):
+        bitstream = bitstream + parse_asm_bytes(os.path.join(repo_root, spec['bitstream_append_file']))
     return lengths, bitstream
 
 
@@ -316,7 +323,7 @@ def cmd_decode_bin(lengths_path: str, bitstream_path: str) -> None:
 
 def cmd_encode(text_path: str, lengths_out: str, bitstream_out: str) -> None:
     strings = []
-    with open(text_path) as f:
+    with open(text_path, encoding='latin-1') as f:
         for line in f:
             line = line.rstrip('\n')
             if line.startswith('#'):

@@ -99,21 +99,42 @@ data/                — Game data (monsters, messages, variables)
 tables/              — Lookup tables (spells, items, actions)
 gfx/                 — Graphics (icons, font)
 levels/city/         — City of Skara Brae level data and code
+docs/                — Format specs, POKEs/cheats reference
 original/            — Original memory dumps for verification
-tools/               — Build tools (binary diff, tape library)
+tools/               — Build tools (binary diff, tape library, m8xxx trace)
 recompile/           — Build output (generated, not committed)
 ```
 
 ## Reverse Engineering Status
 
-The disassembly is **structurally complete** — every byte from `$5B00` to `$FFFF` is
-accounted for. Of the ~170 code routines:
+**The main engine and the first two levels are fully disassembled** — byte-exact
+recompilable, relocatable, and documented to a consistent house style:
 
-- **~107 identified** — named and understood (e.g. `fight_or_run`, `process_spell`,
-  `create_char`)
-- **~85 unidentified** — labeled `___UNKNOWN`, code works but purpose not yet documented
+- **Code — complete.** All 250 routine files (168 shared engine + 45 City + 37 Cellars)
+  carry a header block and are marked `@done`; there are **zero** `loc_`/`sub_` auto-labels
+  left — every routine and branch target has a meaningful name. Relocatability is **proven**
+  by a page-shift test (every internal address reference relocates as one clean page; the
+  old central `addr_XXXX` address-map has been eliminated).
+- **Data — mostly documented.** Every data/table block carries a format header; ~90 are
+  `@done` (fully understood, e.g. `RACE_STAT_BASE`, `CLASS_ELIGIBILITY`, `WEAPON_DAMAGE`,
+  `POW10_TABLE`) and ~66 are `@wip` — ~57 engine lookup tables (`___table_NN`) whose exact
+  record format is not yet reverse-engineered (honestly marked, not guessed).
 
-See [ROADMAP.md](ROADMAP.md) for the plan to complete the reverse engineering.
+**Remaining work:** the `@wip` data tables (the opaque combat/render lookups), and **levels
+3–17** — the other 14 dungeons (Sewers ×3, Catacombs ×3, Harkyn's Castle ×3, Kylearan's
+Tower, Mangar's Tower ×5). Their raw payloads are extracted in `original/levels/`; only the
+City (level 1) and the Cellars (level 2) are carved so far.
+
+See [ROADMAP.md](ROADMAP.md) for the plan to complete the reverse engineering, and
+[docs/BARDSTALE_POKES.md](docs/BARDSTALE_POKES.md) for useful POKEs.
+
+## Documentation
+
+- [docs/BARDSTALE_POKES.md](docs/BARDSTALE_POKES.md) — POKEs & cheats reference (force/disable
+  encounters, useful variable addresses), each traced to the source and verified in-emulator
+- [docs/BARDSTALE_LEVEL_FORMAT.md](docs/BARDSTALE_LEVEL_FORMAT.md) — dungeon-level overlay format
+- [docs/BARDSTALE_TEXT_FORMAT.md](docs/BARDSTALE_TEXT_FORMAT.md) — 5-bit packed text codec
+- [docs/BARDSTALE_IMAGE_FORMAT.md](docs/BARDSTALE_IMAGE_FORMAT.md) — picture/graphics format
 
 ## References
 

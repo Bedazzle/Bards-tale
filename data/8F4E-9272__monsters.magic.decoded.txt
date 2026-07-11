@@ -1,0 +1,132 @@
+# MONST_MAGIC decoded: per-monster spell slots (4 each, 0=empty).
+# RLE-expanded from data/8F4E-9272__monsters.asm ($9182), 128 monsters.
+# Codes are spell ids; FE = breath/special-attack marker.
+
+[  0] kobolds            -
+[  1] hobbits            -
+[  2] gnomes             -
+[  3] dwarfves           -
+[  4] thiefves           -
+[  5] hobgoblins         -
+[  6]                    -
+[  7]                    01 01
+[  8] orcs               02 19
+[  9] skeletons          13
+[ 10] nomads             -
+[ 11] spiders            -
+[ 12] mad dogs           -
+[ 13] barbarians         -
+[ 14] mercenaryies       -
+[ 15] wolfves            -
+[ 16] jade monks         -
+[ 17] half orcs          -
+[ 18] swordsmanen        -
+[ 19] zombies            -
+[ 20] conjurors          -
+[ 21] magicians          01 02
+[ 22] sorcerers          03 19 13
+[ 23] wizards            1B 0B 0B
+[ 24] samurai            0C 01 19
+[ 25] black widows       22
+[ 26] assassins          -
+[ 27] werewolfves        -
+[ 28] ogres              -
+[ 29] wights             -
+[ 30] statues            -
+[ 31] bladesmanen        -
+[ 32] goblin lords       -
+[ 33] master thiefves    -
+[ 34]                    -
+[ 35]                    01 03
+[ 36]                    04 1B 1C
+[ 37]                    1D 0B 0C
+[ 38] ninjas             0D 04 1B
+[ 39] spinners           22
+[ 40] scarlet monks      -
+[ 41] dopplegangers      -
+[ 42] stone giants       FE
+[ 43] ogre magi          FE
+[ 44] jackalweres        -
+[ 45] stone elementals   -
+[ 46] blue dragons       -
+[ 47] seekers            57
+[ 48] dwarf kings        57
+[ 49] samurai lords      -
+[ 50] ghouls             -
+[ 51]                    -
+[ 52]                    03 04
+[ 53]                    05 1B 1D
+[ 54]                    1E 0E 10
+[ 55] azure monks        11 04 1D
+[ 56] weretigers         23
+[ 57] hydras             -
+[ 58] green dragons      -
+[ 59] wraiths            58
+[ 60] lurkers            58
+[ 61] fire giants        -
+[ 62] copper dragons     -
+[ 63] ivory monks        59
+[ 64] shadows            59
+[ 65] berserkers         -
+[ 66]                    -
+[ 67]                    05 06
+[ 68]                    06 1B 1E
+[ 69]                    1F 06 1D
+[ 70] white dragons      23 10 11
+[ 71] ice giants         12 4F
+[ 72] eye spyies         4F
+[ 73] ogre lords         -
+[ 74] body snatchers     -
+[ 75] xorns              -
+[ 76] phantoms           -
+[ 77] lesser demons      -
+[ 78] freds              -
+[ 79]                    11
+[ 80]                    14 09 08
+[ 81]                    07 1D 1C
+[ 82]                    1F 12 15
+[ 83] master ninjas      16 25 24
+[ 84] war giants         1F
+[ 85] warrior elites elite -
+[ 86] bone crushers      -
+[ 87] ghosts             -
+[ 88] grey dragons       -
+[ 89] basilisks          50
+[ 90] evil eyes          50
+[ 91] mimics             1D
+[ 92] golems             0E FE
+[ 93] vampires           FE
+[ 94] demons             -
+[ 95] bandersnatches     0D
+[ 96] maze dwellers      50
+[ 97] mongos             -
+[ 98] mandar guards      20
+[ 99] gimps              20
+[100] red dragons        -
+[101] titans             51
+[102] master conjurors   51
+[103] master magicians   0A 09
+[104] master sorcerers   09 1F 20
+[105] mind shadows       21 15 16
+[106] spectres           18
+[107] cloud giants       -
+[108] beholders          -
+[109] vampire lords      1E 1F
+[110] greater demons     21 24
+[111] master wizards     21 25
+[112] mad Gods           52 25 26
+[113] maze masters       26 20
+[114] death denizens     07
+[115] jabberwocks        15
+[116] black dragons      53
+[117] mangar             53 54
+[118] crystal Golems     54 26 18 21
+[119] soul suckers       1F
+[120] storm giants       55
+[121] ancient enemyies   55
+[122] balrogs            -
+[123] liches             -
+[124] archmages          21 26 21
+[125] demon lords        0D 26 18 21
+[126] old manen          1F 26
+[127] human              56 15

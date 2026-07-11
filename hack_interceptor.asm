@@ -111,7 +111,7 @@
 ;
 ;		ZERO_BUFFERS
 ;
-;		;call dyn_proc_07
+;		;call recalc_party_ac
 ;		call print_stats_table
 ;
 ;		call wait_space_down

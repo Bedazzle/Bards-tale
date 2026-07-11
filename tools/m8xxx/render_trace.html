@@ -1,0 +1,61 @@
+<!doctype html><meta charset="utf-8">
+<div id="out">PENDING</div>
+<iframe id="fr" src="index.html" style="width:320px;height:256px;border:0"></iframe>
+<script>
+function emit(o){ document.getElementById('out').textContent='@@S@@'+JSON.stringify(o)+'@@E@@'; }
+async function waitFor(f,ms){ let t=0; while(!f()&&t<ms){ await new Promise(r=>setTimeout(r,50)); t+=50; } return f(); }
+const hx=a=>'0x'+a.toString(16);
+async function main(){
+  const fr=document.getElementById('fr'); const W=()=>fr.contentWindow;
+  if(!await waitFor(()=>W()&&W().spectrum&&W().zxDebug,30000)) return emit({err:'no spectrum'});
+  const s=W().spectrum, zx=W().zxDebug, F=W().fetch.bind(W()); const rd=a=>s.memory.read(a),wr=(a,v)=>s.memory.write(a,v),ula=s.ula;
+  const key=(code,down,up)=>{ s.memory.write(0x5C00,0xFF);s.memory.write(0x5C01,0xFF);s.memory.write(0x5C08,0);
+    ula.keyDown&&ula.keyDown(code); for(let i=0;i<(down||14);i++) s.runFrame();
+    if(ula.keyUp)ula.keyUp(code); if(ula.keyboardState)ula.keyboardState.fill(0xff); for(let i=0;i<(up||10);i++) s.runFrame(); };
+  try{
+    if(!s.romLoaded){ try{ await s.loadRom('roms/48.rom'); s.reset&&s.reset(); }catch(e){} }
+    await waitFor(()=>rd(0)===0xF3,8000);
+    s.setTapeFlashLoad&&s.setTapeFlashLoad(true);
+    await zx.loadFile(new Uint8Array(await F('_bard_t1s1.tzx').then(r=>r.arrayBuffer())),'game.tzx');
+    await zx.autoLoad({type:'tape', isTzx:true, maxFrames:16000, settleFrames:1500});
+    s.cpu.pc=0x5B00; for(let i=0;i<300;i++) s.runFrame();
+    key('KeyE',18,120);
+    const lv=new Uint8Array(await F('_level_02.bin').then(r=>r.arrayBuffer()));
+    for(let i=0;i<lv.length;i++) wr(0xC18C+i, lv[i]);
+    for(let i=0;i<30;i++) s.runFrame();
+
+    const CALC=0x7150; const acc={};
+    s.xrefTrackingEnabled=true;
+    s.onInstructionExecuted=(pc)=>{ if(pc===CALC){ const t=s.cpu.a,c=s.cpu.c;
+      if(!acc[t]) acc[t]={n:0,sub:{}}; acc[t].n++; acc[t].sub[c]=(acc[t].sub[c]||0)+1; } };
+
+    // ---- FORCE-CALL render_dungeon_view ($D3F7); return into a self-loop so the
+    //      city game-loop never hijacks/crashes it. ----
+    const G=0x5FAB, RENDER=0xD3F7, SPIN=0xFF20;
+    wr(SPIN,0x18); wr(SPIN+1,0xFE);                 // 'jr $' at $FF20 (infinite harmless loop)
+    const cells=[[10,10],[5,5],[8,8],[12,6],[3,3],[15,15],[18,7],[7,15]];
+    const rendered=[];
+    for(const [ns,we] of cells){
+      for(let face=0; face<4; face++){
+        wr(G+0x01, ns); wr(G+0x02, we);             // coord_ns/we ($5FAC/$5FAD)
+        wr(G+0x03, face);                            // facing ($5FAE)
+        wr(G+0x40, 0);                               // darkness OFF ($5FEB)
+        wr(G+0x38, ns); wr(G+0x39, we);             // view offsets
+        s.cpu.iy=0x5FAB; s.cpu.sp=0xFF00;
+        wr(0xFF00,SPIN&0xff); wr(0xFF01,(SPIN>>8)&0xff);   // return -> self-loop
+        s.cpu.pc=RENDER;
+        for(let i=0;i<4;i++) s.runFrame();           // render runs, then spins at $FF20
+      }
+      rendered.push([ns,we]);
+    }
+    s.onInstructionExecuted=null;
+    const tables={};
+    for(const t in acc){ const a=acc[t]; const subs=Object.keys(a.sub).map(Number).sort((x,y)=>x-y);
+      tables['$'+(+t).toString(16).padStart(2,'0')]={reads:a.n,sub_min:subs[0],sub_max:subs[subs.length-1],distinct:subs.length,subs:subs.slice(0,24)}; }
+    s.renderToScreen&&s.renderToScreen();
+    emit({ rendered_cells:rendered.length, slots_read:Object.keys(acc).length, tables,
+           png:s.canvas?s.canvas.toDataURL('image/png'):'' });
+  }catch(e){ emit({err:String(e), stack:String(e&&e.stack).slice(0,500)}); }
+}
+main();
+</script>

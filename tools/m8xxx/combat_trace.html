@@ -1,0 +1,78 @@
+<!doctype html><meta charset="utf-8">
+<div id="out">PENDING</div>
+<iframe id="fr" src="index.html" style="width:320px;height:256px;border:0"></iframe>
+<script>
+function emit(o){ document.getElementById('out').textContent='@@S@@'+JSON.stringify(o)+'@@E@@'; }
+async function waitFor(f,ms){ let t=0; while(!f()&&t<ms){ await new Promise(r=>setTimeout(r,50)); t+=50; } return f(); }
+const hx=a=>'0x'+a.toString(16);
+async function main(){
+  const fr=document.getElementById('fr'); const W=()=>fr.contentWindow;
+  if(!await waitFor(()=>W()&&W().spectrum&&W().zxDebug,30000)) return emit({err:'no spectrum'});
+  const s=W().spectrum, zx=W().zxDebug, F=W().fetch.bind(W()); const rd=a=>s.memory.read(a),wr=(a,v)=>s.memory.write(a,v),ula=s.ula;
+  const key=(code,down,up)=>{
+    // reset ROM KEY-SCAN debounce (K-STATE $5C00/$5C01, LAST_K $5C08) so the press reads fresh
+    s.memory.write(0x5C00,0xFF); s.memory.write(0x5C01,0xFF); s.memory.write(0x5C08,0);
+    ula.keyDown&&ula.keyDown(code);
+    for(let i=0;i<(down||14);i++) s.runFrame();
+    if(ula.keyUp)ula.keyUp(code); if(ula.keyboardState)ula.keyboardState.fill(0xff);
+    for(let i=0;i<(up||10);i++) s.runFrame();
+  };
+  try{
+    if(!s.romLoaded){ try{ await s.loadRom('roms/48.rom'); s.reset&&s.reset(); }catch(e){} }
+    await waitFor(()=>rd(0)===0xF3,8000);
+    s.setTapeFlashLoad&&s.setTapeFlashLoad(true);
+    await zx.loadFile(new Uint8Array(await F('_bard_t1s1.tzx').then(r=>r.arrayBuffer())),'game.tzx');
+    await zx.autoLoad({type:'tape', isTzx:true, maxFrames:16000, settleFrames:1500});
+    s.cpu.pc=0x5B00; for(let i=0;i<300;i++) s.runFrame();      // Guild
+    const G=0x5FAB;
+    const boot={pc:hx(s.cpu.pc), party:rd(G), heroes:[]};
+    for(let h=0;h<6;h++){ let n=''; for(let i=0;i<10;i++){const c=rd(0x5C83+h*101+i); if(c<32||c>126)break; n+=String.fromCharCode(c);} boot.heroes.push(n); }
+    key('KeyE',18,60);                                         // exit building -> street
+    key('KeyE',10,40); key('Space',8,30);                      // dismiss any prompt
+    boot.pc_after_E=hx(s.cpu.pc); boot.combat_at_street=hx(rd(G+0x0E));
+
+    // ---- install the table-lookup hook (calc_addr_from_A = $7150; A=table idx, C=sub idx) ----
+    const CALC=0x7150; const acc={};
+    s.xrefTrackingEnabled=true;
+    s.onInstructionExecuted=(pc)=>{
+      if(pc===CALC){
+        const t=s.cpu.a, c=s.cpu.c;
+        if(!acc[t]) acc[t]={n:0,sub:{}};
+        acc[t].n++; acc[t].sub[c]=(acc[t].sub[c]||0)+1;
+      }
+    };
+    // ---- POKE the city-ambush dice to 100%: game_cycle needs TWO GET_RND_BY_PARAM $3F
+    //      to both roll 0 (1/4096). Patch both operands ($5B19,$5B1E) to $00 -> RND&0=0
+    //      always -> every loop_city_walk step triggers combat_foes with REAL enemies. ----
+    const combatSeen=[]; let rounds=0, maxEnemy=0;
+    s.memory.write(0x5B19,0x00); s.memory.write(0x5B1E,0x00);   // <-- the encounter poke
+    boot.poke_5B19=rd(0x5B19); boot.poke_5B1E=rd(0x5B1E);
+    s.cpu.pc=0x5B0E;                                             // loop_city_walk
+    const CAF=0xFB98;                                            // COMBAT_ACTIVE_FLAG
+    // Every step now hits a "Thieves... (F)ight or (R)un?" encounter. Drive:
+    //   F (fight) -> (P)arty attack -> each hero (A)ttack + target Digit1 -> Space (resolve).
+    for(let round=0; round<34; round++){
+      key('KeyI',8,4);                                           // take a step -> encounter fires
+      const ec=rd(G+0x4D); if(rd(CAF)||ec) maxEnemy=Math.max(maxEnemy,ec);
+      if(combatSeen.length<8) combatSeen.push({round,pc:hx(s.cpu.pc),caf:hx(rd(CAF)),enemies:ec});
+      key('KeyF',10,5);                                          // Fight
+      key('KeyP',9,4);                                           // Party attack
+      for(let h=0;h<6;h++){ key('KeyA',7,3); key('Digit1',7,3); }// each hero attacks group 1
+      key('Space',8,5); key('Space',8,5); rounds++;              // resolve / advance
+    }
+    s.onInstructionExecuted=null;
+    boot.rounds=rounds; boot.max_enemy_count=maxEnemy; boot.combat_mode_after=hx(rd(CAF));
+    // format the access log
+    const tables={};
+    for(const t in acc){ const a=acc[t]; const subs=Object.keys(a.sub).map(Number).sort((x,y)=>x-y);
+      tables['$'+(+t).toString(16).padStart(2,'0')]={reads:a.n, subidx_min:subs[0], subidx_max:subs[subs.length-1], distinct_subidx:subs.length, subidx:subs.slice(0,24)};
+    }
+    s.renderToScreen&&s.renderToScreen();
+    emit({ boot, combat_encounters:combatSeen.length, combatSeen:combatSeen.slice(0,8),
+           final_pc:hx(s.cpu.pc), final_combat:hx(rd(G+0x0E)),
+           total_tables_read:Object.keys(acc).length, tables,
+           png: s.canvas? s.canvas.toDataURL('image/png') : '' });
+  }catch(e){ emit({err:String(e), stack:String(e&&e.stack).slice(0,400)}); }
+}
+main();
+</script>

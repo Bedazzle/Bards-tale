@@ -1,0 +1,77 @@
+<!doctype html><meta charset="utf-8">
+<div id="out">PENDING</div>
+<iframe id="fr" src="index.html" style="width:320px;height:256px;border:0"></iframe>
+<script>
+function emit(o){ document.getElementById('out').textContent='@@S@@'+JSON.stringify(o)+'@@E@@'; }
+async function waitFor(f,ms){ let t=0; while(!f()&&t<ms){ await new Promise(r=>setTimeout(r,50)); t+=50; } return f(); }
+const hx=a=>'0x'+a.toString(16);
+async function main(){
+  const fr=document.getElementById('fr'); const W=()=>fr.contentWindow;
+  if(!await waitFor(()=>W()&&W().spectrum&&W().zxDebug,30000)) return emit({err:'no spectrum'});
+  const s=W().spectrum, zx=W().zxDebug, F=W().fetch.bind(W()); const rd=a=>s.memory.read(a),wr=(a,v)=>s.memory.write(a,v),ula=s.ula;
+  const key=(code,down,up)=>{
+    s.memory.write(0x5C00,0xFF); s.memory.write(0x5C01,0xFF); s.memory.write(0x5C08,0);
+    ula.keyDown&&ula.keyDown(code);
+    for(let i=0;i<(down||14);i++) s.runFrame();
+    if(ula.keyUp)ula.keyUp(code); if(ula.keyboardState)ula.keyboardState.fill(0xff);
+    for(let i=0;i<(up||10);i++) s.runFrame();
+  };
+  try{
+    if(!s.romLoaded){ try{ await s.loadRom('roms/48.rom'); s.reset&&s.reset(); }catch(e){} }
+    await waitFor(()=>rd(0)===0xF3,8000);
+    s.setTapeFlashLoad&&s.setTapeFlashLoad(true);
+    await zx.loadFile(new Uint8Array(await F('_bard_t1s1.tzx').then(r=>r.arrayBuffer())),'game.tzx');
+    await zx.autoLoad({type:'tape', isTzx:true, maxFrames:16000, settleFrames:1500});
+    s.cpu.pc=0x5B00; for(let i=0;i<300;i++) s.runFrame();      // Guild
+    const G=0x5FAB;
+    const boot={pc:hx(s.cpu.pc), party:rd(G)};
+    key('KeyE',18,60);                                         // exit building -> street
+    key('KeyE',10,40); key('Space',8,30);
+
+    // ---- memory-access watches over the NO-READER tables + FCE2 combat-buffer region ----
+    const RANGES=[
+      {name:'MONST_HP_ENC',lo:0x8F4E,hi:0x8FC5},
+      {name:'MONST_HP_AC',lo:0x8FCE,hi:0x904D},
+      {name:'MONST_SPEC',lo:0x904E,hi:0x90C5},
+      {name:'MONST_IMAGE',lo:0x90C6,hi:0x9145},
+      {name:'XP_TABLE',lo:0x9146,hi:0x9181},
+      {name:'MONST_MAGIC',lo:0x9182,hi:0x9272},
+    ];
+    const rangeOf=new Int16Array(65536); rangeOf.fill(-1);
+    RANGES.forEach((r,i)=>{ for(let a=r.lo;a<=r.hi;a++) rangeOf[a]=i; });
+    const rd_pcs=RANGES.map(()=>({})), wr_pcs=RANGES.map(()=>({}));
+    const curPC=()=> (s._currentInstrPC!=null? s._currentInstrPC : s.cpu.pc);
+    s.xrefTrackingEnabled=true; s.onInstructionExecuted=()=>{};
+    s.memory.onRead=(addr,val)=>{ const i=rangeOf[addr]; if(i>=0){ const p=curPC(); rd_pcs[i][p]=(rd_pcs[i][p]||0)+1; } };
+    s.memory.onWrite=(addr,val)=>{ const i=rangeOf[addr]; if(i>=0){ const p=curPC(); wr_pcs[i][p]=(wr_pcs[i][p]||0)+1; } };
+
+    // ---- force encounters + drive varied combat ----
+    s.memory.write(0x5B19,0x00); s.memory.write(0x5B1E,0x00);
+    s.cpu.pc=0x5B0E;
+    const CAF=0xFB98; let rounds=0, maxEnemy=0;
+    for(let round=0; round<30; round++){
+      key('KeyI',8,4);                                          // step -> encounter
+      const ec=rd(G+0x4D); if(rd(CAF)||ec) maxEnemy=Math.max(maxEnemy,ec);
+      key('KeyF',10,5);                                         // Fight
+      if(round%3===0){                                          // vary: cast a spell for hero 1
+        key('KeyC',8,4); key('KeyM',6,2); key('KeyA',6,2); key('KeyF',6,2); key('KeyL',6,2); key('Digit1',7,3);
+      } else if(round%3===1){
+        key('KeyD',9,4);                                        // Defend
+      }
+      key('KeyP',9,4);                                          // Party attack
+      for(let h=0;h<6;h++){ key('KeyA',7,3); key('Digit1',7,3); }
+      key('Space',8,5); key('Space',8,5); rounds++;
+    }
+    s.memory.onRead=null; s.memory.onWrite=null; s.onInstructionExecuted=null;
+
+    // ---- format access log: distinct PCs per range ----
+    const fmt=(o)=>{ const ks=Object.keys(o).map(Number).sort((a,b)=>o[b]-o[a]);
+      return {n:ks.reduce((s,k)=>s+o[k],0), pcs:ks.slice(0,12).map(k=>hx(k)+':'+o[k])}; };
+    const result={};
+    RANGES.forEach((r,i)=>{ result[r.name]={reads:fmt(rd_pcs[i]), writes:fmt(wr_pcs[i])}; });
+    s.renderToScreen&&s.renderToScreen();
+    emit({ boot, rounds, max_enemy_count:maxEnemy, combat_flag_after:hx(rd(CAF)), access:result });
+  }catch(e){ emit({err:String(e), stack:String(e&&e.stack).slice(0,500)}); }
+}
+main();
+</script>

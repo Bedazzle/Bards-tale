@@ -1,3 +1,9 @@
+original/
 recompile/
 *.sna
 sjasmplus
+ghidra_out/
+levels/**/ghidra_out/
+__pycache__/
+_*.tap
+_*.tzx

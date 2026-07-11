@@ -5,42 +5,39 @@
 Partial reverse engineering of **The Bard's Tale** (1988 ZX Spectrum port).
 Z80 assembly, compiled with SjASMPlus. Original work done 2020-2022.
 
-## Current State (v1.0.0)
+## Current State
 
-The codebase contains a disassembly of the full game binary (`$5B00-$FFFF`) with the
-original memory dumps in `original/` for byte-level verification.
+The main game engine (`$5B00-$FFFF`) plus level 1 (the City of Skara Brae) and level 2
+(the Cellars) are fully disassembled — byte-exact recompilable, relocatable, and documented
+to a consistent house style. Original memory dumps in `original/` provide byte-level
+verification.
 
-### What exists
+### What's done
 
-- **107 identified code files** — routines with meaningful names (e.g. `fight_or_run`,
-  `process_spell`, `create_char`, `movement`)
-- **61 unidentified core code files** — labeled `___UNKNOWN`
-- **24 unidentified city/level code files** — in `levels/city/`
-- **Full macro library** — 60+ macros wrapping the RST 10h dispatch system
-- **Constants defined** — character classes, races, statuses, time-of-day, directions,
-  icons, screen addresses, character struct offsets, enemy struct offsets
-- **Data tables** — monsters, spells, items, spell costs, light durations, summon
-  creatures, city map, icons, font data
-- **Compile script** (Windows `.bat`) with binary diff verification against original
-- **Original binary dumps** for verification
+- **Code — complete.** All 250 routine files (168 shared engine + 45 City + 37 Cellars)
+  carry an `@done` header block; there are **zero** `loc_`/`sub_`/`___UNKNOWN` auto-labels
+  left — every routine and branch target has a meaningful name.
+- **Relocatable — proven.** Every in-image address is a label or `region+offset`; the old
+  central `addr_XXXX` address-map is eliminated, and a page-shift test confirms all internal
+  references relocate as one clean page (§13 gold standard).
+- **Consistent style.** `$FF` UPPERCASE hex, `DB`/`DW` directives, dot-local branch labels,
+  `STARThex-ENDhex__name.asm` filenames, uniform LF — across the whole tree incl. `constants.asm`.
+- **Data — mostly documented.** Every data/table block has a §10 format header; ~90 are
+  `@done` (fully understood) and ~66 `@wip` (opaque, honestly marked — see below).
+- **Docs** — ARCHITECTURE.md, CROSS_REFERENCE.md, `docs/BARDSTALE_*_FORMAT.md`, the
+  `guide/` game guide, and `docs/BARDSTALE_POKES.md` (verified cheats).
+- **Tooling** — cross-platform build + binary-diff verify; a Python level-disassembler
+  pipeline; a headless ZX-M8XXX dynamic-trace harness (`tools/m8xxx/`).
 
-### What works
+### What's missing / remaining
 
-- The assembly is structurally complete — all addresses from `$5B00` to `$FFFF` are
-  accounted for in the include chain
-- Binary diff verification exists to confirm recompiled output matches original
-- Compilation has not been verified on macOS yet
-
-### What doesn't work / is missing
-
-- No macOS/Linux build script (only `_compile_bt.bat` for Windows)
-- 85 routines across core + city code remain unidentified
-- Many game variables (`VAR_00` through `VAR_76`) are unnamed
-- Many character/enemy struct offsets are unnamed (`CHAR_12`, `ENEMY_10`, etc.)
-- Several data tables are unnamed (`___table_83` through `___table_95`)
-- No dungeon levels included (only `levels/city/`)
-- No documentation of the RST 10h dispatch system
-- No cross-reference map of which routines call which
+- **~57 `___table_NN` engine lookup tables** (of the ~66 `@wip` data blocks) — their exact
+  record format isn't reverse-engineered yet. Dominated by the opaque combat/render tables
+  in the `$FCE2` region (register-indexed; need the dynamic trace driven through a full fight).
+- **5 opaque `byte_` state bytes** + a couple of composite tables — honest unknowns.
+- **Levels 3-17** — the other 14 dungeons (Sewers ×3, Catacombs ×3, Harkyn's Castle ×3,
+  Kylearan's Tower, Mangar's Tower ×5). Raw payloads are extracted in `original/levels/`;
+  only the City and Cellars are carved so far. Level 2 is the template for the rest.
 
 ---
 
@@ -220,16 +217,55 @@ mechanics, and secrets that aren't in any manual.
 
 ---
 
+## Milestone 3: House Style, Relocatability & Levels
+
+### v1.7.0 — Skill-standard normalization (DONE)
+
+- [x] Whole tree to house style: `$FF` hex, `DB`/`DW` case, dot-local labels,
+      `STARThex-ENDhex__name` filenames, uniform LF (incl. `constants*.asm`)
+- [x] Every code routine: §8 header + `@done`; **0** `loc_`/`sub_`/`___UNKNOWN` auto-labels
+- [x] Byte-exact rebuild verified after every change
+
+### v1.7.1 — Relocatability, §13 gold standard (DONE)
+
+- [x] Eliminated all `addr_XXXX` central-map EQUs (→ labels / `region+offset` / numeric values)
+- [x] Proven by the page-shift delta test — every internal reference relocates as one clean page
+
+### v1.8.0 — Level 2 = The Cellars (DONE)
+
+- [x] Full byte-exact disassembly of the Cellars overlay (`$C18C`), one routine per file (`@done`)
+- [x] Maze planes as DB grids; text/renderer/tail data blocks with §10 headers + honest markers
+- [x] Establishes the template + Python pipeline for levels 3-17
+
+### v1.9.0 — Data documentation & table RE (ongoing)
+
+- [x] §10 format headers + honest `@done`/`@wip` on every data/table/gfx block
+- [x] ~90 tables named & understood (`RACE_STAT_BASE`, `CLASS_ELIGIBILITY`, `WEAPON_DAMAGE`,
+      `CLASS_AC_BONUS`, `POW10_TABLE`, …)
+- [x] Headless ZX-M8XXX dynamic-trace harness (`tools/m8xxx/combat_trace.html`) + encounter
+      POKE (`docs/BARDSTALE_POKES.md`) for the opaque combat tables
+- [ ] ~57 `___table_NN` engine lookup tables still `@wip` (opaque combat/render tables)
+
+---
+
+## Next
+
+- **Reverse-engineer the `@wip` data tables** — drive the m8xxx trace through a full fight to
+  capture the opaque table indexing (`$42`/`$56`/`$2C`/`$2E`/…) with real register values.
+- **Levels 3-17** — carve the 14 remaining dungeons (Sewers, Catacombs, Harkyn's/Kylearan's/
+  Mangar's Towers) using level 2 as the template.
+
+---
+
 ## File Inventory
 
-| Category | Identified | Unknown | Total |
-|----------|-----------|---------|-------|
-| Core code | 107 | 0 | 107 |
-| City/level code | 40 | 0 | 40 |
-| Data files | — | 26 | 26 |
-| Tables | — | — | 12 |
-| Graphics | — | — | 2 |
-| **Code Total** | **147** | **0** | **147** |
+| Category | `@done` | `@wip` | Total |
+|----------|--------:|-------:|------:|
+| Shared engine code | 168 | 0 | 168 |
+| City (level 1) code | 45 | 0 | 45 |
+| Cellars (level 2) code | 37 | 0 | 37 |
+| Data / tables / gfx blocks | ~90 | ~66 | ~156 |
+| **Levels carved** | **2** | — | **17** |
 
 ## Notes
 
@@ -237,7 +273,7 @@ mechanics, and secrets that aren't in any manual.
   `hack_tools.asm`) with conditional compilation (`DEFINE INTERCEPT`) — useful for
   runtime analysis
 - Cheat defines exist: `KILLERS`, `MAXEXPIRIENCE`, `MAXGOLD`, `MAXLEVEL`, etc.
-- Only the city level is included; dungeon levels load at `$C18C` and would replace
-  the city data at runtime
+- The City (level 1) and the Cellars (level 2) are carved; the other 15 dungeon overlays
+  load at `$C18C` (replacing the city data at runtime) and are not yet disassembled
 - The compile script diffs recompiled binary against original to verify correctness —
   this is the ultimate validation that reverse engineering is accurate

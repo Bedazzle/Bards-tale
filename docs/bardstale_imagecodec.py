@@ -3,8 +3,8 @@
 bardstale_imagecodec.py — Image format tools for Bard's Tale ZX Spectrum.
 
 Subcommands:
-  extract-icons  — render gfx/98DF-9AA6_icons.asm to PNG
-  extract-font   — render gfx/FC38-FCE1_partial_font.asm to PNG
+  extract-icons  — render gfx/98DF-9AA6__icons.asm to PNG
+  extract-font   — render gfx/FC38-FCE1__partial_font.asm to PNG
   decompress-pic — given an .asm data file or raw bytes, decompress a picture
                    and write the raw 1024-byte output (for further analysis)
   render-pic     — given compressed picture bytes, render to PNG using the
@@ -540,14 +540,14 @@ def main():
     sub = p.add_subparsers(dest='cmd', required=True)
 
     pi = sub.add_parser('extract-icons', help='render icons sheet to PNG')
-    pi.add_argument('input', help='gfx/98DF-9AA6_icons.asm')
+    pi.add_argument('input', help='gfx/98DF-9AA6__icons.asm')
     pi.add_argument('output', help='output PNG path')
     pi.add_argument('--scale', type=int, default=4)
     pi.add_argument('--cols', type=int, default=16)
     pi.set_defaults(func=cmd_extract_icons)
 
     pf = sub.add_parser('extract-font', help='render partial font to PNG')
-    pf.add_argument('input', help='gfx/FC38-FCE1_partial_font.asm')
+    pf.add_argument('input', help='gfx/FC38-FCE1__partial_font.asm')
     pf.add_argument('output', help='output PNG path')
     pf.add_argument('--scale', type=int, default=4)
     pf.add_argument('--cols', type=int, default=16)
