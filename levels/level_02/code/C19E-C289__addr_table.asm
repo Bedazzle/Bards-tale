@@ -45,8 +45,8 @@ ADDR_TABLE:
 		DW PROCS_2+1		; 25
 		DW SPELL_HANDLER_INDEX+1		; 26
 		DW ___table_40+1		; 27
-		DW ___table_10+1		; 28
-		DW ___table_9+1		; 29
+		DW GOLD_ROLL_MASK_LO+1		; 28
+		DW GOLD_ROLL_MASK_HI+1		; 29
 		DW ___table_9D+1		; 2A
 		DW ___table_9C+1		; 2B
 		DW ___table_9A+1		; 2C
@@ -72,7 +72,7 @@ ADDR_TABLE:
 		DW ___table_9H+1		; 40
 		DW ACTIVE_GUARDIAN+1		; 41
 		DW ___table_9B+1		; 42
-		DW ___table_13+1		; 43
+		DW DAYPART_DMG_SCALE+1		; 43
 		DW MONST_HP_AC+1		; 44
 		DW ___table_93+1		; 45
 		DW CLASS_EQUIP_MASK+1		; 46
@@ -84,8 +84,8 @@ ADDR_TABLE:
 		DW CLASS_TO_HIT_BONUS+1		; 4C
 		DW DAMAGE_DICE_MASK+1		; 4D
 		DW SWAP_STAT_TEMPLATE+1		; 4E
-		DW ___table_1+1		; 4F
-		DW ___table_2+1		; 50
+		DW DAYPART_ROLL_MASK+1		; 4F
+		DW DAYPART_ROLL_ADD+1		; 50
 		DW DISPLAY_PALETTE+1		; 51
 		DW chest_attr_table+1		; 52
 		DW trap_effects+9		; 53

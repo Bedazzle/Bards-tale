@@ -20,17 +20,17 @@ MONST_HP_ENC:
 		DB $52,$52,$53,$62,$62,$61,$61,$62,$61,$63,$64,$15,$62,$62,$70,$60
 		DB $62,$62,$62,$66,$72,$72,$72,$71
 
-; --- ___table_13 ----------------------------------------------
-; @wip
-; Engine lookup table at ADDR_TABLE index $43. 8 bytes, a monotonic
-; ramp (1,1,2,2,2,3,3,4) indexed 0-7 - a per-index scaling value (the
-; shape of a "dice count / 2"-style tier). No static GET_*_FROM_TABLE
-; $43 exists, but a dynamic combat trace (tools/m8xxx/memwatch.html)
-; caught slot $43 being dereferenced via the $7150 dispatcher at
-; runtime, so it IS live - reached through a computed/indirect index
-; (like ___table_1/2). Exact consumer + meaning still to pin down.
-; Referenced by: ADDR_TABLE index $43 (indirect; seen live in trace)
-___table_13:
+; --- DAYPART_DMG_SCALE ----------------------------------------
+; @done
+; Daypart-scaled combat multiplier, 8 bytes (1,1,2,2,2,3,3,4) indexed by
+; VAR_COPY_DAYPART (0-7). Read via the two-index macro
+; GET_IY_A_FROM_TABLE $54,$43 (param1 $54 = the VAR_COPY_DAYPART sub-index,
+; param2 $43 = this table) - which is why no plain GET_*_FROM_TABLE $43
+; exists. generate_encounter uses it to scale VAR_BASE_DAMAGE for the
+; encounter, and play_song uses it with the tune's spell id. So the deeper
+; the daypart, the bigger the multiplier (1..4).
+; Referenced by: generate_encounter, play_song (ADDR_TABLE index $43, sub-idx VAR_COPY_DAYPART)
+DAYPART_DMG_SCALE:
 		DB 1
 		DB 1
 		DB 2

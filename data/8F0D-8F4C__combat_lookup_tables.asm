@@ -34,12 +34,16 @@ OPTION_AVAIL_MASK:
 		DB 8
 		DB 0
 
-; --- ___table_9 ----------------------------------------------
-; @wip
-; 8 bytes: $3F,$7F,$FF,$FF,$FF,$FF,$FF,$FF — saturating bit-mask
-; ladder. ADDR_TABLE index $29; no GET_*_FROM_TABLE reader found.
-; Referenced by: ADDR_TABLE index $29
-___table_9:
+; --- GOLD_ROLL_MASK_HI ----------------------------------------
+; @done
+; Gold-drop mask ladder ($3F,$7F,$FF x6), 8 entries indexed by
+; VAR_COPY_DAYPART (0-7). enemies_killed rolls the gold a kill yields:
+; GET_IY_A_FROM_TABLE $54,$29 fetches GOLD_ROLL_MASK_HI[VAR_COPY_DAYPART]
+; and ANDs it with VAR_RND_HI to form one byte of VAR_GOLD_FOUND_HI
+; (GOLD_ROLL_MASK_LO $28 masks VAR_RND_LO for the other byte). The mask
+; saturates to $FF quickly so later dayparts allow the full random range.
+; Referenced by: enemies_killed (ADDR_TABLE index $29, sub-idx VAR_COPY_DAYPART)
+GOLD_ROLL_MASK_HI:
 		DB $3F
 		DB $7F
 		DB $FF
@@ -49,13 +53,15 @@ ___table_9:
 		DB $FF
 		DB $FF
 		
-; --- ___table_10 ---------------------------------------------
-; @wip
-; 8 bytes (0,0,0,1,1,3,3,7). ADDR_TABLE index $28; no
-; GET_*_FROM_TABLE reader found (earlier consumers were artefacts).
-; Note: exact record format not yet reverse-engineered.
-; Referenced by: ADDR_TABLE index $28
-___table_10:
+; --- GOLD_ROLL_MASK_LO ----------------------------------------
+; @done
+; Gold-drop mask ladder (0,0,0,1,1,3,3,7), 8 entries indexed by
+; VAR_COPY_DAYPART (0-7). In the same gold roll (enemies_killed), a
+; GET_IY_A_FROM_TABLE $54,$28 fetches GOLD_ROLL_MASK_LO[VAR_COPY_DAYPART]
+; and ANDs it with VAR_RND_LO for the companion byte of VAR_GOLD_FOUND_HI
+; (0 for the first few dayparts = little/no low-order gold, rising to 7).
+; Referenced by: enemies_killed (ADDR_TABLE index $28, sub-idx VAR_COPY_DAYPART)
+GOLD_ROLL_MASK_LO:
 		DB 0
 		DB 0
 		DB 0

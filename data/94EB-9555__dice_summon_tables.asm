@@ -95,12 +95,19 @@ DICE_SIDES_TABLE:			; dice rolls table?
 
 ; --- SUMMON_DATA ----------------------------------------------
 ; @wip
-; Summonable-ally records, each 21 bytes: 5 leading stat/AC/HP-ish
-; bytes, a 15-char space-padded name ("Dummy", "Joe the Sword",
-; "Thor"), then a trailing block; list closed by an $FF-led record.
-; This is the ally template data conjured by the summon spells
-; (spell_summon_monster / summon_ally / finish_summon).
-; Note: exact field layout not yet fully reverse-engineered.
+; Summonable-creature templates for the weak-monster summon path. The
+; block OPENS with a little-endian WORD POINTER TABLE: the first words
+; ($9508,$9522,$953C = this block +6/+$20/+$3A) each point at one of the
+; template records below (the 'Dummy'/'Joe the Sword'/'Thor' names sit
+; exactly at those addresses). spell_summon_monster (.weak_monster) reads
+; a pointer via GET_B_FROM_TABLE $63 (id, then id+1 for the high byte),
+; then `ld bc,$17 / ldir` copies the 23-byte template (15-char name +
+; init flag bytes) into the ENEMY record, clears the tail, and rolls the
+; creature's HP from a dice spec in the template (GET_RND_NUMBERS; and e;
+; add d -> capped at $FF). Each template = 15-char space-padded name then
+; a short {$FF,0,$FF..} init/stat block; the list ends with an $FF record.
+; Note: the leading 6 bytes are POINTERS (not stats as previously guessed);
+;       exact per-byte meaning of the init/stat block is still partial.
 		debug "SUMMON_DATA: "
 SUMMON_DATA:
 		DB 8

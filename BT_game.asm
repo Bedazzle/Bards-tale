@@ -21,8 +21,8 @@ binary_start:
 dynamic_vector:
 		DW run_dynamic
 
-		include "data/5C55-5C5C__table_1.asm"
-		include "data/5C5D-5C64__table_2.asm"
+		include "data/5C55-5C5C__daypart_roll_mask.asm"
+		include "data/5C5D-5C64__daypart_roll_add.asm"
 ; -------------------------------------
 
 JP_INTERRUPT:
@@ -588,7 +588,7 @@ OPTION_KEYS:
 		include "data/9AB7-9B0C__letters.asm"
 		include "data/9B0D-9B94__messages_table.asm"		; rst 10 / db 7 print
 		include "data/9B95-9C14__items_lengths.asm"
-		include "data/9C0D-9C1F__word_entry_lengths.asm"
+		include "data/9C15-9C1F__word_entry_lengths.asm"
 		include "data/9C20-9CDC__words.asm"
 
 		DB 7

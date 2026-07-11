@@ -108,16 +108,21 @@ CLASS_TO_HIT_BONUS:
 		DB 3
 
 ; --- DAMAGE_DICE_MASK -----------------------------------------
-; @wip
-; Composite block. First 8 bytes are a bit-mask ladder
-; (3,7,$0F,$1F,$3F,$7F,$FF,1 = 2^(n+2)-1): calc_attack_damage takes
-; the weapon damage-spec's dice-count field (top 3 bits) as the index
-; and uses the returned mask in the per-round damage roll.
-; The later bytes (+8,+$B, formerly addr_92C9/92CC) are referenced
-; separately for other purposes - not part of the mask ladder.
-; Note: only the mask-ladder use is reverse-engineered; the rest is
-;       unidentified data sharing this block.
-; Referenced by: calc_attack_damage (ADDR_TABLE index $4D)
+; @done
+; Composite block, three adjacent sub-tables:
+;  +$0..$7  dice-count bit-mask ladder (3,7,$0F,$1F,$3F,$7F,$FF,1 =
+;           2^(n+2)-1). calc_attack_damage indexes it (ADDR_TABLE $4D)
+;           by the weapon damage-spec's dice-count field and ANDs the
+;           returned mask into the per-round damage roll.
+;  +$8..$A  three ADDR_TABLE slot ids {$45,$30,$2F} = the per-group
+;           combat buffers post_combat_cleanup shifts down (via
+;           swap_group_field, e=3) when an enemy group is removed.
+;  +$B..    two $0B-byte rows of permitted spell codes per target:
+;           check_spell_valid does cpir over 11 bytes from +$B (row 0
+;           for spell letters < 'E') or +$16 (row 1, +$0B, for >= 'E'),
+;           setting carry if the current spell is not in the row.
+; Referenced by: calc_attack_damage ($4D), post_combat_cleanup (+8),
+;               check_spell_valid (+$B).
 DAMAGE_DICE_MASK:
 		DB 3
 		DB 7
