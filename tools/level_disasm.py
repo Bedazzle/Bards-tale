@@ -19,11 +19,13 @@ def byte(a): return BLOCK[a-BASE]
 RST={}; MAC={}
 for blk in re.split(r'\bMACRO\b', open("code/macroses.asm",encoding="utf-8",errors="replace").read())[1:]:
     body=blk.split("ENDM")[0]
-    if not re.search(r'rst\s+10h',body,re.I): continue
+    # dispatch macros are `rst 10h` OR `rst $10` (coding-style normalised form)
+    if not re.search(r'rst\s+(?:10h|\$10)',body,re.I): continue
     nm=body.strip().splitlines()[0].split()[0]
     d=re.findall(r'\b(db|dw)\b\s+([^\n;]+)',body,re.I)
     if not d: continue
-    try: idn=int(d[0][1].strip().rstrip('h'),16)
+    # dispatch id may be written $3A, 3Ah or 3A
+    try: idn=int(d[0][1].strip().lstrip('$').rstrip('h'),16)
     except: continue
     RST[idn]=sum(2 if x[0].lower()=='dw' else 1 for x in d[1:])
     MAC[idn]=nm
@@ -52,10 +54,16 @@ for line in open(FUNCS):
         a=int(m.group(1),16)
         if OVL_LO<=a<=OVL_HI and not looks_data(a): ghidra.append(a)
 seeds+=ghidra
-argv_seeds=[]
+argv_seeds=[]; label_only=[]
 for s in sys.argv[6:]:
-    try: argv_seeds.append(int(s,16))
-    except ValueError: pass
+    # '=ADDR' forces a LABEL at ADDR without descending from it (for a data table
+    # embedded in the code region, so the split can start a file there).
+    if s.startswith('='):
+        try: label_only.append(int(s[1:],16))
+        except ValueError: pass
+    else:
+        try: argv_seeds.append(int(s,16))
+        except ValueError: pass
 seeds+=argv_seeds
 seeds=[s for s in set(seeds) if OVL_LO<=s<=OVL_HI]
 
@@ -94,6 +102,8 @@ descend(seeds)
 # argv-provided seeds are usually computed-dispatch/SMC targets — emit labels for them
 for s in argv_seeds:
     if s in insns: labels.add(s)
+for s in label_only:               # force a label at a data address (data run gets split there)
+    if OVL_LO<=s<=OVL_HI: labels.add(s)
 tot=EMIT_HI-EMIT_LO+1
 codeb=sum(1 for a in range(EMIT_LO,EMIT_HI+1) if a in covered)
 print("overlay descent: %d instrs. emit $%04X-$%04X: %d/%d code bytes"%(len(insns),EMIT_LO,EMIT_HI,codeb,tot))
