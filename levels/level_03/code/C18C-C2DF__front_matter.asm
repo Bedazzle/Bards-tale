@@ -13,9 +13,13 @@ LEVEL_START:
 	jp	handle_move_key		; [0] movement / action keys
 redraw_vector:
 	jp	refresh_dungeon_view	; [1] redraw location
+
 	jp	process_turn		; [2] end-of-move processing
+
 	jp	handle_wandering_creature	; [3] wandering-creature encounter
+
 	jp	handle_chest		; [4] chest interaction
+
 	jp	scan_cells_ahead	; [5] scan cells ahead
 
 ; $C19E-$C289 - ADDR_TABLE (118 words), read by RST 10h GET_*_FROM_TABLE.

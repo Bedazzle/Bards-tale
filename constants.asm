@@ -1,10 +1,4 @@
-ROM_KEY_SCAN	EQU $028E
-ROM_KEY_REPEAT	EQU $031C
-ROM_BEEPER		EQU $03B5
-ROM_BYTES_SAVE	EQU $04C6
-ROM_BYTES_LOAD	EQU $0562
-
-PORT_BORDER		EQU $FE
+; ZX hardware constants (ROM_*, PORT_BORDER, SCR_ATTR) moved to ZX_constants.asm
 STACK_LOADER	EQU $FF00
 
 FACE_NORTH		EQU 0
@@ -13,9 +7,7 @@ FACE_SOUTH		EQU 2
 FACE_WEST		EQU 3
 
 ; ------------------------
-; screen 4000 - 5AFF
-SCR_ATTR		EQU $5800
-SCR_ATTR_LEN	EQU $0300
+; screen 4000 - 5AFF: SCREEN / SCR_ATTR / SCR_ATTR_LEN in ZX_constants.asm
 ; ------------------------
 
 ; RAM work buffers (fixed addresses; overlay shipped data at load time)

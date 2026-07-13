@@ -1,10 +1,10 @@
 ; --- nullify_FDDD -----------------------------------------
 ; @done
-; Zero the 7-byte buffer ending at ___table_9H+$6 (falls into
+; Zero the 7-byte buffer ending at COMBAT_UI_TEXT+$6 (falls into
 ; nullify_buffer).
 nullify_FDDD:
 		ld	b,7
-		ld	hl,___table_9H+$6
+		ld	hl,COMBAT_UI_TEXT+$6
 
 		jr	nullify_buffer
 

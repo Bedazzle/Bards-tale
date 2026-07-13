@@ -16,7 +16,9 @@
 	DEVICE ZXSPECTRUM48
 
 	include "code/macroses.asm"
-	include "levels/level_03/level_03_externals.asm"
+	include "ZX_constants.asm"
+	include "levels/shared_externals.asm"
+	include "levels/game_vars.asm"
 
 	org $C18C
 level_03_start:

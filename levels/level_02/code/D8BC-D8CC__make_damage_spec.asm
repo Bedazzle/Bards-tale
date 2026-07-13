@@ -3,9 +3,9 @@
 ; Prepare the effect/damage spec: store A ($5FFB), mark iy+$52, and return
 ; ($5FFF<<4)&$F0.
 make_damage_spec:
-		ld	(var_5FFB),a
+		ld	(damage_type),a
 		ld	(iy+$52),$80
-		ld	a,(var_5FFF)
+		ld	a,(copy_daypart)
 		rla
 		rla
 		rla

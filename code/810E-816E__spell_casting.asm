@@ -13,10 +13,10 @@ spell_casting:
 
 		ld	a,(GAME_VARIABLES + VAR_CURRENT_SPELL)
 
-		cp	$4F 			; 'O'
+		cp	'O'
 		jr	c,.cast_spell
 
-		cp	$5A 			; 'Z'
+		cp	'Z'
 		ret	c
 
 		cp	$5C 			; '\'
@@ -77,12 +77,12 @@ casts_a_spell:
 		ld	a,(GAME_VARIABLES + VAR_CURRENT_SPELL)
 		ld	c,a
 
-		cp	$4F ; 'O'
+		cp	'O'
 		jr	c,.clamp_spell
 
 		sub	$0B
 
-		cp	$51 ; 'Q'
+		cp	'Q'
 		jr	c,.clamp_spell
 
 		ld	a,$51 ; 'Q'

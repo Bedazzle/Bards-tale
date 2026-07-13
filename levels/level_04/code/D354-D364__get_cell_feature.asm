@@ -1,0 +1,17 @@
+; --- get_cell_feature ($D354-$D364) ------------------------
+; @done
+; Return the MAZE_FEATURES byte for the party's current cell (+$1E4 plane).
+; In:  ($5FAC)=N/S, ($5FAD)=W/E coord
+; Out: a = feature byte at cell+$1E4
+
+get_cell_feature:
+		push	de
+		push	bc
+		ld	bc,(coord_so_no)
+		call	maze_cell_addr
+		ld	de,$1E4
+		add	hl,de
+		ld	a,(hl)
+		pop	bc
+		pop	de
+		ret

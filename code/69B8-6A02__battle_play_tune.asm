@@ -58,7 +58,7 @@ commit_action:
 ; @done
 ; End of command entry for the round: asks "Use these commands?" and,
 ; on No, restarts command entry at party_fight. On Yes it finalises the
-; per-hero action list at ___table_9I+$6 (turning any still-unset entry, code
+; per-hero action list at HERO_ACTION_CODE+$6 (turning any still-unset entry, code
 ; 7, into the default 1), clears the info panel and returns so combat
 ; resolution can run.
 ; In:  iy = game variables base
@@ -72,7 +72,7 @@ confirm_round:
 		jp	nc,party_fight
 
 		ld	b,7
-		ld	hl,___table_9I+$6
+		ld	hl,HERO_ACTION_CODE+$6
 
 .commit_loop:
 		ld	a,(hl)

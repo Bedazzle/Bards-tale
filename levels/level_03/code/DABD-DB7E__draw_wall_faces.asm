@@ -1,119 +1,123 @@
 ; --- draw_wall_faces ($DABD-$DB7E) -----------------------------
-; @wip
-; Render all wall faces/edges for a cell: test each reveal/pattern slot (GET_B_FROM_TABLE $17-$1d) and blit the matching element (draw_wall_element e=2..15).
+; @done
+; Render all wall faces/edges for a cell. For each wall (near/left/right/corner/
+; far/edge) it reads that wall's reveal slot (GET_B_FROM_TABLE $17-$1D) and blits
+; the "lit" element or the "_dk" (dark/secret) variant depending on the reveal
+; state and reveal_secret. Element indices 2..15 index the wall_element_table.
+; draw_wall_column jumps in at .mid_walls after drawing the front element.
 
 draw_wall_faces:
-		GET_B_FROM_TABLE $1b
+		GET_B_FROM_TABLE $1B
 		inc	b
 		or	a
-		jr	nz,.dade
-		GET_B_FROM_TABLE $1b
+		jr	nz,.mid_walls
+		GET_B_FROM_TABLE $1B
 		dec	a
-		jr	z,.dad2
+		jr	z,.near
 		dec	a
-		jr	z,.dad9
-		ld	a,(var_5FD3)
-		jr	nz,.dad9
-.dad2:
+		jr	z,.near_dk
+		ld	a,(reveal_secret)
+		jr	nz,.near_dk
+.near:
 		ld	e,8
 		call	draw_wall_element
-		jr	.dade
-.dad9:
+		jr	.mid_walls
+.near_dk:
 		ld	e,9
 		call	draw_wall_element
-.dade:
+.mid_walls:
 		GET_B_FROM_TABLE $17
-		jr	z,.dafd
+		jr	z,.right_wall
 		dec	a
-		jr	z,.daef
+		jr	z,.left
 		dec	a
-		jr	z,.daf6
-		ld	a,(var_5FD3)
+		jr	z,.left_dk
+		ld	a,(reveal_secret)
 		or	a
-		jr	nz,.daf6
-.daef:
+		jr	nz,.left_dk
+.left:
 		ld	e,2
 		call	draw_wall_element
-		jr	.db49
-.daf6:
+		jr	.far_wall
+.left_dk:
 		ld	e,3
 		call	draw_wall_element
-		jr	.db49
-.dafd:
-		GET_B_FROM_TABLE $1a
-		jr	z,.db49
+		jr	.far_wall
+.right_wall:
+		GET_B_FROM_TABLE $1A
+		jr	z,.far_wall
 		dec	a
-		jr	z,.db0e
+		jr	z,.right
 		dec	a
-		jr	z,.db15
-		ld	a,(var_5FD3)
+		jr	z,.right_dk
+		ld	a,(reveal_secret)
 		or	a
-		jr	nz,.db15
-.db0e:
+		jr	nz,.right_dk
+.right:
 		ld	e,6
 		call	draw_wall_element
-		jr	.db1a
-.db15:
+		jr	.corner_chk
+.right_dk:
 		ld	e,7
 		call	draw_wall_element
-.db1a:
+.corner_chk:
 		dec	b
 		inc	b
-		jr	z,.db49
+		jr	z,.far_wall
 		dec	b
 		GET_B_FROM_TABLE $17
 		inc	b
 		or	a
-		jr	nz,.db49
+		jr	nz,.far_wall
 		dec	b
-		GET_B_FROM_TABLE $1a
+		GET_B_FROM_TABLE $1A
 		inc	b
 		or	a
-		jr	nz,.db49
-		GET_B_FROM_TABLE $1a
+		jr	nz,.far_wall
+		GET_B_FROM_TABLE $1A
 		dec	a
-		jr	z,.db3d
+		jr	z,.corner
 		dec	a
-		jr	z,.db44
-		ld	a,(var_5FD3)
+		jr	z,.corner_dk
+		ld	a,(reveal_secret)
 		or	a
-		jr	nz,.db44
-.db3d:
+		jr	nz,.corner_dk
+.corner:
 		ld	e,10
 		call	draw_wall_element
-		jr	.db49
-.db44:
+		jr	.far_wall
+.corner_dk:
 		ld	e,11
 		call	draw_wall_element
-.db49:
+.far_wall:
 		GET_B_FROM_TABLE $19
-		jr	z,.db68
+		jr	z,.edge_chk
 		pop	hl
 		pop	hl
 		dec	a
-		jr	z,.db5c
+		jr	z,.far
 		dec	a
-		jr	z,.db63
-		ld	a,(var_5FD3)
+		jr	z,.far_dk
+		ld	a,(reveal_secret)
 		or	a
-		jr	nz,.db63
-.db5c:
+		jr	nz,.far_dk
+.far:
 		ld	e,12
 		call	draw_wall_element
-		jr	.db68
-.db63:
+		jr	.edge_chk
+.far_dk:
 		ld	e,13
 		call	draw_wall_element
-.db68:
+.edge_chk:
 		ld	a,b
 		or	a
 		ret	z
-		GET_B_FROM_TABLE $1d
-		jr	z,.db75
+		GET_B_FROM_TABLE $1D
+		jr	z,.edge
 		ld	e,14
 		call	draw_wall_element
-.db75:
-		GET_B_FROM_TABLE $1c
+.edge:
+		GET_B_FROM_TABLE $1C
 		ret	z
 		ld	e,15
 		call	draw_wall_element

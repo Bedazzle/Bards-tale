@@ -17,7 +17,7 @@ trade_gold:
 
 		jr	nc,check_is_equipped
 
-		cp	$47
+		cp	'G'
 		ret	nz
 
 		PRINT_SPACE_LINE

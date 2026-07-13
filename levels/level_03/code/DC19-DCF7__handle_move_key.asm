@@ -1,112 +1,112 @@
 ; --- handle_move_key ($DC19-$DCF7) -----------------------------
-; @wip
+; @done
 ; Dispatch[0]: read the movement/action key and act (move/turn/etc.).
 
 handle_move_key:
-		ld	a,(iy+$24)
-		cp	$4c
-		jr	z,.dc8d
-		cp	$4b
-		jr	z,.dca0
-		cp	$4a
-		jr	z,.dc82
-		cp	$49
-		jp	z,.dcb5
-		cp	$44
-		jp	z,.dc4b
-		cp	$45
+		ld	a,(iy+$24)		; the pressed key
+		cp	'L'			; turn right
+		jr	z,.turn_right
+		cp	'K'
+		jr	z,.key_k
+		cp	'J'			; turn left
+		jr	z,.turn_left
+		cp	'I'			; move forward
+		jp	z,.move_fwd
+		cp	'D'			; descend stairs
+		jp	z,.use_stairs
+		cp	'E'			; enter/ascend stairs
 		ret	nz
 		call	get_cell_feature
 		and	$40
-		jp	z,.dcc5
+		jp	z,.end_turn
 		GET_GAME_VARIABLE $20
-		jp	z,.dcc5
-		ld	a,($fa55)
+		jp	z,.end_turn
+		ld	a,(special_loc_list+$15)
 		or	a
-		jr	nz,.dc60
-		jr	.dc66
-.dc4b:
+		jr	nz,.stairs_down
+		jr	.stairs_up
+.use_stairs:
 		call	get_cell_feature
 		and	$20
-		jr	z,.dcc5
+		jr	z,.end_turn
 		GET_GAME_VARIABLE $20
-		jr	nz,.dc5a
+		jr	nz,.stairs_ok
 		call	damage_all_groups
-.dc5a:
-		ld	a,($fa55)
+.stairs_ok:
+		ld	a,(special_loc_list+$15)
 		or	a
-		jr	nz,.dc66
-.dc60:
-		inc	(iy+$3b)
+		jr	nz,.stairs_up
+.stairs_down:
+		inc	(iy+$3B)
 		jp	teleport_to_level
-.dc66:
-		dec	(iy+$3b)
+.stairs_up:
+		dec	(iy+$3B)
 		jp	p,teleport_to_level
-		ld	hl,($fa53)
-		ld	(var_5FAC),hl
-		ld	a,($fa5f)
-		ld	(var_5FAE),a
+		ld	hl,(special_loc_list+$13)
+		ld	(coord_so_no),hl
+		ld	a,(special_loc_list+$1F)
+		ld	(face_direction),a
 		xor	a
-		ld	(var_5FE6),a
+		ld	(teleport_mode),a
 		ld	c,a
-		ld	b,$ff
+		ld	b,$FF
 		jp	insert_skara_tape
-.dc82:
+.turn_left:
 		ld	a,(iy+3)
 		dec	a
-		jp	p,.dc96
+		jp	p,.set_facing
 		ld	a,3
-		jr	.dc96
-.dc8d:
+		jr	.set_facing
+.turn_right:
 		ld	a,(iy+3)
 		inc	a
 		cp	4
-		jr	nz,.dc96
+		jr	nz,.set_facing
 		xor	a
-.dc96:
+.set_facing:
 		ld	(iy+3),a
 		ld	(iy+$40),0
 		jp	process_turn
-.dca0:
+.key_k:
 		ld	a,(SPELL_SECRET_STATE)
 		or	a
-		jr	z,.dcbb
+		jr	z,.try_step
 		cp	2
-		jr	nz,.dcaf
-.dcaa:
+		jr	nz,.k_check
+.k_beep:
 		call	move_beep
-		jr	.dcbb
-.dcaf:
+		jr	.try_step
+.k_check:
 		cp	3
-		jr	nz,.dcc8
-		jr	.dcaa
-.dcb5:
+		jr	nz,.bump
+		jr	.k_beep
+.move_fwd:
 		ld	a,(SPELL_SECRET_STATE)
 		or	a
-		jr	nz,.dcc3
-.dcbb:
-		GET_GAME_VARIABLE $3e
-		jr	nz,.dcc8
+		jr	nz,.redraw_move
+.try_step:
+		GET_GAME_VARIABLE $3E
+		jr	nz,.bump
 		call	move_party_forward
-.dcc3:
+.redraw_move:
 		CLEAR_INFO_PANEL
-.dcc5:
+.end_turn:
 		jp	process_turn
-.dcc8:
+.bump:
 		GET_GAME_VARIABLE $27
-		jr	nz,.dcd6
+		jr	nz,.bump_beep
 		inc	(iy+9)
 		inc	(iy+$27)
 		call	redraw_location
-.dcd6:
+.bump_beep:
 		GET_GAME_VARIABLE $10
-		jr	nz,.dce8
-		GET_GAME_VARIABLE $2e
+		jr	nz,.bump_undo
+		GET_GAME_VARIABLE $2E
 		ret	nz
 		ld	de,$32
 		ld	hl,$15
 		call	call_beeper
-.dce8:
+.bump_undo:
 		GET_GAME_VARIABLE $09
 		jr	z,process_turn
 		dec	(iy+9)

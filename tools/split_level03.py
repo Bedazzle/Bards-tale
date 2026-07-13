@@ -86,6 +86,30 @@ for f in os.listdir(OUT):
     if m and 0xD30A <= int(m.group(1), 16) <= 0xDD7C:
         os.remove(os.path.join(OUT, f))
 
+# §8 In:/Out:/Note fields per routine (register/var interface). Absent = data block
+# or implicit-state routine (dispatch entry / event handler).
+HDR = {
+ "get_cell_feature":   ["In:  ($5FAC)=N/S, ($5FAD)=W/E coord", "Out: a = feature byte at cell+$1E4"],
+ "mask_cell_byte":     ["In:  a = AND mask (applied to the cell feature byte)"],
+ "maze_cell_addr":     ["In:  c = row, b = col", "Out: hl = cell address, a = (hl)"],
+ "wrap_maze_coord":    ["In:  a = signed coord", "Out: a = wrapped into 0..21"],
+ "wrap_view_we":       ["Wraps the W/E view coord ($5FE4) in place into 0..21"],
+ "wrap_view_ns":       ["Wraps the N/S view coord ($5FE3) in place into 0..21"],
+ "point_ix_to_record": ["In:  a = record index", "Out: ix = record pointer (from the $D83E table)"],
+ "scan_cells_ahead":   ["In:  ($5FAE) = facing", "Out: e = collected reveal/sense bits"],
+ "set_state_and_redraw":["In:  a = view-state value (stored to $5FD2), then redraw + clear panel"],
+ "roll_from_daypart_table":["In:  hl = table base", "Out: a = amount summed by daypart then randomised"],
+ "prompt_pick_hero":   ["Out: b = chosen hero, carry set if cancelled"],
+ "damage_group_checked":["In:  a = guardian id, b = target group"],
+ "set_damage_state":   ["In:  a = damage value (stored to $5FFB)", "Out: a = hi nibble of $5FFF"],
+ "draw_wall_element":  ["In:  b = view position, e = element index (into wall_element_table)"],
+ "draw_wall_column":   ["In:  a = view slot / depth"],
+ "step_in_facing":     ["In:  a = facing (1-3)", "Out: the party coord advanced one cell, wrapped"],
+ "move_party_forward": ["In:  (iy+3) = facing; steps the party one cell forward"],
+ "damage_all_groups":  ["Applies the rolled damage to all 6 enemy groups (uses $5FFF)"],
+ "announce_stairs":    ["Prints 'there are stairs here, going up/down' for the current cell"],
+ "dispatch_special_location":["In:  party cell (iy+1/iy+2); fires that cell's special event via the SMC jp"],
+}
 inc = []
 for k, name in enumerate(bounds):
     a = sym[name]
@@ -96,6 +120,7 @@ for k, name in enumerate(bounds):
     fn = "%04X-%04X__%s.asm" % (a, b, name)
     hdr = ["; --- %s ($%04X-$%04X) %s" % (name, a, b, "-"*max(3, 44-len(name))),
            "; @wip", "; " + DESC[name]]
+    hdr += ["; " + ln for ln in HDR.get(name, [])]
     open(os.path.join(OUT, fn), "w", newline="\r\n").write("\n".join(hdr + [""] + body) + "\n")
     inc.append('\tinclude "levels/level_03/code/%s"' % fn)
 

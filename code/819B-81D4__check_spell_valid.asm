@@ -31,7 +31,7 @@ check_spell_valid:
 		push	af
 		ld	a,c
 
-		cp	$45 ; 'E'
+		cp	'E'
 		jr	nc,.search
 
 		ld	de,0
@@ -51,10 +51,10 @@ check_spell_valid:
 .valid:
 		ld	a,(GAME_VARIABLES + VAR_CURRENT_SPELL)
 
-		cp	$43 ; 'C'
+		cp	'C'
 		jp	z,breath_attack_run
 
-		cp	$4B ; 'K'
+		cp	'K'
 		jr	nz,spell_roll_damage
 
 		jp	breath_attack_run

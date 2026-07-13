@@ -25,7 +25,7 @@ draw_wall_column:
 		jr	z,.elem0
 		dec	a
 		jr	z,.elem1
-		ld	a,(var_5FD3)
+		ld	a,(reveal_secret)
 		or	a
 		jr	nz,.elem1
 .elem0:
@@ -43,7 +43,7 @@ draw_wall_column:
 		jr	z,.elem4
 		dec	a
 		jr	z,.elem5
-		ld	a,(var_5FD3)
+		ld	a,(reveal_secret)
 		or	a
 		jr	nz,.elem5
 .elem4:
@@ -72,7 +72,7 @@ draw_wall_column:
 		jr	z,.elem8
 		dec	a
 		jr	z,.elem9
-		ld	a,(var_5FD3)
+		ld	a,(reveal_secret)
 		jr	nz,.elem9
 .elem8:
 		ld	e,8
@@ -88,7 +88,7 @@ draw_wall_column:
 		jr	z,.elem2
 		dec	a
 		jr	z,.elem3
-		ld	a,(var_5FD3)
+		ld	a,(reveal_secret)
 		or	a
 		jr	nz,.elem3
 .elem2:
@@ -106,7 +106,7 @@ draw_wall_column:
 		jr	z,.elem6
 		dec	a
 		jr	z,.elem7
-		ld	a,(var_5FD3)
+		ld	a,(reveal_secret)
 		or	a
 		jr	nz,.elem7
 .elem6:
@@ -135,7 +135,7 @@ draw_wall_column:
 		jr	z,.elem10
 		dec	a
 		jr	z,.elem11
-		ld	a,(var_5FD3)
+		ld	a,(reveal_secret)
 		or	a
 		jr	nz,.elem11
 .elem10:
@@ -154,7 +154,7 @@ draw_wall_column:
 		jr	z,.elem12
 		dec	a
 		jr	z,.elem13
-		ld	a,(var_5FD3)
+		ld	a,(reveal_secret)
 		or	a
 		jr	nz,.elem13
 .elem12:

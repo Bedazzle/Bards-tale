@@ -2,7 +2,7 @@
 ; @done
 ; Draw the 3D dungeon view. If the darkness var ($40) is set the walls are skipped
 ; (black view). Otherwise it clears the light-spell state, copies the party coord to
-; the view coord, selects the wall renderer for the current facing ($03) out of four
+; the view coord, selects the wall renderer for the current face_direction ($03) out of four
 ; (one per direction), and calls it via an SMC slot for each of the 5 depth steps,
 ; then finishes with draw_view_elements.
 render_dungeon_view:
@@ -18,10 +18,10 @@ render_dungeon_view:
 		ld	(hl),0
 		inc	hl
 		djnz	.clear_light
-		ld	hl,(coord_ns)		; party coord -> view coord
-		ld	(view_ns),hl
+		ld	hl,(coord_so_no)		; party coord -> view coord
+		ld	(view_y_offset),hl
 		ld	b,0
-		GET_GAME_VARIABLE $03		; facing 0..3
+		GET_GAME_VARIABLE $03		; face_direction 0..3
 		jr	z,.face0
 		dec	a
 		jr	z,.face1

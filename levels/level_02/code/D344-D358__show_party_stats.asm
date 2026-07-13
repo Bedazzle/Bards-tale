@@ -5,8 +5,8 @@
 show_party_stats:
 		xor	a
 		ld	h,a
-		ld	(var_5FFB),a
-		ld	a,(var_5FFF)
+		ld	(damage_type),a
+		ld	a,(copy_daypart)
 		inc	a
 		ld	l,a
 		ld	b,6

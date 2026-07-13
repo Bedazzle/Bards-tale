@@ -5,7 +5,7 @@
 get_cell_feature:
 		push	de
 		push	bc
-		ld	bc,(coord_ns)
+		ld	bc,(coord_so_no)
 		call	maze_cell_addr
 		ld	de,$1e4
 		add	hl,de

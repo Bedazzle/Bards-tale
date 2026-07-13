@@ -1,15 +1,17 @@
 ; --- MONST_HP_ENC ---------------------------------------------
-; @wip
-; Nibble-packed per-monster HP/tier spec at the head of the monster-data
-; region ($8F4E), $FC-RLE like the sibling tables. Each byte = {hi nibble
-; = tier/level 1-7, lo nibble = variance 0-6}: values climb $1x -> $7x by
-; monster id (weak humanoids $12, up to $72 for the toughest). No STATIC
-; GET_*_FROM_TABLE targets it, but a dynamic combat trace
-; (tools/m8xxx/memwatch.html) caught it being read via the RST-10h
-; dispatcher (lookup_addr_table $716F/$7192) during fights, so it IS live
-; - reached through a computed/indirect index (its sibling MONST_HP_AC at
-; $8FCE is the one calc_monster_hp reads by the named INX_MONST_HP_AC).
-; Note: exact consumer + how the {tier,variance} feeds HP still to pin down.
+; @done
+; Per-monster HP-variance tier, nibble-packed (hi nibble climbs $1->$7 by
+; monster id, weak humanoids $1x up to $7x for the toughest). Reached via
+; the OPTION_KEYS ADDR_TABLE slot ($71): OPTION_KEYS = $8F4D and the table
+; stores OPTION_KEYS+1 = $8F4E = MONST_HP_ENC, so calc_monster_hp's
+; GET_D_FROM_TABLE INX_OPTION_KEYS (d = monster id) actually reads
+; MONST_HP_ENC[id] (that is why no plain GET_*_FROM_TABLE names it - it
+; rides the OPTION_KEYS slot at a large offset). calc_monster_hp then takes
+; its HI nibble (divide_A_by_16) and uses it as the index into
+; RND_RANGE_MASKS ($64) to pick the HP random-range MASK, ANDs the RNG hi
+; byte with it, and adds MONST_HP_AC[id]'s hi nibble (the base). So:
+;   HP = (RND_HI & RND_RANGE_MASKS[MONST_HP_ENC[id].hi]) + MONST_HP_AC[id].hi
+; Referenced by: calc_monster_hp (via ADDR_TABLE index $71, INX_OPTION_KEYS)
 MONST_HP_ENC:
 		DB $12,$12,$22,$22,$21,$22,$21,$21,$22,$21,$21,$21,$22,$22,$21,$22
 		DB $21,$22,$FC,6,$21,$32,$32,$32,$FC,4,$31,$32,$31,$31,$32,$32

@@ -31,11 +31,11 @@ handle_wandering_creature:
 		PRINT_MESSAGE2 $12
 .wait_key:
 		WAIT_KEY_DOWN
-		cp	$4c
+		cp	'L'
 		jr	z,.leave
-		cp	$41
+		cp	'A'
 		jr	z,.allow
-		sub	$46
+		sub	'F'
 		jr	nz,.wait_key
 		ld	(enemy_count),a
 		inc	(iy+$5b)
@@ -88,7 +88,7 @@ give_item_to_party:
 		ld	c,a
 check_party_alive:
 		ld	a,c
-		call	var_6CDA
+		call	check_equipped+3
 		ret	nc
 		djnz	check_party_alive
 		ret
@@ -128,7 +128,7 @@ enc_start_combat:
 		ld	(ACTIVE_GUARDIAN),a
 		ld	a,1
 		ld	(COMBAT_ACTIVE_FLAG),a
-		ld	(var_6006),a
+		ld	(encounter_ctr),a
 		ld	(iy+$4d),0
 		call	combat_foes
 		GET_GAME_VARIABLE $51

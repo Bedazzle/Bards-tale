@@ -1,25 +1,26 @@
 ; --- draw_wall_element ($DB7F-$DC18) ---------------------------
-; @wip
+; @done
 ; Blit one view element from the 5-byte-record table at $DD5F (stride $19).
+; In:  b = view position, e = element index (into wall_element_table)
 
 draw_wall_element:
 		push	hl
 		push	bc
 		push	de
-		ld	hl,wall_element_table-$1e
+		ld	hl,wall_element_table-$1E
 		inc	b
 		ld	de,5
-.db89:
+.find_record:
 		add	hl,de
-		djnz	.db89
+		djnz	.find_record
 		pop	de
 		push	de
 		ld	b,e
 		inc	b
 		ld	de,$19
-.db93:
+.find_slot:
 		add	hl,de
-		djnz	.db93
+		djnz	.find_slot
 		ld	c,(hl)
 		srl	c
 		srl	c
@@ -42,7 +43,7 @@ draw_wall_element:
 		push	hl
 		push	bc
 		push	de
-		ld	hl,$4000
+		ld	hl,SCREEN
 		ld	b,0
 		add	hl,bc
 		ex	af,af'
@@ -50,26 +51,26 @@ draw_wall_element:
 		rra
 		rra
 		rra
-		and	$1f
+		and	$1F
 		ld	b,a
 		inc	b
-.dbbe:
+.row_loop:
 		ld	a,l
 		add	a,$20
 		ld	l,a
-		jr	nc,.dbc8
+		jr	nc,.row_next
 		ld	a,h
 		add	a,8
 		ld	h,a
-.dbc8:
-		djnz	.dbbe
+.row_next:
+		djnz	.row_loop
 		ld	a,d
 		and	7
 		ld	bc,$100
-.dbd0:
+.pixel_rows:
 		add	hl,bc
 		dec	a
-		jp	p,.dbd0
+		jp	p,.pixel_rows
 		push	hl
 		exx
 		pop	hl
@@ -79,40 +80,40 @@ draw_wall_element:
 		pop	de
 		ex	af,af'
 		ld	l,a
-.dbde:
+.col_loop:
 		push	hl
 		exx
 		push	hl
 		exx
 		inc	h
 		ld	b,h
-.dbe4:
+.byte_loop:
 		ld	a,(de)
 		inc	de
 		ld	l,a
 		dec	c
 		inc	c
-		jr	z,.dbee
-		ld	h,$f4
+		jr	z,.plot
+		ld	h,high pixel_shift_table
 		ld	a,(hl)
-.dbee:
+.plot:
 		exx
 		or	(hl)
 		ld	(hl),a
 		inc	h
 		ld	a,h
 		and	7
-		jr	nz,.dc01
+		jr	nz,.row_adv
 		ld	a,l
 		add	a,$20
 		ld	l,a
-		jr	c,.dc01
+		jr	c,.row_adv
 		ld	a,h
 		sub	8
 		ld	h,a
-.dc01:
+.row_adv:
 		exx
-		djnz	.dbe4
+		djnz	.byte_loop
 		exx
 		pop	hl
 		exx
@@ -120,15 +121,15 @@ draw_wall_element:
 		dec	c
 		inc	c
 		exx
-		jr	z,.dc10
+		jr	z,.col_fwd
 		dec	hl
-		jr	.dc11
-.dc10:
+		jr	.col_done
+.col_fwd:
 		inc	hl
-.dc11:
+.col_done:
 		exx
 		dec	l
-		jr	nz,.dbde
+		jr	nz,.col_loop
 		pop	de
 		pop	bc
 		pop	hl

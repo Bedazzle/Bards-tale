@@ -5,7 +5,7 @@
 ; 9-byte anti-magic block at VAR_ANTIMAGIC.
 ; In:  iy = game variables base
 zero_buffers:
-		ld	hl,___table_9J+$2
+		ld	hl,HERO_CAST_STATE+$2
 		ld	bc,$9603		; b=$96 bytes/block, c=3 blocks
 
 more_nullify:

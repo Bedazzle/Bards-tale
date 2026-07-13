@@ -1,9 +1,9 @@
 ; --- maze_cell_addr + 3D-view wall scanners ----------------
 ; @done
 ; maze_cell_addr: address of a maze cell = MAZE_WALLS + (row+1)*22 + col.
-; render_wall_face0..3: per-facing view scanners (walk cells in the facing dir, read
+; render_wall_face0..3: per-face_direction view scanners (walk cells in the face_direction dir, read
 ; the reveal/light wall tables, build wall data via the l_dXXX helpers, advance the
-; view coord). render_dungeon_view picks one by facing. NOTE: the l_dXXX helpers are
+; view coord). render_dungeon_view picks one by face_direction. NOTE: the l_dXXX helpers are
 ; shared here and still auto-labelled - meaningful names + per-routine split pending.
 maze_cell_addr:
 		ld	hl,MAZE_WALLS
@@ -147,7 +147,7 @@ wall_init_face3:
 		ret
 get_wall_byte:
 		push	bc
-		ld	bc,(view_ns)
+		ld	bc,(view_y_offset)
 		call	maze_cell_addr
 		ld	l,a
 		and	3
@@ -171,7 +171,7 @@ get_wall_byte:
 		ret
 build_wall_data:
 		push	bc
-		ld	bc,(view_ns)
+		ld	bc,(view_y_offset)
 		call	maze_cell_addr
 		ld	de,$1e4
 		add	hl,de

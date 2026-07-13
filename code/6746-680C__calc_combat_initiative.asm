@@ -13,7 +13,7 @@ calc_combat_initiative:
 
 		jr	z,.calc_heroes
 
-		ld	hl,___table_9G+$6
+		ld	hl,COMBAT_INITIATIVE+$6
 		ld	b,7
 		call	nullify_buffer
 		ld	(GAME_VARIABLES + VAR_INITIATIVE_FLAG),a
@@ -22,7 +22,7 @@ calc_combat_initiative:
 
 .calc_heroes:
 		ld	b,1
-		ld	hl,___table_9G+$1
+		ld	hl,COMBAT_INITIATIVE+$1
 
 .hero_loop:
 		FIND_HERO_BY_B
@@ -72,7 +72,7 @@ calc_combat_initiative:
 
 		ld	a,e
 
-		cp	$41 ; 'A'
+		cp	'A'
 		jr	nc,.by_class
 
 .small_speed:

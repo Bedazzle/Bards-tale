@@ -5,18 +5,18 @@
 ; hero via apply_damage_to_group. Returns the trap index ($5FE1).
 ; In: a = effect value, b = hero index.
 apply_effect_to_hero:
-		ld	(var_FB90),a
+		ld	(ACTIVE_GUARDIAN),a
 		CHECK_FLEE_RESULT
 		jr	c,.apply
 		or	a
 		jr	nz,.halve
 		ld	hl,0
-		ld	(var_5FFB),a
+		ld	(damage_type),a
 .halve:
 		srl	h
 		rr	l
 .apply:
-		ld	a,(var_5FFB)
+		ld	a,(damage_type)
 		ld	a,b
 		call	apply_damage_to_group
 		ld	a,(treasure_flag)

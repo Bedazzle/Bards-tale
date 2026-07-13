@@ -1,0 +1,194 @@
+; ============================================================================
+; Level 03 (Sewers 1) - overlay front matter ($C18C-$C2DF)
+; ----------------------------------------------------------------------------
+; @done  Dispatch JP table + the RST-10h dispatch pointer tables (ADDR_TABLE +
+; addr_table_2, DW label+1) + the text-decoder clone. Relocatable: every pointer
+; resolves to a label (shared-engine targets via level_03_externals.asm; in-
+; overlay targets to this level's own labels). ADDR_TABLE/addr_table_2 generated
+; from the raw words + the main-build .sym.
+; ============================================================================
+
+LEVEL_START:
+	jp	handle_move_key		; [0] movement / action keys
+redraw_vector:
+	jp	refresh_dungeon_view	; [1] redraw location
+
+	jp	process_turn		; [2] end-of-move processing
+
+	jp	handle_wandering_creature	; [3] wandering-creature encounter
+
+	jp	handle_chest		; [4] chest interaction
+
+	jp	scan_cells_ahead	; [5] scan cells ahead
+
+; $C19E-$C289 - ADDR_TABLE (118 words), read by RST 10h GET_*_FROM_TABLE.
+ADDR_TABLE:
+		DW BARD_TUNE_TABLE+1		; 00
+		DW ___table_99+1		; 01
+		DW COMBAT_SPEED_TABLE+1		; 02
+		DW cell_feature_masks+1		; 03
+		DW RACE_STAT_BASE+1		; 04
+		DW LEVEL_START+1		; 05
+		DW ICON_SCREEN_POS+1		; 06
+		DW LEVEL_START+1		; 07
+		DW LEVEL_START+1		; 08
+		DW LEVEL_START+1		; 09
+		DW LEVEL_START+1		; 0A
+		DW LEVEL_START+1		; 0B
+		DW LEVEL_START+1		; 0C
+		DW LEVEL_START+1		; 0D
+		DW LEVEL_START+1		; 0E
+		DW addr_table_2-1		; 0F
+		DW LEVEL_START+1		; 10
+		DW LEVEL_START+1		; 11
+		DW LEVEL_START+1		; 12
+		DW LEVEL_START+1		; 13
+		DW KEY_CODES_TABLE+1		; 14
+		DW ___table_46+1		; 15
+		DW PARTY_FILE+1		; 16
+		DW SPELL_REVEAL_STATE+1		; 17
+		DW SPELL_LIGHT_STATE+1		; 18
+		DW SPELL_SECRET_STATE+1		; 19
+		DW SPELL_CARPET_STATE+1		; 1A
+		DW SPELL_COMPASS_STATE+1		; 1B
+		DW SPELL_EYE_STATE+1		; 1C
+		DW SPELL_SHIELD_STATE+1		; 1D
+		DW trap_value_tables+17		; 1E
+		DW trap_name_table+1		; 1F
+		DW SPELL_AC_DELTA+1		; 20
+		DW MOD_STAT_21_AMOUNT+1		; 21
+		DW MOD_STAT_22_AMOUNT+1		; 22
+		DW SPELL_DURATIONS+1		; 23
+		DW SONG_EFFECT_TABLE+1		; 24
+		DW PROCS_2+1		; 25
+		DW SPELL_HANDLER_INDEX+1		; 26
+		DW ___table_40+1		; 27
+		DW GOLD_ROLL_MASK_LO+1		; 28
+		DW GOLD_ROLL_MASK_HI+1		; 29
+		DW HIT_GROUP_KILLS+1		; 2A
+		DW HIT_GROUP_LIST+1		; 2B
+		DW GROUP_ATK_MOD+1		; 2C
+		DW GROUP_AC_MOD+1		; 2D
+		DW GROUP_DMG_MOD+1		; 2E
+		DW ALLY_DATA+1		; 2F
+		DW FD7A_ANCHOR+1		; 30
+		DW ACTIONS_PROCS+1		; 31
+		DW ACTIONS_KEYS+1		; 32
+		DW STAT_DISPLAY_TABLE+1		; 33
+		DW TEXT_BUFFER+1		; 34
+		DW AI_SPELL_CODES+1		; 35
+		DW COMBAT_ACTIVE_FLAG+1		; 36
+		DW ENEMY+1		; 37
+		DW COMBAT_INITIATIVE+1		; 38
+		DW OPTION_AVAIL_MASK+1		; 39
+		DW HERO_QUEUED_ITEM+1		; 3A
+		DW HERO_CAST_STATE+1		; 3B
+		DW HERO_QUEUED_SPELL+1		; 3C
+		DW PALADIN_AC_BY_LEVEL+1		; 3D
+		DW CLASS_AC_BONUS+1		; 3E
+		DW ITEM_STATE_MARKERS+1		; 3F
+		DW COMBAT_UI_TEXT+1		; 40
+		DW ACTIVE_GUARDIAN+1		; 41
+		DW GROUP_ILLUSION_FLAG+1		; 42
+		DW DAYPART_DMG_SCALE+1		; 43
+		DW MONST_HP_AC+1		; 44
+		DW ALLY_STATE+1		; 45
+		DW CLASS_EQUIP_MASK+1		; 46
+		DW ITEM_EQUIP+1		; 47
+		DW GUARDIAN_TYPE+1		; 48
+		DW XP_CLASS_THRESHOLDS+1		; 49
+		DW SPELL_HANDLER_PARAM+1		; 4A
+		DW DICE_SIDES_TABLE+1		; 4B
+		DW CLASS_TO_HIT_BONUS+1		; 4C
+		DW DAMAGE_DICE_MASK+1		; 4D
+		DW SWAP_STAT_TEMPLATE+1		; 4E
+		DW DAYPART_ROLL_MASK+1		; 4F
+		DW DAYPART_ROLL_ADD+1		; 50
+		DW DISPLAY_PALETTE+1		; 51
+		DW trap_value_tables+1		; 52
+		DW trap_area_damage+71		; 53
+		DW trap_area_damage+63		; 54
+		DW GROUP_AC_MOD2+1		; 55
+		DW HERO_ACTION_CODE+1		; 56
+		DW GROUP_TURN_SKIP+1		; 57
+		DW special_loc_list+1		; 58
+		DW ___table_28+1		; 59
+		DW MONST_IMAGE+1		; 5A
+		DW ___table_27+1		; 5B
+		DW SPELL_ATTACK_BONUS+1		; 5C
+		DW MOD_STAT_5D_AMOUNT+1		; 5D
+		DW overlay_end+0		; 5E
+		DW RANGE_VALUES+1		; 5F
+		DW REVEAL_DURAT+1		; 60
+		DW LIGHT_DURAT+1		; 61
+		DW SUMMON_CREAT+1		; 62
+		DW SUMMON_DATA+1		; 63
+		DW RND_RANGE_MASKS+1		; 64
+		DW SPELL_COST+1		; 65
+		DW STATUSES+1		; 66
+		DW ITEM_EFFECTS+1		; 67
+		DW WEAPON_DAMAGE+1		; 68
+		DW SPELL_TYPES+1		; 69
+		DW ITEM_SPELL_CODES+1		; 6A
+		DW ITEM_SPECATT+1		; 6B
+		DW MONK_BAREHAND_DAMAGE+1		; 6C
+		DW XP_TABLE+1		; 6D
+		DW LEVEL_START+1		; 6E
+		DW CLASS_ELIGIBILITY+1		; 6F
+		DW MONST_SPEC+1		; 70
+		DW OPTION_KEYS+1		; 71
+		DW MONST_MAGIC+1		; 72
+		DW WEAPON_BONUS+1		; 73
+		DW ATTACK_WORD_TABLE+1		; 74
+		DW MONST_PIC_00+1		; 75
+
+; $C28A-$C2C1 - addr_table_2 (28 words), read by RST 10h GET_*_FROM_LIST.
+addr_table_2:
+		DW MONST_PIC_01+1		; 00
+		DW MONST_PIC_02+1		; 01
+		DW MONST_PIC_03+1		; 02
+		DW MONST_PIC_04+1		; 03
+		DW MONST_PIC_05+1		; 04
+		DW MONST_PIC_06+1		; 05
+		DW level_tbl_4+1		; 06
+		DW MONST_PIC_08+1		; 07
+		DW level_tbl_2+1		; 08
+		DW level_tbl_5+1		; 09
+		DW MONST_PIC_0B+1		; 0A
+		DW level_tbl_6+1		; 0B
+		DW MONST_PIC_07+1		; 0C
+		DW MONST_PIC_07+1		; 0D
+		DW MONST_PIC_07+1		; 0E
+		DW MONST_PIC_07+1		; 0F
+		DW MONST_PIC_07+1		; 10
+		DW MONST_PIC_07+1		; 11
+		DW MONST_PIC_07+1		; 12
+		DW MONST_PIC_07+1		; 13
+		DW MONST_PIC_07+1		; 14
+		DW MONST_PIC_07+1		; 15
+		DW MONST_PIC_07+1		; 16
+		DW level_tbl_1+1		; 17
+		DW MONST_PIC_07+1		; 18
+		DW MONST_PIC_07+1		; 19
+		DW MONST_PIC_07+1		; 1A
+		DW level_tbl_3+1		; 1B
+
+; $C2C2-$C2DF - text-decoder clone (byte-identical to level_02/03's).
+print_msg_sewers2:
+	PUSH_REGS
+	ld	de,MESSAGES_TEXTS
+	ld	hl,MESSAGES_TABLE
+	jp	clear_prnt_param
+print_sewers2_flag0:
+	ex	af,af'
+	xor	a
+	jr	flip_sewers2_print
+print_sewers2_flag1:
+	ex	af,af'
+	ld	a,1
+flip_sewers2_print:
+	ex	af,af'
+	PUSH_REGS
+	ld	de,MESSAGES_TEXTS
+	ld	hl,MESSAGES_TABLE
+	jp	print_msg_A

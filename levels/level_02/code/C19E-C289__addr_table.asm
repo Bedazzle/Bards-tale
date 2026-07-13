@@ -38,8 +38,8 @@ ADDR_TABLE:
 		DW chest_attr_table+17		; 1E
 		DW chest_option_masks+1		; 1F
 		DW SPELL_AC_DELTA+1		; 20
-		DW ___table_30+1		; 21
-		DW ___table_29+1		; 22
+		DW MOD_STAT_21_AMOUNT+1		; 21
+		DW MOD_STAT_22_AMOUNT+1		; 22
 		DW SPELL_DURATIONS+1		; 23
 		DW SONG_EFFECT_TABLE+1		; 24
 		DW PROCS_2+1		; 25
@@ -47,13 +47,13 @@ ADDR_TABLE:
 		DW ___table_40+1		; 27
 		DW GOLD_ROLL_MASK_LO+1		; 28
 		DW GOLD_ROLL_MASK_HI+1		; 29
-		DW ___table_9D+1		; 2A
-		DW ___table_9C+1		; 2B
-		DW ___table_9A+1		; 2C
-		DW ___table_96+1		; 2D
-		DW ___table_97+1		; 2E
+		DW HIT_GROUP_KILLS+1		; 2A
+		DW HIT_GROUP_LIST+1		; 2B
+		DW GROUP_ATK_MOD+1		; 2C
+		DW GROUP_AC_MOD+1		; 2D
+		DW GROUP_DMG_MOD+1		; 2E
 		DW ALLY_DATA+1		; 2F
-		DW ___table_94+1		; 30
+		DW FD7A_ANCHOR+1		; 30
 		DW ACTIONS_PROCS+1		; 31
 		DW ACTIONS_KEYS+1		; 32
 		DW STAT_DISPLAY_TABLE+1		; 33
@@ -61,20 +61,20 @@ ADDR_TABLE:
 		DW AI_SPELL_CODES+1		; 35
 		DW COMBAT_ACTIVE_FLAG+1		; 36
 		DW ENEMY+1		; 37
-		DW ___table_9G+1		; 38
+		DW COMBAT_INITIATIVE+1		; 38
 		DW OPTION_AVAIL_MASK+1		; 39
-		DW ___table_9E+1		; 3A
-		DW ___table_9J+1		; 3B
-		DW ___table_9F+1		; 3C
+		DW HERO_QUEUED_ITEM+1		; 3A
+		DW HERO_CAST_STATE+1		; 3B
+		DW HERO_QUEUED_SPELL+1		; 3C
 		DW PALADIN_AC_BY_LEVEL+1		; 3D
 		DW CLASS_AC_BONUS+1		; 3E
 		DW ITEM_STATE_MARKERS+1		; 3F
-		DW ___table_9H+1		; 40
+		DW COMBAT_UI_TEXT+1		; 40
 		DW ACTIVE_GUARDIAN+1		; 41
-		DW ___table_9B+1		; 42
+		DW GROUP_ILLUSION_FLAG+1		; 42
 		DW DAYPART_DMG_SCALE+1		; 43
 		DW MONST_HP_AC+1		; 44
-		DW ___table_93+1		; 45
+		DW ALLY_STATE+1		; 45
 		DW CLASS_EQUIP_MASK+1		; 46
 		DW ITEM_EQUIP+1		; 47
 		DW GUARDIAN_TYPE+1		; 48
@@ -90,16 +90,16 @@ ADDR_TABLE:
 		DW chest_attr_table+1		; 52
 		DW trap_effects+9		; 53
 		DW trap_effects+1		; 54
-		DW ___table_9K+1		; 55
-		DW ___table_9I+1		; 56
-		DW ___table_98+1		; 57
+		DW GROUP_AC_MOD2+1		; 55
+		DW HERO_ACTION_CODE+1		; 56
+		DW GROUP_TURN_SKIP+1		; 57
 		DW special_loc_list+1		; 58
 		DW ___table_28+1		; 59
 		DW MONST_IMAGE+1		; 5A
 		DW ___table_27+1		; 5B
 		DW SPELL_ATTACK_BONUS+1		; 5C
-		DW ___table_31+1		; 5D
-		DW overlay_end+1		; 5E
+		DW MOD_STAT_5D_AMOUNT+1		; 5D
+		DW overlay_end			; 5E
 		DW RANGE_VALUES+1		; 5F
 		DW REVEAL_DURAT+1		; 60
 		DW LIGHT_DURAT+1		; 61
@@ -122,34 +122,34 @@ ADDR_TABLE:
 		DW MONST_MAGIC+1		; 72
 		DW WEAPON_BONUS+1		; 73
 		DW ATTACK_WORD_TABLE+1		; 74
-		DW ___table_48+1		; 75
+		DW MONST_PIC_00+1		; 75
 
 addr_table_2:
-		DW ___table_49+1		; 00
-		DW ___table_50+1		; 01
-		DW ___table_51+1		; 02
-		DW ___table_52+1		; 03
-		DW ___table_53+1		; 04
-		DW ___table_54+1		; 05
+		DW MONST_PIC_01+1		; 00
+		DW MONST_PIC_02+1		; 01
+		DW MONST_PIC_03+1		; 02
+		DW MONST_PIC_04+1		; 03
+		DW MONST_PIC_05+1		; 04
+		DW MONST_PIC_06+1		; 05
 		DW level_tbl_4+1		; 06
-		DW ___table_56+1		; 07
+		DW MONST_PIC_08+1		; 07
 		DW level_tbl_2+1		; 08
 		DW level_tbl_5+1		; 09
-		DW ___table_57+1		; 0A
+		DW MONST_PIC_0B+1		; 0A
 		DW level_tbl_6+1		; 0B
-		DW ___table_55+1		; 0C
-		DW ___table_55+1		; 0D
-		DW ___table_55+1		; 0E
-		DW ___table_55+1		; 0F
-		DW ___table_55+1		; 10
-		DW ___table_55+1		; 11
-		DW ___table_55+1		; 12
-		DW ___table_55+1		; 13
-		DW ___table_55+1		; 14
-		DW ___table_55+1		; 15
-		DW ___table_55+1		; 16
+		DW MONST_PIC_07+1		; 0C
+		DW MONST_PIC_07+1		; 0D
+		DW MONST_PIC_07+1		; 0E
+		DW MONST_PIC_07+1		; 0F
+		DW MONST_PIC_07+1		; 10
+		DW MONST_PIC_07+1		; 11
+		DW MONST_PIC_07+1		; 12
+		DW MONST_PIC_07+1		; 13
+		DW MONST_PIC_07+1		; 14
+		DW MONST_PIC_07+1		; 15
+		DW MONST_PIC_07+1		; 16
 		DW level_tbl_1+1		; 17
-		DW ___table_55+1		; 18
-		DW ___table_55+1		; 19
-		DW ___table_55+1		; 1A
+		DW MONST_PIC_07+1		; 18
+		DW MONST_PIC_07+1		; 19
+		DW MONST_PIC_07+1		; 1A
 		DW level_tbl_3+1		; 1B

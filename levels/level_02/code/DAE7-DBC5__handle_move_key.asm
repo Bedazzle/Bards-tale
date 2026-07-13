@@ -6,24 +6,24 @@
 ; also entered from handle_stairs. Ends by jumping to process_turn.
 handle_move_key:
 		ld	a,(iy+$24)
-		cp	$4c
+		cp	'L'
 		jr	z,mk_turn_right
-		cp	$4b
+		cp	'K'
 		jr	z,mk_key_k
-		cp	$4a
+		cp	'J'
 		jr	z,mk_turn_left
-		cp	$49
+		cp	'I'
 		jp	z,mk_forward
-		cp	$44
+		cp	'D'
 		jp	z,mk_kick
-		cp	$45
+		cp	'E'
 		ret	nz
 		call	cellars_handlers
 		and	$40
 		jp	z,mk_end
 		GET_GAME_VARIABLE $20
 		jp	z,mk_end
-		ld	a,(var_FA55)
+		ld	a,(special_loc_list+$15)
 		or	a
 		jr	nz,stairs_up
 		jr	stairs_down
@@ -35,7 +35,7 @@ mk_kick:
 		jr	nz,mk_kick_no_msg
 		call	show_party_stats
 mk_kick_no_msg:
-		ld	a,(var_FA55)
+		ld	a,(special_loc_list+$15)
 		or	a
 		jr	nz,stairs_down
 stairs_up:
@@ -45,9 +45,9 @@ stairs_down:
 		dec	(iy+$3b)
 		jp	p,teleport_to_level
 		ld	hl,($fa53)
-		ld	(coord_ns),hl
+		ld	(coord_so_no),hl
 		ld	a,($fa5f)
-		ld	(facing),a
+		ld	(face_direction),a
 		xor	a
 		ld	(teleport_mode),a
 		ld	c,a

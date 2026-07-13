@@ -113,7 +113,7 @@ ev_portal:
 		call	render_dungeon_view
 		jr	dispatch_done
 ev_set_flags:
-		ld	hl,var_5FCE
+		ld	hl,shield_state
 		ld	b,4
 .flag_loop:
 		ld	a,(hl)

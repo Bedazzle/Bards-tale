@@ -1,5 +1,5 @@
 ; --- ev_damage_all ($D407-$D40B) -------------------------------
-; @wip
+; @done
 ; Special event: damage all enemy groups.
 
 ev_damage_all:

@@ -10,7 +10,7 @@ handle_stairs:
 		CLEAR_INFO_PANEL
 		PRINT_MESSAGE2 $00		; "there are stairs "
 		PRINT_MESSAGE2 $26		; "here, going "
-		ld	a,(var_FA55)
+		ld	a,(special_loc_list+$15)
 		xor	b
 		and	1
 		jr	z,.up

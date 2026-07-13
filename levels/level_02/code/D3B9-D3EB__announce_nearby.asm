@@ -10,7 +10,7 @@ announce_nearby:
 		call	scan_cells_ahead
 		ret	z
 		CLEAR_INFO_PANEL
-		ld	a,(var_6004)
+		ld	a,(speed_lookup)
 		srl	e
 		jr	nc,.chk_special
 		or	a

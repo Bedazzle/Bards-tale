@@ -1,5 +1,5 @@
 ; --- ev_smoke ($D3DF-$D3E8) ------------------------------------
-; @wip
+; @done
 ; Special event: set smoke/darkness state, print 'smoke in your eyes!'.
 
 ev_smoke:

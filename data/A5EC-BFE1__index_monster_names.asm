@@ -1178,7 +1178,7 @@ INDEX_MONSTER_NAMES:
 		DB $3F
 		DB $6B
 
-; --- ___table_48 ---------------------------------------------
+; --- MONST_PIC_00 ---------------------------------------------
 ; @done
 ; ~425 bytes. Bytes read like RLE-compressed 4-colour graphics: a
 ; repeat escape (DB 7 / DB count) interleaved with 2-bit pixel
@@ -1193,7 +1193,7 @@ INDEX_MONSTER_NAMES:
 ; via the PICTURE_POINTERS sub-table; the same image is shared by many
 ; monsters through MONST_IMAGE (image ids $00-$0C).
 ; Referenced by: ADDR_TABLE index $75
-___table_48:
+MONST_PIC_00:
 		DB $80
 		DB 7
 		DB 7
@@ -1618,9 +1618,9 @@ ___table_48:
 		DB 7
 		DB $28
 
-; --- ___table_49 ---------------------------------------------
+; --- MONST_PIC_01 ---------------------------------------------
 ; @done
-; ~570 bytes, same RLE-compressed-graphics form as ___table_48
+; ~570 bytes, same RLE-compressed-graphics form as MONST_PIC_00
 ; (repeat-escape DB 7 / count + pixel nibbles). Read via ADDR_TABLE
 ; index $76 (no direct consumer in the cross-ref).
 ; CONFIRMED a combat/encounter portrait bitmap: 2-bit packed graphics
@@ -1631,7 +1631,7 @@ ___table_48:
 ; via the PICTURE_POINTERS sub-table; the same image is shared by many
 ; monsters through MONST_IMAGE (image ids $00-$0C).
 ; Referenced by: ADDR_TABLE index $76
-___table_49:
+MONST_PIC_01:
 		DB $A0
 		DB 7
 		DB 7
@@ -2202,7 +2202,7 @@ ___table_49:
 		DB 7
 		DB $23
 
-; --- ___table_50 ---------------------------------------------
+; --- MONST_PIC_02 ---------------------------------------------
 ; @done
 ; ~537 bytes, same RLE-compressed-graphics form (DB 7 / count escape
 ; + $FF/$AA/$55 pixel nibbles). Read via ADDR_TABLE index $77 (no
@@ -2215,7 +2215,7 @@ ___table_49:
 ; via the PICTURE_POINTERS sub-table; the same image is shared by many
 ; monsters through MONST_IMAGE (image ids $00-$0C).
 ; Referenced by: ADDR_TABLE index $77
-___table_50:
+MONST_PIC_02:
 		DB $40
 		DB 7
 		DB 7
@@ -2752,7 +2752,7 @@ ___table_50:
 		DB 7
 		DB $28
 
-; --- ___table_51 ---------------------------------------------
+; --- MONST_PIC_03 ---------------------------------------------
 ; @done
 ; ~463 bytes, RLE-compressed-graphics form (here the repeat escape is
 ; DB $12 / count) with $AA/$55 pixel nibbles. Read via ADDR_TABLE
@@ -2765,7 +2765,7 @@ ___table_50:
 ; via the PICTURE_POINTERS sub-table; the same image is shared by many
 ; monsters through MONST_IMAGE (image ids $00-$0C).
 ; Referenced by: ADDR_TABLE index $78
-___table_51:
+MONST_PIC_03:
 		DB $E0
 		DB $12
 		DB $12
@@ -3228,7 +3228,7 @@ ___table_51:
 		DB $12
 		DB $28
 
-; --- ___table_52 ---------------------------------------------
+; --- MONST_PIC_04 ---------------------------------------------
 ; @done
 ; ~700 bytes, RLE-compressed-graphics form ($13/count escape) with
 ; $77/$55/$44 pixel nibbles. Read via ADDR_TABLE index $79 (no
@@ -3241,7 +3241,7 @@ ___table_51:
 ; via the PICTURE_POINTERS sub-table; the same image is shared by many
 ; monsters through MONST_IMAGE (image ids $00-$0C).
 ; Referenced by: ADDR_TABLE index $79
-___table_52:
+MONST_PIC_04:
 		DB $A0
 		DB $13
 		DB $AA
@@ -3942,7 +3942,7 @@ ___table_52:
 		DB $13
 		DB $1B
 
-; --- ___table_53 ---------------------------------------------
+; --- MONST_PIC_05 ---------------------------------------------
 ; @done
 ; ~412 bytes, RLE-compressed-graphics form ($0D/count escape) with
 ; $AA/$55/$FF pixel nibbles. Read via ADDR_TABLE index $7F by
@@ -3955,7 +3955,7 @@ ___table_52:
 ; via the PICTURE_POINTERS sub-table; the same image is shared by many
 ; monsters through MONST_IMAGE (image ids $00-$0C).
 ; Referenced by: ADDR_TABLE index $7F
-___table_53:
+MONST_PIC_05:
 		DB $A0
 		DB $0D
 		DB $0D
@@ -4367,7 +4367,7 @@ ___table_53:
 		DB $0D
 		DB $15
 
-; --- ___table_54 ---------------------------------------------
+; --- MONST_PIC_06 ---------------------------------------------
 ; @done
 ; ~567 bytes, RLE-compressed-graphics form ($12/count escape) with
 ; $FF/$55 pixel nibbles. Read via ADDR_TABLE index $7B (no direct
@@ -4380,7 +4380,7 @@ ___table_53:
 ; via the PICTURE_POINTERS sub-table; the same image is shared by many
 ; monsters through MONST_IMAGE (image ids $00-$0C).
 ; Referenced by: ADDR_TABLE index $7B
-___table_54:
+MONST_PIC_06:
 		DB $E0
 		DB $12
 		DB $12
@@ -4947,7 +4947,7 @@ ___table_54:
 		DB $12
 		DB 2
 
-; --- ___table_55 ---------------------------------------------
+; --- MONST_PIC_07 ---------------------------------------------
 ; @done
 ; ~574 bytes, RLE-compressed-graphics form (DB 7 / count escape) with
 ; $FF/$CC/$3F pixel nibbles. Read via ADDR_TABLE index $91 (no direct
@@ -4960,7 +4960,7 @@ ___table_54:
 ; via the PICTURE_POINTERS sub-table; the same image is shared by many
 ; monsters through MONST_IMAGE (image ids $00-$0C).
 ; Referenced by: ADDR_TABLE index $91
-___table_55:
+MONST_PIC_07:
 		DB $40
 		DB 7
 		DB 7
@@ -5534,7 +5534,7 @@ ___table_55:
 		DB 7
 		DB $0A
 
-; --- ___table_56 ---------------------------------------------
+; --- MONST_PIC_08 ---------------------------------------------
 ; @done
 ; ~479 bytes, RLE-compressed-graphics form (DB 7 / count escape) with
 ; $FF/$AA/$55 pixel nibbles. Read via ADDR_TABLE index $7D (no direct
@@ -5547,7 +5547,7 @@ ___table_55:
 ; via the PICTURE_POINTERS sub-table; the same image is shared by many
 ; monsters through MONST_IMAGE (image ids $00-$0C).
 ; Referenced by: ADDR_TABLE index $7D
-___table_56:
+MONST_PIC_08:
 		DB $E0
 		DB 7
 		DB 7
@@ -6026,7 +6026,7 @@ ___table_56:
 		DB 7
 		DB 6
 
-; --- ___table_57 ---------------------------------------------
+; --- MONST_PIC_0B ---------------------------------------------
 ; @done
 ; ~684 bytes ($BD..$BFE1), RLE-compressed-graphics form ($12/count
 ; escape) with $55/$77/$FF pixel nibbles — last of the ten image-like
@@ -6040,7 +6040,7 @@ ___table_56:
 ; via the PICTURE_POINTERS sub-table; the same image is shared by many
 ; monsters through MONST_IMAGE (image ids $00-$0C).
 ; Referenced by: ADDR_TABLE index $80
-___table_57:
+MONST_PIC_0B:
 		DB $40
 		DB $12
 		DB $12

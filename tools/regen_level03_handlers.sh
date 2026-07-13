@@ -1,4 +1,10 @@
 #!/usr/bin/env bash
+# ############################################################################
+# WARNING: the levels/level_03/code/ files are now HAND-POLISHED (meaningful
+# dot-locals, inline comments, §3/§13 fixes). This script BOOTSTRAPPED them and
+# is kept as the reproducible-from-binary record, but re-running it REVERTS that
+# hand-polish to first-pass. Do not run it unless you intend to re-bootstrap.
+# ############################################################################
 # Regenerate the level-03 (Sewers 1) handler files from original/levels/level_03.bin,
 # reproducibly:  disassemble (RST-aware, seeded) -> rename known routines -> symbolize
 # externals -> get routine addresses -> split one-file-per-routine -> verify byte-exact.
@@ -75,11 +81,15 @@ sed -i \
  -e 's/\bl_d9cf\b/damage_group_checked/g'       -e 's/\bl_d9ee\b/set_damage_state/g' \
  -e 's/\bl_dabd\b/draw_wall_faces/g' \
  "$STAGE"
-#    -- in-overlay refs to labelled data blocks (decoder / element table / maze)
+#    -- in-overlay refs to labelled data blocks (decoder / element table / maze /
+#       screen / loc-list / dispatch vector) - §13 relocatability
 sed -i \
  -e 's/\$c2d1/print_sewers_flag1/g' \
  -e 's/ld\thl,\$dd5f/ld\thl,wall_element_table-$1e/' \
  -e 's/ld\thl,\$f4ea/ld\thl,MAZE_WALLS/' \
+ -e 's/ld\thl,\$4000/ld\thl,SCREEN/' \
+ -e 's/\$fa40/special_loc_list/g' \
+ -e 's/\$c18f/redraw_vector/g' \
  "$STAGE"
 
 # 3) symbolize shared-engine calls in the handler mono (raw $xxxx -> names; the
@@ -91,10 +101,12 @@ python tools/level_disasm_symbolize.py "$BTSYM" "$STAGE" "$TEMP/l3_ext_partial.a
 cat > "$SYMBUILD" <<EOF
 	DEVICE ZXSPECTRUM48
 	include "code/macroses.asm"
-	include "levels/level_03/level_03_externals.asm"
+	include "$TEMP/l3_ext_partial.asm"	; the mono's own externals (from symbolize step 3)
 print_sewers_flag1 EQU \$C2D1		; front-matter decoder entry the handlers call
 wall_element_table EQU \$DD7D		; gfx-region labels the handlers reference
 MAZE_WALLS         EQU \$F4EA
+special_loc_list   EQU \$FA40
+redraw_vector      EQU \$C18F
 	org \$D30A
 	include "$STAGE"
 EOF
@@ -106,8 +118,13 @@ python tools/split_level03.py "$STAGE" "$LABELS" "$CODE" /dev/null >/dev/null
 # 5b) convert intra-routine l_XXXX branch labels to dot-locals (cross-file refs qualified)
 python tools/level_dotlocal.py "$CODE"
 
-# 5c) regenerate the COMPLETE externals (handler code + the front-matter ADDR_TABLE/decoder)
-python tools/scan_externals.py "$BTSYM" levels/level_03/level_03_externals.asm \
+# 5b2) mechanical coding-style pass (byte-safe): $hex -> UPPER + blank line after
+#      unconditional jp/jr/ret (coding-style §1/§2/§5)
+python tools/level_format.py "$CODE"
+
+# 5c) regenerate the UNIFIED shared externals (union across all carved levels)
+python tools/scan_externals.py "$BTSYM" levels/shared_externals.asm \
+    "levels/level_02/code/*.asm" "levels/level_02/level_02.asm" \
     "levels/level_03/code/*.asm" "levels/level_03/level_03.asm"
 
 # 6) verify (the stitcher includes the split files in address order)

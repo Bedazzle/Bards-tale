@@ -7,7 +7,7 @@ print_msg_cellars:
 		PUSH_REGS
 		ld	de,MESSAGES_TEXTS
 		ld	hl,MESSAGES_TABLE
-		jp	clear_and_print
+		jp	clear_prnt_param
 
 print_cellars_flag0:
 		ex	af,af'

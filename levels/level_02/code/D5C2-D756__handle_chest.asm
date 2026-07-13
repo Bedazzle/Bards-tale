@@ -9,7 +9,7 @@ handle_chest:
 		GET_RND_NUMBERS
 		and	3
 		ld	e,a
-		ld	a,(var_5FFF)
+		ld	a,(copy_daypart)
 		sla	a
 		sla	a
 		add	a,e
@@ -22,15 +22,15 @@ handle_chest:
 		PRINT_MESSAGE2 $06
 .c5e1:
 		WAIT_KEY_DOWN
-		cp	$4f
+		cp	'O'
 		jp	z,.c689
-		cp	$54
+		cp	'T'
 		jr	z,.c62d
-		cp	$44
+		cp	'D'
 		jr	z,.c651
-		cp	$4c
+		cp	'L'
 		jr	z,.c64d
-		cp	$45
+		cp	'E'
 		jr	nz,.c5e1
 		ld	a,8
 		call	enc_pick_hero

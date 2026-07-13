@@ -8,8 +8,9 @@
 ; blocks (maze planes as DB grids; text/renderer/tail tables as labelled incbin).
 ; Each data block carries a §10 header + @done (format understood) or @wip (opaque).
 ; Rebuild stays byte-identical to original/levels/level_02.bin at every step.
-; REMAINING (@wip data): reverse-engineer level_tbl_1..6 (3D-renderer tables),
-; cellars_data_tail, and the special_loc_list record format. See data/README.md.
+; REMAINING (@wip data): only the PATTERN-BYTE encoding of level_tbl_1..6
+; (the 3D wall-renderer tables); their access is understood (see below /
+; data/README.md). cellars_data_tail = verified all-zero padding (@done).
 ; ============================================================================
 
 ; $C18C-$C19D - level dispatch table: the engine enters the level through these 6
@@ -50,11 +51,16 @@ MESSAGES_TEXTS:
 
 ; --- level_tbl_1 .. level_tbl_6 ($C6D0-$D1D7) -----------------
 ; @wip
-; Six per-level 3D-renderer lookup tables, one per ADDR_TABLE sub-table
-; slot ($8D/$7E/$91/$7C/$7F/$81; the City leaves these slots as dummies).
-; Wall-pattern / bitmap data indexed by the dungeon-view renderer; the
-; exact per-table record format is NOT yet reverse-engineered (unnamed in
-; level 1 too). See data/README.md for the per-table size/consumer.
+; Six per-level 3D-renderer wall-pattern tables, each an addr_table_2
+; (sub-table) slot the City leaves as a dummy (MONST_PIC_07/MONST_PIC_05).
+; ACCESS understood: render_wall_face0..3 (maze_cell_addr, $D448) walk 5
+; depth steps and per step do GET_B_FROM_LIST $1a/$1b (the _LIST macros
+; index addr_table_2, where these tables live) to fetch a wall-face
+; pattern byte, gated by GET_B_FROM_TABLE $17/$18 (per-cell reveal/light
+; state); render_dungeon_view skips walls entirely when the darkness var
+; ($5FEB) is set (dynamically confirmed - see data/README.md). STILL @wip:
+; the exact meaning of each PATTERN BYTE (how it maps to the drawn wall
+; slices) - the same tables are unnamed in level 1 too.
 level_tbl_1:
 	incbin "levels/level_02/data/C6D0-C850__level_tbl_1.bin"
 level_tbl_2:
@@ -173,9 +179,11 @@ MAZE_FEATURES:			; 22x22 feature plane (stairs/doors/specials/traps)
 		DB $00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00	; row 20
 
 ; --- cellars_data_tail ($F6B2-$FA3F, 910 bytes) ---------------
-; @wip
-; Trailing level data after the maze planes: predominantly zero padding
-; with a few short tables; exact contents not yet reverse-engineered.
+; @done
+; Trailing region after the maze planes and before special_loc_list.
+; Verified ENTIRELY ZERO (all 910 bytes) - it is padding / zero-initialised
+; runtime working space, not data. Kept as an incbin so the rebuild stays
+; byte-identical.
 cellars_data_tail:
 	incbin "levels/level_02/data/F6B2-FA3F__cellars_data_tail.bin"
 
@@ -189,4 +197,5 @@ cellars_data_tail:
 ; pairs are empty slots (the Cellars, a tutorial level, uses few special cells).
 special_loc_list:
 	incbin "levels/level_02/data/FA40-FB50__special_loc_list.bin"
+overlay_end:					; $FB51 - one past the overlay (ADDR_TABLE slot $5E)
 

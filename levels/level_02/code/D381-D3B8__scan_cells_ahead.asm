@@ -1,16 +1,16 @@
 ; --- scan_cells_ahead --------------------------------------
 ; @done
-; Step through the 3 cells ahead in the facing direction, OR-ing their wall bits into
+; Step through the 3 cells ahead in the face_direction direction, OR-ing their wall bits into
 ; E and (if a $10 "secret" bit is found and reveal is active) clearing it. Restores
 ; the party coord afterwards.
-; In:  ($5FAE) = facing.  Out: e = accumulated wall/reveal bits, zero flag from E.
+; In:  ($5FAE) = face_direction.  Out: e = accumulated wall/reveal bits, zero flag from E.
 scan_cells_ahead:
-		ld	hl,(coord_ns)
+		ld	hl,(coord_so_no)
 		push	hl
 		ld	e,0
 		ld	b,3
 .loop:
-		ld	a,(facing)
+		ld	a,(face_direction)
 		call	step_in_direction
 		call	get_cell_feature
 		and	$10			; secret bit?
@@ -34,7 +34,7 @@ scan_cells_ahead:
 		ld	e,a
 		djnz	.loop
 		pop	hl
-		ld	(coord_ns),hl
+		ld	(coord_so_no),hl
 		ld	a,e
 		or	a
 		ret

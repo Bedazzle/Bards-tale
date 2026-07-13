@@ -1,30 +1,32 @@
 ; --- roll_from_daypart_table ($D9FF-$DA1E) ---------------------
-; @wip
+; @done
 ; Sum a table by daypart (iy+$54) then roll a random amount from it.
+; In:  hl = table base
+; Out: a = amount summed by daypart then randomised
 
 roll_from_daypart_table:
-		ld	e,(iy+$36)
+		ld	e,(iy+$36)		; enemy-group offset into the table
 		ld	d,0
 		add	hl,de
 		ld	b,(iy+$54)
-		inc	b
+		inc	b			; daypart + 1 = how many rows to sum
 		xor	a
 		ld	e,a
 		ld	d,a
-.da0c:
+.sum_loop:
 		add	a,(hl)
-		djnz	.da0c
+		djnz	.sum_loop
 		ex	de,hl
 		or	a
-		ret	z
-		ld	b,a
-.da13:
+		ret	z			; nothing to roll
+		ld	b,a			; roll that many d4-ish steps
+.roll_loop:
 		GET_RND_NUMBERS
 		and	3
 		add	a,l
 		ld	l,a
-		jr	nc,.da1c
+		jr	nc,.no_carry
 		inc	h
-.da1c:
-		djnz	.da13
+.no_carry:
+		djnz	.roll_loop
 		ret

@@ -15,11 +15,13 @@ BARD_TUNE_TABLE:
 
 ; --- ___table_40 ---------------------------------------------
 ; @wip
-; 16 bytes: $20,$1E,$1C,…,2 — an even descending ramp (step -2).
-; Read via ADDR_TABLE index $27 (no direct consumer found in the
-; cross-ref).
-; Note: exact use not yet reverse-engineered.
-; Referenced by: ADDR_TABLE index $27
+; 16 bytes: $20,$1E,$1C,…,$10 — an even descending ramp (step -2),
+; the shape of a per-step scaling/fade curve. EXHAUSTIVELY searched: no
+; GET_*_FROM_TABLE $27, no GET_IY_A_FROM_TABLE two-index, no address ref
+; in the shared engine, level 1 (City) OR level 2 (Cellars) - so its
+; ADDR_TABLE slot $27 is unexercised by all carved code. Almost certainly
+; read only by an un-carved dungeon level (3-17), or vestigial.
+; Referenced by: ADDR_TABLE index $27 (no reader in any carved code)
 		; display "___table_40: ", $
 ___table_40:
 		DB $20
@@ -173,11 +175,13 @@ KEY_CODES_TABLE:
 
 ; --- ___table_46 ---------------------------------------------
 ; @wip
-; 18 bytes cycling $15,$16,$17,$18 (a repeating 4-value pattern).
-; Read via ADDR_TABLE index $15 (no direct consumer found in the
-; cross-ref).
-; Note: exact use not yet reverse-engineered.
-; Referenced by: ADDR_TABLE index $15
+; 18 bytes cycling $15,$16,$17,$18 - values in the picture-id range, so
+; likely an animation frame sequence (4 frames repeated). EXHAUSTIVELY
+; searched: no GET_*_FROM_TABLE $15, no two-index, no address ref in the
+; shared engine, level 1 or level 2 - its ADDR_TABLE slot $15 is
+; unexercised by all carved code. Likely read only by an un-carved dungeon
+; level (3-17), or vestigial.
+; Referenced by: ADDR_TABLE index $15 (no reader in any carved code)
 		; display "___table_46: ", $
 ___table_46:
 		DB $15

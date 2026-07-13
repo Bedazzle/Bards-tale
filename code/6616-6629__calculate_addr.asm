@@ -17,7 +17,7 @@ calc_in_FB7D:
 ; In:  b = index
 ; Out: hl = FD7A + 100*(b+1)
 calc_in_FD7A:
-		ld	hl,___table_94+$2
+		ld	hl,FD7A_ANCHOR+$2
 
 ; --- calculate_addr -------------------------------------------
 ; @done

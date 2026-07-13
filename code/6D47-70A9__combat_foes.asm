@@ -114,7 +114,7 @@ ally_choose_action:
 		cp	$FF
 		jr	z,skip_hero
 
-		cp	$4F 	; 'O'
+		cp	'O'
 		jr	nc,ally_cast
 
 		GET_A_FROM_TABLE	$35
@@ -165,10 +165,10 @@ announce_spell:
 
 		ld	a,(GAME_VARIABLES + VAR_CURRENT_SPELL)
 
-		cp	$4F ; 'O'
+		cp	'O'
 		jr	c,cast_targeted_spell
 
-		cp	$5A ; 'Z'
+		cp	'Z'
 		jr	nc,cast_targeted_spell
 
 cast_area_spell:
@@ -580,7 +580,7 @@ enemy_pick_spell:
 		pop	bc
 		jr	z,enemy_retry_spell
 
-		cp	$4F
+		cp	'O'
 		jr	nc,enemy_cast_setup
 
 		GET_A_FROM_TABLE	$35
@@ -597,7 +597,7 @@ enemy_cast_setup:
 		call	set_combat_target
 		pop	af
 
-		cp	$4F
+		cp	'O'
 		jr	nc,enemy_area_spell
 
 		call	do_cast_spell

@@ -1,12 +1,14 @@
 ; --- WEAPON_DAMAGE --------------------------------------------
-; @wip
-; One attribute byte per item id giving the weapon's damage roll
-; (packed dice, high/low nibble = count/faces), consumed by
-; calc_attack_damage. RLE-compressed: a $FC escape introduces a run
-; -> $FC,count,value emits `value` `count` times (index >= $67 enables
-; $FC decoding in lookup_addr_table). Leading DB 0 is padding: ADDR_TABLE
-; stores WEAPON_DAMAGE+1, so item id N indexes from the following byte.
-; Note: exact dice packing only partially reverse-engineered.
+; @done
+; One packed dice-spec byte per item id giving the weapon's damage roll,
+; consumed by calc_attack_damage (.roll_damage). The byte splits as
+; bits 5-7 = the dice-count field (b, which indexes DAMAGE_DICE_MASK $4D
+; to fetch the per-die random mask c) and bits 0-4 = the faces/roll field
+; (e = (byte & $1F)+1); the roll then does `GET_RND_NUMBERS; and c` and
+; accumulates over the attack rounds. RLE-compressed ($FC,count,value;
+; index >= $67 enables $FC decoding in lookup_addr_table). Leading DB 0 is
+; padding: ADDR_TABLE stores WEAPON_DAMAGE+1, so item id N indexes from the
+; following byte.
 ; Referenced by: ADDR_TABLE index $68 (INX_WEAPON_DAMAGE) - calc_attack_damage
 		debug "WEAPON_DAMAGE: "
 WEAPON_DAMAGE:
@@ -19,12 +21,14 @@ WEAPON_DAMAGE:
 		DB $43
 
 ; --- WEAPON_BONUS ---------------------------------------------
-; @wip
-; One attribute byte per item id: the weapon/item to-hit + damage bonus,
-; added by calc_attack_damage (stored to VAR_WEAPON_BONUS). Same
-; RLE-compressed, index-by-item-id layout as WEAPON_DAMAGE
-; ($FC,count,value runs; leading DB 0 padding, base = LABEL+1).
-; Note: exact bonus packing only partially reverse-engineered.
+; @done
+; One packed bonus byte per item id: the HIGH nibble is the weapon/item
+; to-hit + damage bonus. calc_attack_damage reads WEAPON_BONUS[item]
+; (GET_D_FROM_TABLE $73), takes divide_A_by_16 (= the high nibble) and
+; adds it into the attack accumulator (also bumping VAR_WEAPON_BONUS). The
+; low nibble is not used on the calc_attack_damage path. Same RLE-
+; compressed, index-by-item-id layout as WEAPON_DAMAGE ($FC,count,value
+; runs; leading DB 0 padding, base = LABEL+1).
 ; Referenced by: ADDR_TABLE index $73 (INX_WEAPON_BONUS) - calc_attack_damage
 		debug "WEAPON_BONUS: "
 WEAPON_BONUS:
@@ -61,15 +65,16 @@ ITEM_SPECATT:
 		DB 9,$0A,$0A,$0A,7,7,$71
 
 ; --- ITEM_EQUIP -----------------------------------------------
-; @wip
-; One byte per item id: a bitmask of which hero classes may equip /
-; which slot the item uses, checked by add_item_to_hero and shoppe_buy
-; when granting an item. UNCOMPRESSED (index $47 < $67, so no $FC
-; decoding) - direct byte lookup by item id; leading DB 0 padding, base
-; = LABEL+1. ($FF entries seen = not equippable / all-classes guard.)
-; Note: exact class/slot bit assignment only partially reverse-engineered.
+; @done
+; One class-eligibility bitmask per item id: which hero classes may
+; equip/use the item. add_item_to_hero ANDs ITEM_EQUIP[item] with
+; CLASS_EQUIP_MASK[hero class] (the per-class bit $80/$40/../$01, classes
+; 2-4 sharing $40); a non-zero result means that class may take the item,
+; so it auto-equips. So a set bit here = "this class group is allowed".
+; UNCOMPRESSED (index $47 < $67, no $FC decoding) - direct byte lookup by
+; item id; leading DB 0 padding, base = LABEL+1. ($FF = all classes.)
 ; Referenced by: ADDR_TABLE index $47 (INX_ITEM_EQUIP) -
-;                add_item_to_hero, shoppe_buy
+;                add_item_to_hero, shoppe_buy  (pairs with CLASS_EQUIP_MASK)
 		debug "ITEM_EQUIP: "
 ITEM_EQUIP:
 		DB 0

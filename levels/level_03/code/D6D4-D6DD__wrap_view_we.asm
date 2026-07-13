@@ -1,9 +1,10 @@
 ; --- wrap_view_we ($D6D4-$D6DD) --------------------------------
-; @wip
+; @done
 ; Wrap the W/E view coord ($5FE4) into 0..21.
+; Wraps the W/E view coord ($5FE4) in place into 0..21
 
 wrap_view_we:
-		ld	a,(var_5FE4)
+		ld	a,(view_x_offset)
 		call	wrap_maze_coord
-		ld	(var_5FE4),a
+		ld	(view_x_offset),a
 		ret

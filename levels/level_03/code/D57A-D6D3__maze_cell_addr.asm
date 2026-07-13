@@ -1,60 +1,236 @@
-; --- maze_cell_addr ($D57A-$D6D3) ------------------------------
-; @wip
-; Compute the maze feature-plane cell address: $F4EA + row*22 + col. Out: hl, a=(hl).
+; ============================================================================
+; Level 03 (Sewers 1) - maze cell addressing + the 3D wall-face renderers
+; ----------------------------------------------------------------------------
+; @done  maze_cell_addr + the 4 per-face_direction wall renderers (render_wall_face0..3,
+; SMC-selected into the $D56B slot by redraw_location) and their helpers. The
+; renderers were SMC-reached code the disassembler left as DB; recovered here.
+; ============================================================================
 
+; --- maze_cell_addr ------------------------------
+; @done
+; Compute the maze cell address: MAZE_WALLS + (row+1)*22 + col.
+; In:  c = row, b = col
+; Out: hl = cell address, a = (hl)
 maze_cell_addr:
 		ld	hl,MAZE_WALLS
 		ld	de,$16
-.d580:
+.loop:
 		add	hl,de
 		dec	c
-		jp	p,.d580
+		jp	p,.loop
 		ld	e,b
 		add	hl,de
 		ld	a,(hl)
 		ret
-		db $cd,$56,$d6,$d7,$3a,$17,$20,$07	; .V..:. .
-		db $cd,$29,$d6,$7d,$d7,$1b,$1b,$d7	; .).}....
-		db $3a,$18,$20,$07,$cd,$1a,$d6,$7d	; :. ....}
-		db $d7,$1b,$1a,$cd,$b7,$d6,$fd,$34	; .......4
-		db $38,$c3,$de,$d6,$cd,$66,$d6,$d7	; 8....f..
-		db $3a,$18,$20,$07,$cd,$29,$d6,$7a	; :. ..).z
-		db $d7,$1b,$1a,$d7,$3a,$17,$20,$07	; ....:. .
-		db $cd,$1a,$d6,$7a,$d7,$1b,$1b,$cd	; ...z....
-		db $b7,$d6,$fd,$35,$38,$c3,$de,$d6	; ...58...
-		db $78,$cd,$76,$d6,$d7,$3a,$18,$20	; x.v..:. 
-		db $07,$cd,$47,$d6,$7b,$d7,$1b,$1b	; ..G.{...
-		db $d7,$3a,$17,$20,$07,$cd,$38,$d6	; .:. ..8.
-		db $7b,$d7,$1b,$1a,$cd,$b7,$d6,$fd	; {.......
-		db $34,$39,$c3,$d4,$d6,$cd,$86,$d6	; 49......
-		db $d7,$3a,$17,$20,$07,$cd,$47,$d6	; .:. ..G.
-		db $7c,$d7,$1b,$1a,$d7,$3a,$18,$20	; |....:. 
-		db $07,$cd,$38,$d6,$7c,$d7,$1b,$1b	; ..8.|...
-		db $cd,$b7,$d6,$fd,$35,$39,$c3,$d4	; ....59..
-		db $d6,$fd,$34,$39,$cd,$d4,$d6,$cd	; ..49....
-		db $96,$d6,$fd,$35,$39,$c3,$d4,$d6	; ...59...
-		db $fd,$35,$39,$cd,$d4,$d6,$cd,$96	; .59.....
-		db $d6,$fd,$34,$39,$c3,$d4,$d6,$fd	; ..49....
-		db $35,$38,$cd,$de,$d6,$cd,$96,$d6	; 58......
-		db $fd,$34,$38,$c3,$de,$d6,$fd,$34	; .48....4
-		db $38,$cd,$de,$d6,$cd,$96,$d6,$fd	; 8.......
-		db $35,$38,$c3,$de,$d6,$cd,$96,$d6	; 58......
-		db $7d,$d7,$1b,$19,$7b,$d7,$1b,$17	; }...{...
-		db $7c,$d7,$1b,$18,$c9,$cd,$96,$d6	; |.......
-		db $7a,$d7,$1b,$19,$7b,$d7,$1b,$18	; z...{...
-		db $7c,$d7,$1b,$17,$c9,$cd,$96,$d6	; |.......
-		db $7d,$d7,$1b,$18,$7a,$d7,$1b,$17	; }...z...
-		db $7b,$d7,$1b,$19,$c9,$cd,$96,$d6	; {.......
-		db $7d,$d7,$1b,$17,$7a,$d7,$1b,$18	; }...z...
-		db $7c,$d7,$1b,$19,$c9,$c5,$ed,$4b	; |......K
-		db $e3,$5f,$cd,$7a,$d5,$6f,$e6,$03	; ._.z.o..
-		db $4f,$06,$03,$7d,$cb,$3f,$cb,$3f	; O..}.?.?
-		db $6f,$e6,$03,$f5,$10,$f5,$e1,$f1	; o.......
-		db $5f,$f1,$57,$69,$c1,$c9,$c5,$ed	; _.Wi....
-		db $4b,$e3,$5f,$cd,$7a,$d5,$11,$e4	; K._.z...
-		db $01,$19,$7e,$e6,$20,$f5,$7e,$e6	; ..~. .~.
-		db $40,$e1,$c1,$d7,$1b,$1d	; @.....
-.d6cf:
+; --- render_wall_face0 ---------------------------
+; @done
+; Draw the wall faces for view face_direction 0 (SMC-selected by redraw_location).
+render_wall_face0:
+		call	wall_init_face0
+		GET_B_FROM_TABLE $17
+		jr	nz,.wall2
+		call	get_walls_w
+		ld	a,l
+		GET_B_FROM_LIST $1B
+.wall2:
+		GET_B_FROM_TABLE $18
+		jr	nz,.finish
+		call	get_walls_e
+		ld	a,l
+		GET_B_FROM_LIST $1A
+.finish:
+		call	render_wall_flags
+		inc	(iy+$38)
+		jp	wrap_view_ns
+; --- render_wall_face1 ---------------------------
+; @done
+; Draw the wall faces for view face_direction 1.
+render_wall_face1:
+		call	wall_init_face1
+		GET_B_FROM_TABLE $18
+		jr	nz,.wall2
+		call	get_walls_w
+		ld	a,d
+		GET_B_FROM_LIST $1A
+.wall2:
+		GET_B_FROM_TABLE $17
+		jr	nz,.finish
+		call	get_walls_e
+		ld	a,d
+		GET_B_FROM_LIST $1B
+.finish:
+		call	render_wall_flags
+		dec	(iy+$38)
+		jp	wrap_view_ns
+; --- render_wall_face2 ---------------------------
+; @done
+; Draw the wall faces for view face_direction 2.
+render_wall_face2:
+		ld	a,b
+		call	wall_init_face2
+		GET_B_FROM_TABLE $18
+		jr	nz,.wall2
+		call	get_walls_s
+		ld	a,e
+		GET_B_FROM_LIST $1B
+.wall2:
+		GET_B_FROM_TABLE $17
+		jr	nz,.finish
+		call	get_walls_n
+		ld	a,e
+		GET_B_FROM_LIST $1A
+.finish:
+		call	render_wall_flags
+		inc	(iy+$39)
+		jp	wrap_view_we
+; --- render_wall_face3 ---------------------------
+; @done
+; Draw the wall faces for view face_direction 3.
+render_wall_face3:
+		call	wall_init_face3
+		GET_B_FROM_TABLE $17
+		jr	nz,.wall2
+		call	get_walls_s
 		ld	a,h
-		GET_B_FROM_LIST $1c
+		GET_B_FROM_LIST $1A
+.wall2:
+		GET_B_FROM_TABLE $18
+		jr	nz,.finish
+		call	get_walls_n
+		ld	a,h
+		GET_B_FROM_LIST $1B
+.finish:
+		call	render_wall_flags
+		dec	(iy+$39)
+		jp	wrap_view_we
+; --- get_walls_e ---------------------------------
+; @done
+; Fetch the east-neighbour cell walls (unpack_cell_walls on W/E+1).
+get_walls_e:
+		inc	(iy+$39)
+		call	wrap_view_we
+		call	unpack_cell_walls
+		dec	(iy+$39)
+		jp	wrap_view_we
+; --- get_walls_w ---------------------------------
+; @done
+; Fetch the west-neighbour cell walls (W/E-1).
+get_walls_w:
+		dec	(iy+$39)
+		call	wrap_view_we
+		call	unpack_cell_walls
+		inc	(iy+$39)
+		jp	wrap_view_we
+; --- get_walls_n ---------------------------------
+; @done
+; Fetch the north-neighbour cell walls (N/S-1).
+get_walls_n:
+		dec	(iy+$38)
+		call	wrap_view_ns
+		call	unpack_cell_walls
+		inc	(iy+$38)
+		jp	wrap_view_ns
+; --- get_walls_s ---------------------------------
+; @done
+; Fetch the south-neighbour cell walls (N/S+1).
+get_walls_s:
+		inc	(iy+$38)
+		call	wrap_view_ns
+		call	unpack_cell_walls
+		dec	(iy+$38)
+		jp	wrap_view_ns
+; --- wall_init_face0 -----------------------------
+; @done
+; Per-face_direction view setup for face_direction 0: fetch this cell + the reveal/light states.
+wall_init_face0:
+		call	unpack_cell_walls
+		ld	a,l
+		GET_B_FROM_LIST $19
+		ld	a,e
+		GET_B_FROM_LIST $17
+		ld	a,h
+		GET_B_FROM_LIST $18
+		ret
+; --- wall_init_face1 -----------------------------
+; @done
+; Per-face_direction view setup for face_direction 1.
+wall_init_face1:
+		call	unpack_cell_walls
+		ld	a,d
+		GET_B_FROM_LIST $19
+		ld	a,e
+		GET_B_FROM_LIST $18
+		ld	a,h
+		GET_B_FROM_LIST $17
+		ret
+; --- wall_init_face2 -----------------------------
+; @done
+; Per-face_direction view setup for face_direction 2.
+wall_init_face2:
+		call	unpack_cell_walls
+		ld	a,l
+		GET_B_FROM_LIST $18
+		ld	a,d
+		GET_B_FROM_LIST $17
+		ld	a,e
+		GET_B_FROM_LIST $19
+		ret
+; --- wall_init_face3 -----------------------------
+; @done
+; Per-face_direction view setup for face_direction 3.
+wall_init_face3:
+		call	unpack_cell_walls
+		ld	a,l
+		GET_B_FROM_LIST $17
+		ld	a,d
+		GET_B_FROM_LIST $18
+		ld	a,h
+		GET_B_FROM_LIST $19
+		ret
+; --- unpack_cell_walls ---------------------------
+; @done
+; Read the view cell and unpack its wall byte into the 4 directional nibbles (d/e/l/c).
+unpack_cell_walls:
+		push	bc
+		ld	bc,(view_y_offset)
+		call	maze_cell_addr
+		ld	l,a
+		and	3
+		ld	c,a
+		ld	b,3
+.loop:
+		ld	a,l
+		srl	a
+		srl	a
+		ld	l,a
+		and	3
+		push	af
+		djnz	.loop
+		pop	hl
+		pop	af
+		ld	e,a
+		pop	af
+		ld	d,a
+		ld	l,c
+		pop	bc
+		ret
+; --- render_wall_flags ---------------------------
+; @done
+; Read the cell feature byte, test the $20/$40 special-wall flags and draw the wall overlays.
+render_wall_flags:
+		push	bc
+		ld	bc,(view_y_offset)
+		call	maze_cell_addr
+		ld	de,$1E4
+		add	hl,de
+		ld	a,(hl)
+		and	$20
+		push	af
+		ld	a,(hl)
+		and	$40
+		pop	hl
+		pop	bc
+		GET_B_FROM_LIST $1D
+		ld	a,h
+		GET_B_FROM_LIST $1C
 		ret

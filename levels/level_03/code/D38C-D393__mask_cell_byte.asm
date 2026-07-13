@@ -1,6 +1,7 @@
 ; --- mask_cell_byte ($D38C-$D393) ------------------------------
-; @wip
+; @done
 ; AND the party's maze feature-plane cell byte with A, storing it back.
+; In:  a = AND mask (applied to the cell feature byte)
 
 mask_cell_byte:
 		push	af
