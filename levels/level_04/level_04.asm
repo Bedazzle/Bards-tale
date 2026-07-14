@@ -6,8 +6,8 @@
 ; 14789-byte dungeon overlay, org $C18C. Same FORMAT as the carved level_02/03.
 ; CARVE STATUS: fully carved + byte-exact. Front matter, handlers, wall_element_table,
 ; maze planes are source; sprites single-sourced (shared Sewers set). Remaining incbin
-; are irreducible shared-format data (packed text, level_tbl pixels, maze_tail). 66 of
-; 73 handler routines named; 7 small SMC fragments honest @wip. See CARVE.md.
+; are irreducible data (packed text, maze_tail); level_tbl format cracked ($FC-record
+; wall-pattern lists). All 73 handler routines named + @done. See CARVE.md.
 ;
 ; Region map (all boundaries measured, byte-exact):
 ;   $C18C-$C2DF  front_matter: dispatch JP + ADDR_TABLE + addr_table_2 + decoder [source]
@@ -59,9 +59,9 @@ level_tbl_6:
 	incbin "levels/level_04/data/D123-D353__level_tbl_6.bin"
 
 ; --- $D354-$DDC6  handler code (dispatch targets + maze/view/movement) --------
-; Split one-file-per-routine (STARThex-ENDhex__name). 6 dispatch handlers + 7
-; structural matches named (@done); the rest are honest l_XXXX entries (@wip) to
-; name by behaviour. process_turn ends jp $62aa @ $DDC6; gfx starts $DDC7.
+; Split one-file-per-routine (STARThex-ENDhex__name). All 73 named + @done with
+; In/Out headers + role-based dot-locals. process_turn ends jp $62aa @ $DDC6;
+; gfx starts $DDC7.
 ; Bootstrapped by tools/regen_level04_handlers.sh (see levels/level_04/CARVE.md).
 sewers2_handlers:
 	include "levels/level_04/code/D354-D364__get_cell_feature.asm"
@@ -114,12 +114,12 @@ sewers2_handlers:
 	include "levels/level_04/code/D984-D997__wc_join_scan.asm"
 	include "levels/level_04/code/D998-D9A9__wc_join_hero.asm"
 	include "levels/level_04/code/D9AA-D9B7__run_cell_encounter.asm"
-	include "levels/level_04/code/D9B8-D9C2__l_d9b8.asm"
+	include "levels/level_04/code/D9B8-D9C2__party_has_effect_item.asm"
 	include "levels/level_04/code/D9C3-D9D4__damage_groups_by_a.asm"
 	include "levels/level_04/code/D9D5-D9EE__prompt_pick_hero.asm"
 	include "levels/level_04/code/D9EF-D9F7__trigger_cell_encounter.asm"
 	include "levels/level_04/code/D9F8-DA0C__start_combat.asm"
-	include "levels/level_04/code/DA0D-DA18__l_da0d.asm"
+	include "levels/level_04/code/DA0D-DA18__print_msg_at_loc.asm"
 	include "levels/level_04/code/DA19-DA37__damage_group_checked.asm"
 	include "levels/level_04/code/DA38-DA48__set_damage_state.asm"
 	include "levels/level_04/code/DA49-DA68__roll_from_daypart_table.asm"

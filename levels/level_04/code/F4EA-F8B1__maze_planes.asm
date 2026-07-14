@@ -2,7 +2,9 @@
 ; @done
 ; The two 22x22 maze planes (1 byte/cell), addressed by maze_cell_addr as
 ; $F4EA + (row+1)*22 + col (row 0 = the top border row). MAZE_WALLS holds the
-; per-cell wall nibbles (N/S/E/W passability); MAZE_FEATURES (= MAZE_WALLS+$1E4,
+; per-cell wall codes: 4 x 2-bit fields (bits [0-1][2-3][4-5][6-7], one per
+; direction), each a wall-type code 0-3 that unpack_cell_walls extracts to index a
+; level_tbl wall-pattern record; MAZE_FEATURES (= MAZE_WALLS+$1E4,
 ; read by get_cell_feature) holds the per-cell special-location / feature bits
 ; scanned by process_cell_features. Rendered in levels/level_03/MAZE.md.
 

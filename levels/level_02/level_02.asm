@@ -8,9 +8,9 @@
 ; blocks (maze planes as DB grids; text/renderer/tail tables as labelled incbin).
 ; Each data block carries a §10 header + @done (format understood) or @wip (opaque).
 ; Rebuild stays byte-identical to original/levels/level_02.bin at every step.
-; REMAINING (@wip data): only the PATTERN-BYTE encoding of level_tbl_1..6
-; (the 3D wall-renderer tables); their access is understood (see below /
-; data/README.md). cellars_data_tail = verified all-zero padding (@done).
+; ALL data blocks now @done: the level_tbl_1..6 wall-pattern encoding was CRACKED
+; (2026-07-14) - $FC-record lists of 8-pixel-column wall-face patterns (see below).
+; cellars_data_tail = verified all-zero padding (@done).
 ; ============================================================================
 
 ; $C18C-$C19D - level dispatch table: the engine enters the level through these 6
@@ -50,17 +50,18 @@ MESSAGES_TEXTS:
 	incbin "levels/level_02/data/C320-C6CF__messages_texts.bin"
 
 ; --- level_tbl_1 .. level_tbl_6 ($C6D0-$D1D7) -----------------
-; @wip
-; Six per-level 3D-renderer wall-pattern tables, each an addr_table_2
-; (sub-table) slot the City leaves as a dummy (MONST_PIC_07/MONST_PIC_05).
-; ACCESS understood: render_wall_face0..3 (maze_cell_addr, $D448) walk 5
-; depth steps and per step do GET_B_FROM_LIST $1a/$1b (the _LIST macros
-; index addr_table_2, where these tables live) to fetch a wall-face
-; pattern byte, gated by GET_B_FROM_TABLE $17/$18 (per-cell reveal/light
-; state); render_dungeon_view skips walls entirely when the darkness var
-; ($5FEB) is set (dynamically confirmed - see data/README.md). STILL @wip:
-; the exact meaning of each PATTERN BYTE (how it maps to the drawn wall
-; slices) - the same tables are unnamed in level 1 too.
+; @done
+; Six per-level 3D-renderer wall-pattern tables (addr_table_2 slots $17/$08/$1B/
+; $06/$09/$0B = tbl_1..6). FORMAT CRACKED (static, 2026-07-14): each table is a
+; list of $FC-delimited variable-length RECORDS, and each record holds the
+; 8-pixel-column bit patterns for drawing ONE wall face. render_wall_face0..3 index
+; them by the cell's wall code (from unpack_cell_walls) via GET_B_FROM_LIST ->
+; lookup_addr_table (the standard $FC-record walk shared with all ADDR_TABLE data),
+; gated by reveal/light state (GET_B_FROM_TABLE $17/$18); the pattern bytes are
+; OR-composited to the $4000 screen via pixel_shift_table. Confirmed by reading
+; lookup_addr_table (7144) + rendering the records = structured wall-slice graphics
+; (bytes like $55=.#.#.#.# , $07=.....### are vertical wall-edge pixel columns).
+; render_dungeon_view skips walls when the darkness var ($5FEB) is set.
 level_tbl_1:
 	incbin "levels/level_02/data/C6D0-C850__level_tbl_1.bin"
 level_tbl_2:

@@ -68,12 +68,14 @@ level_tbl_pad:
 	DB 0,0,0,0,0,0,0,0,0,0,0,0,0
 
 ; --- level_tbl_1..6 ($C7E0-$D309) ----------------------------
-; @wip
-; The six per-level 3D-renderer wall-pattern tables (addr_table_2 in-overlay
-; slots, sub-idx $17/$08/$1B/$06/$09/$0B). Same role as level_02's level_tbl_1..6:
-; the wall renderer (draw_wall_faces/draw_wall_column) walks them per depth step
-; to fetch wall-face pattern bytes ($AA/$A8/$07/$55/$54 pixel data). Per-BYTE
-; pixel meaning still @wip (unnamed in level 1 too). Kept as .bin.
+; @done
+; The six 3D-renderer wall-pattern tables (addr_table_2 sub-idx $17/$08/$1B/$06/
+; $09/$0B). FORMAT CRACKED (see level_02): each is a list of $FC-delimited
+; variable-length records; each record = the 8-pixel-column bit patterns for one
+; wall face. render_wall_face0..3 index them by the cell's wall code (unpack_cell_
+; walls) via GET_B_FROM_LIST -> lookup_addr_table, then OR-composite to $4000 via
+; pixel_shift_table. The $AA/$A8/$07/$55/$54 bytes are vertical wall-edge pixel
+; columns. Kept as .bin (irreducible pixel data, format now understood).
 level_tbl_1:
 	incbin "levels/level_03/data/C7E0-C960__level_tbl_1.bin"
 level_tbl_2:
